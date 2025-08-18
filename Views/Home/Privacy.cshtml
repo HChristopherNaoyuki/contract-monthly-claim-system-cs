@@ -1,6 +1,36 @@
-﻿@{
+﻿<!-- Views/Home/Privacy.cshtml -->
+@{
     ViewData["Title"] = "Privacy Policy";
 }
-<h1>@ViewData["Title"]</h1>
 
-<p>Use this page to detail your site's privacy policy.</p>
+<div class="container privacy-container">
+    <h1>@ViewData["PrivacyTitle"]</h1>
+
+    <div class="privacy-content">
+        <p>@ViewData["PrivacyContent"]</p>
+
+        <h3>Data Collection</h3>
+        <p>We collect the following information when you use our system:</p>
+        <ul>
+            <li>Personal identification information (Name, email address)</li>
+            <li>Claim details (hours worked, supporting documents)</li>
+            <li>Approval records and comments</li>
+        </ul>
+
+        <h3>Data Usage</h3>
+        <p>Your information is used for:</p>
+        <ul>
+            <li>Processing and approving monthly claims</li>
+            <li>Generating reports and invoices</li>
+            <li>System improvements and analytics</li>
+        </ul>
+
+        <h3>Data Protection</h3>
+        <p>We implement security measures including:</p>
+        <ul>
+            <li>Encryption of sensitive data</li>
+            <li>Regular security audits</li>
+            <li>Access controls and authentication</li>
+        </ul>
+    </div>
+</div>

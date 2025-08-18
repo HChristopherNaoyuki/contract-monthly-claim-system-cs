@@ -1,8 +1,46 @@
-﻿@{
+﻿<!-- Views/Home/Index.cshtml -->
+@{
     ViewData["Title"] = "Home Page";
 }
 
 <div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <h1 class="display-4">@ViewData["WelcomeMessage"]</h1>
+    <p class="lead">@ViewData["SystemDescription"]</p>
+
+    <div class="row mt-5">
+        <div class="col-md-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <h5 class="card-title">Submit Claims</h5>
+                    <p class="card-text">Easily submit your monthly claims with supporting documents.</p>
+                    <a asp-controller="Claims" asp-action="Submit" class="btn btn-primary">Get Started</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <h5 class="card-title">Track Status</h5>
+                    <p class="card-text">Monitor the progress of your submitted claims in real-time.</p>
+                    <a asp-controller="Claims" asp-action="Status" asp-route-claimId="1" class="btn btn-primary">View Status</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card feature-card">
+                <div class="card-body">
+                    <h5 class="card-title">Approve Claims</h5>
+                    <p class="card-text">Review and approve claims as a coordinator or manager.</p>
+                    <a asp-controller="Claims" asp-action="Approve" class="btn btn-primary">Review Claims</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Initialize any home page specific JavaScript here
+        console.log("Home page loaded successfully");
+    </script>
+}
