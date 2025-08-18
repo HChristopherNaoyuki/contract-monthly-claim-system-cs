@@ -1,62 +1,56 @@
-﻿// wwwroot/js/site.js
-
-// Document ready function
-(function () {
-    'use strict';
-
-    // Initialize the page
-    document.addEventListener('DOMContentLoaded', function () {
-        console.log('Application initialized');
-
-        // Add active class to current nav link
-        var currentPath = window.location.pathname;
-        var navLinks = document.querySelectorAll('.nav-link');
-
-        navLinks.forEach(function (link) {
-            if (link.getAttribute('href') === currentPath) {
-                link.classList.add('active');
-            }
-        });
-
-        // Initialize tooltips
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-        tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl);
-        });
-
-        // Home page specific functionality
-        if (currentPath === '/') {
-            initializeHomePage();
-        }
+﻿// Document ready function
+document.addEventListener('DOMContentLoaded', function () {
+    // Initialize tooltips
+    const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
     });
 
-    /**
-     * Initializes home page specific functionality
-     */
-    function initializeHomePage() {
-        console.log('Initializing home page features');
+    // File upload preview
+    const fileUploads = document.querySelectorAll('.custum-file-upload input[type="file"]');
+    fileUploads.forEach(function (upload) {
+        upload.addEventListener('change', function (e) {
+            const container = this.closest('.custum-file-upload');
+            const textSpan = container.querySelector('.text span');
 
-        // Add animation to feature cards
-        var cards = document.querySelectorAll('.feature-card');
-
-        cards.forEach(function (card, index) {
-            // Add delay based on index for staggered animation
-            card.style.transitionDelay = (index * 0.1) + 's';
-            card.style.opacity = '0';
-            card.style.transform = 'translateY(20px)';
-
-            // Animate in
-            setTimeout(function () {
-                card.style.opacity = '1';
-                card.style.transform = 'translateY(0)';
-            }, 300 + (index * 100));
+            if (this.files.length > 0) {
+                textSpan.textContent = this.files[0].name;
+                container.style.borderColor = '#0071E3';
+            } else {
+                textSpan.textContent = 'Click to upload file';
+                container.style.borderColor = '#D2D2D7';
+            }
         });
+    });
 
-        // Add click tracking for analytics (example)
-        document.querySelectorAll('.btn-primary').forEach(function (button) {
-            button.addEventListener('click', function () {
-                console.log('Button clicked: ' + button.textContent.trim());
+    // Button ripple effect
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(function (button) {
+        button.addEventListener('click', function (e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const ripple = document.createElement('span');
+            ripple.classList.add('ripple');
+            ripple.style.left = `${x}px`;
+            ripple.style.top = `${y}px`;
+
+            this.appendChild(ripple);
+
+            setTimeout(() => {
+                ripple.remove();
+            }, 1000);
+        });
+    });
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            document.querySelector(this.getAttribute('href')).scrollIntoView({
+                behavior: 'smooth'
             });
         });
-    }
-})();
+    });
+});
