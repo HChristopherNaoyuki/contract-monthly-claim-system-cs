@@ -39,7 +39,7 @@ namespace contract_monthly_claim_system_cs.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Submit(ClaimSubmissionViewModel model)
+        public IActionResult Submit(ClaimSubmissionViewModel model)
         {
             if (ModelState.IsValid)
             {
