@@ -1,7 +1,11 @@
-﻿using contract_monthly_claim_system_cs.Models.ClaimViewModels;
+﻿// Controllers/ClaimsController.cs
+using contract_monthly_claim_system_cs.Models.ClaimViewModels;
+using contract_monthly_claim_system_cs.Models.DataModels;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
-// Controllers/ClaimsController.cs
 namespace contract_monthly_claim_system_cs.Controllers
 {
     /// <summary>
@@ -13,7 +17,7 @@ namespace contract_monthly_claim_system_cs.Controllers
 
         public ClaimsController(ClaimSystemContext context)
         {
-            _context = context;
+            _context = context ?? throw new ArgumentNullException(nameof(context));
         }
 
         /// <summary>
@@ -22,7 +26,6 @@ namespace contract_monthly_claim_system_cs.Controllers
         [HttpGet]
         public IActionResult Submit()
         {
-            // In a real implementation, we would get the current lecturer's details
             var viewModel = new ClaimSubmissionViewModel
             {
                 HourlyRate = 150.00m // Default value for prototype
@@ -40,7 +43,6 @@ namespace contract_monthly_claim_system_cs.Controllers
         {
             if (ModelState.IsValid)
             {
-                // In a real implementation, we would save to database
                 // For prototype, we just redirect to status page
                 return RedirectToAction("Status", new { claimId = 1 });
             }
@@ -54,7 +56,6 @@ namespace contract_monthly_claim_system_cs.Controllers
         [HttpGet]
         public IActionResult Approve()
         {
-            // For prototype, we create sample data
             var viewModel = new List<ClaimApprovalViewModel>
             {
                 new ClaimApprovalViewModel
@@ -79,7 +80,6 @@ namespace contract_monthly_claim_system_cs.Controllers
         [HttpGet]
         public IActionResult Status(int claimId)
         {
-            // For prototype, we create sample data
             var viewModel = new ClaimApprovalViewModel
             {
                 ClaimId = claimId,

@@ -1,4 +1,4 @@
-﻿// Add this to your existing DataModels folder or create a new file
+﻿// Models/DataModels/ClaimSystemContext.cs
 using Microsoft.EntityFrameworkCore;
 
 namespace contract_monthly_claim_system_cs.Models.DataModels
@@ -13,10 +13,10 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
         {
         }
 
-        public DbSet<Lecturer> Lecturers { get; set; }
-        public DbSet<Claim> Claims { get; set; }
-        public DbSet<Document> Documents { get; set; }
-        public DbSet<Approval> Approvals { get; set; }
+        public DbSet<Lecturer> Lecturers { get; set; } = null!;
+        public DbSet<Claim> Claims { get; set; } = null!;
+        public DbSet<Document> Documents { get; set; } = null!;
+        public DbSet<Approval> Approvals { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

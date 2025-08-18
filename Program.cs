@@ -1,4 +1,4 @@
-// Program.cs (or Startup.cs if using .NET Core < 6.0)
+// Program.cs
 using contract_monthly_claim_system_cs.Models.DataModels;
 using Microsoft.EntityFrameworkCore;
 

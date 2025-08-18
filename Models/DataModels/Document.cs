@@ -1,4 +1,5 @@
 ﻿// Models/DataModels/Document.cs
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,15 +15,15 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
 
         [ForeignKey("Claim")]
         public int ClaimId { get; set; }
-        public virtual Claim Claim { get; set; }
+        public virtual Claim? Claim { get; set; }
 
         [Required(ErrorMessage = "File name is required")]
         [Display(Name = "File Name")]
-        public string FileName { get; set; }
+        public string FileName { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "File path is required")]
         [Display(Name = "File Path")]
-        public string FilePath { get; set; }
+        public string FilePath { get; set; } = string.Empty;
 
         [DataType(DataType.DateTime)]
         [Display(Name = "Upload Date")]

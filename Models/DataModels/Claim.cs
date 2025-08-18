@@ -1,4 +1,6 @@
 ﻿// Models/DataModels/Claim.cs
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,7 +16,7 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
 
         [ForeignKey("Lecturer")]
         public int LecturerId { get; set; }
-        public virtual Lecturer Lecturer { get; set; }
+        public virtual Lecturer? Lecturer { get; set; }
 
         [Required(ErrorMessage = "Claim date is required")]
         [DataType(DataType.Date)]
@@ -33,8 +35,8 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
         [Display(Name = "Claim Status")]
         public ClaimStatus Status { get; set; } = ClaimStatus.Submitted;
 
-        public virtual ICollection<Document> Documents { get; set; }
-        public virtual ICollection<Approval> Approvals { get; set; }
+        public virtual ICollection<Document> Documents { get; set; } = new List<Document>();
+        public virtual ICollection<Approval> Approvals { get; set; } = new List<Approval>();
     }
 
     /// <summary>

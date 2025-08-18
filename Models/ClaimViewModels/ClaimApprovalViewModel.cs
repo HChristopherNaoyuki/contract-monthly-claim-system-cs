@@ -1,4 +1,6 @@
 ﻿// Models/ClaimViewModels/ClaimApprovalViewModel.cs
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace contract_monthly_claim_system_cs.Models.ClaimViewModels
@@ -11,7 +13,7 @@ namespace contract_monthly_claim_system_cs.Models.ClaimViewModels
         public int ClaimId { get; set; }
 
         [Display(Name = "Lecturer Name")]
-        public string LecturerName { get; set; }
+        public string LecturerName { get; set; } = string.Empty;
 
         [Display(Name = "Claim Date")]
         public DateTime ClaimDate { get; set; }
@@ -26,13 +28,13 @@ namespace contract_monthly_claim_system_cs.Models.ClaimViewModels
         public decimal Amount { get; set; }
 
         [Display(Name = "Status")]
-        public string Status { get; set; }
+        public string Status { get; set; } = string.Empty;
 
         [Display(Name = "Documents")]
         public List<string> DocumentNames { get; set; } = new List<string>();
 
         [Display(Name = "Approval Comments")]
         [StringLength(500, ErrorMessage = "Comments cannot exceed 500 characters")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 }

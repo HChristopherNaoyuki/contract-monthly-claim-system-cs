@@ -1,4 +1,6 @@
 ﻿// Models/ClaimViewModels/ClaimSubmissionViewModel.cs
+using Microsoft.AspNetCore.Http;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace contract_monthly_claim_system_cs.Models.ClaimViewModels

@@ -1,4 +1,5 @@
 ﻿// Models/DataModels/Approval.cs
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -14,11 +15,11 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
 
         [ForeignKey("Claim")]
         public int ClaimId { get; set; }
-        public virtual Claim Claim { get; set; }
+        public virtual Claim? Claim { get; set; }
 
         [Required(ErrorMessage = "Approver role is required")]
         [Display(Name = "Approver Role")]
-        public string ApproverRole { get; set; }
+        public string ApproverRole { get; set; } = string.Empty;
 
         [DataType(DataType.DateTime)]
         [Display(Name = "Approval Date")]
@@ -28,6 +29,6 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
         public bool IsApproved { get; set; }
 
         [StringLength(500, ErrorMessage = "Comments cannot exceed 500 characters")]
-        public string Comments { get; set; }
+        public string? Comments { get; set; }
     }
 }
