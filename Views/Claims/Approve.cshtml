@@ -1,0 +1,55 @@
+﻿<!-- Views/Claims/Approve.cshtml -->
+@model List<contract_monthly_claim_system_cs.Models.ClaimViewModels.ClaimApprovalViewModel>
+
+@{
+    ViewData["Title"] = "Approve Claims";
+}
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Lecturer</th>
+                <th>Claim Date</th>
+                <th>Hours</th>
+                <th>Amount</th>
+                <th>Status</th>
+                <th>Documents</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in Model)
+            {
+                <tr>
+                    <td>@claim.LecturerName</td>
+                    <td>@claim.ClaimDate.ToShortDateString()</td>
+                    <td>@claim.HoursWorked</td>
+                    <td>@claim.Amount.ToString("C")</td>
+                    <td>@claim.Status</td>
+                    <td>
+                        @if (claim.DocumentNames.Any())
+                        {
+                            <ul>
+                                @foreach (var doc in claim.DocumentNames)
+                                {
+                                    <li>@doc</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span>No documents</span>
+                        }
+                    </td>
+                    <td>
+                        <a href="#" class="btn btn-success">Approve</a>
+                        <a href="#" class="btn btn-danger">Reject</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

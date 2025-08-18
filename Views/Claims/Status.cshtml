@@ -1,0 +1,44 @@
+﻿<!-- Views/Claims/Status.cshtml -->
+@model contract_monthly_claim_system_cs.Models.ClaimViewModels.ClaimApprovalViewModel
+
+@{
+    ViewData["Title"] = "Claim Status";
+}
+
+<div class="container">
+    <h2>@ViewData["Title"]</h2>
+
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Claim #@Model.ClaimId</h5>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Lecturer:</strong> @Model.LecturerName</p>
+                    <p><strong>Claim Date:</strong> @Model.ClaimDate.ToShortDateString()</p>
+                    <p><strong>Hours Worked:</strong> @Model.HoursWorked</p>
+                </div>
+                <div class="col-md-6">
+                    <p><strong>Hourly Rate:</strong> @Model.HourlyRate.ToString("C")</p>
+                    <p><strong>Claim Amount:</strong> @Model.Amount.ToString("C")</p>
+                    <p><strong>Status:</strong> @Model.Status</p>
+                </div>
+            </div>
+
+            <h6>Supporting Documents:</h6>
+            @if (Model.DocumentNames.Any())
+            {
+                <ul>
+                    @foreach (var doc in Model.DocumentNames)
+                    {
+                        <li>@doc</li>
+                    }
+                </ul>
+            }
+            else
+            {
+                <p>No documents uploaded</p>
+            }
+        </div>
+    </div>
+</div>
