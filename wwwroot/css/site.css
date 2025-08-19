@@ -436,3 +436,7 @@ label {
         opacity: 0;
     }
 }
+
+.text-center {
+    text-align: center;
+}
