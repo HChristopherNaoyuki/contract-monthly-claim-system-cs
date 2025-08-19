@@ -1,12 +1,11 @@
-﻿<!-- Views/Claims/Approve.cshtml -->
-@model List<contract_monthly_claim_system_cs.Models.ClaimViewModels.ClaimApprovalViewModel>
+﻿@model List<contract_monthly_claim_system_cs.Models.ClaimViewModels.ClaimApprovalViewModel>
 
 @{
     ViewData["Title"] = "Approve Claims";
 }
 
 <div class="container">
-    <h2>@ViewData["Title"]</h2>
+    <h1>@ViewData["Title"]</h1>
 
     <table class="table">
         <thead>
@@ -28,25 +27,29 @@
                     <td>@claim.ClaimDate.ToShortDateString()</td>
                     <td>@claim.HoursWorked</td>
                     <td>@claim.Amount.ToString("C")</td>
-                    <td>@claim.Status</td>
+                    <td>
+                        <span class="status-badge status-@claim.Status.ToLower()">@claim.Status</span>
+                    </td>
                     <td>
                         @if (claim.DocumentNames.Any())
                         {
-                            <ul>
+                            <ul style="margin: 0; padding-left: 16px;">
                                 @foreach (var doc in claim.DocumentNames)
                                 {
-                                    <li>@doc</li>
+                                    <li style="font-size: 13px;">@doc</li>
                                 }
                             </ul>
                         }
                         else
                         {
-                            <span>No documents</span>
+                            <span style="color: var(--system-gray); font-size: 13px;">No documents</span>
                         }
                     </td>
                     <td>
-                        <a href="#" class="btn btn-success">Approve</a>
-                        <a href="#" class="btn btn-danger">Reject</a>
+                        <div style="display: flex; gap: 8px;">
+                            <a href="#" class="btn btn-success" style="padding: 8px 12px; font-size: 14px;">Approve</a>
+                            <a href="#" class="btn btn-danger" style="padding: 8px 12px; font-size: 14px;">Reject</a>
+                        </div>
                     </td>
                 </tr>
             }

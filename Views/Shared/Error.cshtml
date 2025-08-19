@@ -3,7 +3,7 @@
     ViewData["Title"] = "Error";
 }
 
-<div class="error-container">
+<div class="container">
     <h1 class="error-title">Error</h1>
     <h2 class="error-message">An error occurred while processing your request.</h2>
 
@@ -23,5 +23,10 @@
             <strong>Don't enable Development mode for deployed applications.</strong>
             It may display sensitive information to end users.
         </p>
+    </div>
+
+    <div class="footer">
+        <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Back to Home</a>
+        <div class="copyright">© 2025 - Contract Monthly Claim System</div>
     </div>
 </div>

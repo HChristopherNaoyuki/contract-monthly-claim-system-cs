@@ -10,15 +10,15 @@
 
     <div class="card-grid">
         <div class="card">
-            <div class="image" style="background-color: #E1F0FF;"></div>
-            <div class="content">
+            <div class="card-image" style="background: linear-gradient(135deg, #E1F0FF 0%, #B9D7FF 100%);"></div>
+            <div class="card-content">
                 <a asp-controller="Claims" asp-action="Submit">
-                    <span class="title">Submit New Claim</span>
+                    <span class="card-title">Submit New Claim</span>
                 </a>
-                <p class="desc">
+                <p class="card-desc">
                     Quickly submit your monthly claim with all required documentation
                 </p>
-                <a class="action" asp-controller="Claims" asp-action="Submit">
+                <a class="card-action" asp-controller="Claims" asp-action="Submit">
                     Get Started
                     <span aria-hidden="true">→</span>
                 </a>
@@ -26,15 +26,15 @@
         </div>
 
         <div class="card">
-            <div class="image" style="background-color: #FFEEF0;"></div>
-            <div class="content">
+            <div class="card-image" style="background: linear-gradient(135deg, #FFEEF0 0%, #FFD5D9 100%);"></div>
+            <div class="card-content">
                 <a asp-controller="Claims" asp-action="Approve">
-                    <span class="title">Review Claims</span>
+                    <span class="card-title">Review Claims</span>
                 </a>
-                <p class="desc">
+                <p class="card-desc">
                     Approve or reject pending claims as a coordinator or manager
                 </p>
-                <a class="action" asp-controller="Claims" asp-action="Approve">
+                <a class="card-action" asp-controller="Claims" asp-action="Approve">
                     View Dashboard
                     <span aria-hidden="true">→</span>
                 </a>
@@ -42,15 +42,15 @@
         </div>
 
         <div class="card">
-            <div class="image" style="background-color: #E8F9F0;"></div>
-            <div class="content">
+            <div class="card-image" style="background: linear-gradient(135deg, #E8F9F0 0%, #C8EED7 100%);"></div>
+            <div class="card-content">
                 <a asp-controller="Claims" asp-action="Status">
-                    <span class="title">Track Status</span>
+                    <span class="card-title">Track Status</span>
                 </a>
-                <p class="desc">
+                <p class="card-desc">
                     Monitor the progress of your submitted claims in real-time
                 </p>
-                <a class="action" asp-controller="Claims" asp-action="Status" asp-route-claimId="1">
+                <a class="card-action" asp-controller="Claims" asp-action="Status" asp-route-claimId="1">
                     Check Status
                     <span aria-hidden="true">→</span>
                 </a>
@@ -59,13 +59,7 @@
     </div>
 
     <div class="footer">
-        <button type="button" class="privacy-button" onclick="location.href='@Url.Action("Privacy", "Home")'">
-            <span class="text">Privacy Policy</span>
-            <span class="blob"></span>
-            <span class="blob"></span>
-            <span class="blob"></span>
-            <span class="blob"></span>
-        </button>
-        <div class="copyright">© 2025 - contract_monthly_claim_system_cs</div>
+        <a class="btn btn-secondary" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
+        <div class="copyright">© 2025 - Contract Monthly Claim System</div>
     </div>
 </div>
