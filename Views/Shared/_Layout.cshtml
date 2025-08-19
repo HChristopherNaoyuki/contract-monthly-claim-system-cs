@@ -68,19 +68,23 @@
     <div class="app-container">
         <header class="app-header">
             <div class="header-content">
-                <!-- Apple Minimalistic Tab Style - exact template implementation with 4 options -->
+                <!-- Apple Minimalistic Tab Style - exact template implementation with 5 options -->
                 <div class="radio-inputs">
                     <label class="radio">
                         <input type="radio" name="radio" id="nav-home" checked />
                         <span class="name" onclick="location.href='@Url.Action("Index", "Home")'">Home</span>
                     </label>
                     <label class="radio">
-                        <input type="radio" name="radio" id="nav-claim" />
-                        <span class="name" onclick="location.href='@Url.Action("Submit", "Claims")'">Claim</span>
+                        <input type="radio" name="radio" id="nav-submit" />
+                        <span class="name" onclick="location.href='@Url.Action("Submit", "Claims")'">Submit</span>
                     </label>
                     <label class="radio">
-                        <input type="radio" name="radio" id="nav-submit" />
-                        <span class="name" onclick="location.href='@Url.Action("Approve", "Claims")'">Submit</span>
+                        <input type="radio" name="radio" id="nav-review" />
+                        <span class="name" onclick="location.href='@Url.Action("Approve", "Claims")'">Review</span>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="radio" id="nav-track" />
+                        <span class="name" onclick="location.href='@Url.Action("Status", "Claims")'">Track</span>
                     </label>
                     <label class="radio">
                         <input type="radio" name="radio" id="nav-privacy" />
@@ -106,22 +110,27 @@
 
             // Reset all radio buttons
             document.getElementById('nav-home').removeAttribute('checked');
-            document.getElementById('nav-claim').removeAttribute('checked');
             document.getElementById('nav-submit').removeAttribute('checked');
+            document.getElementById('nav-review').removeAttribute('checked');
+            document.getElementById('nav-track').removeAttribute('checked');
             document.getElementById('nav-privacy').removeAttribute('checked');
 
             document.getElementById('nav-home').checked = false;
-            document.getElementById('nav-claim').checked = false;
             document.getElementById('nav-submit').checked = false;
+            document.getElementById('nav-review').checked = false;
+            document.getElementById('nav-track').checked = false;
             document.getElementById('nav-privacy').checked = false;
 
             // Set the active radio based on current path
             if (currentPath.includes('/claims/submit')) {
-                document.getElementById('nav-claim').checked = true;
-                document.getElementById('nav-claim').setAttribute('checked', 'checked');
-            } else if (currentPath.includes('/claims/approve')) {
                 document.getElementById('nav-submit').checked = true;
                 document.getElementById('nav-submit').setAttribute('checked', 'checked');
+            } else if (currentPath.includes('/claims/approve')) {
+                document.getElementById('nav-review').checked = true;
+                document.getElementById('nav-review').setAttribute('checked', 'checked');
+            } else if (currentPath.includes('/claims/status')) {
+                document.getElementById('nav-track').checked = true;
+                document.getElementById('nav-track').setAttribute('checked', 'checked');
             } else if (currentPath.includes('/home/privacy')) {
                 document.getElementById('nav-privacy').checked = true;
                 document.getElementById('nav-privacy').setAttribute('checked', 'checked');
