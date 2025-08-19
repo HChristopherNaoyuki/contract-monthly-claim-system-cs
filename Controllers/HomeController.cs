@@ -12,6 +12,9 @@ namespace contract_monthly_claim_system_cs.Controllers
     {
         private readonly ILogger<HomeController> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of the HomeController class
+        /// </summary>
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
