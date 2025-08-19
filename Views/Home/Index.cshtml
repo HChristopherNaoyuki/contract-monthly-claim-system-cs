@@ -58,15 +58,14 @@
         </div>
     </div>
 
-    <div class="footer-button">
-        <a asp-controller="Home" asp-action="Privacy">
-            <button type="button">
-                <span class="text">Privacy Policy</span>
-                <span class="blob"></span>
-                <span class="blob"></span>
-                <span class="blob"></span>
-                <span class="blob"></span>
-            </button>
-        </a>
+    <div class="footer">
+        <button type="button" class="privacy-button" onclick="location.href='@Url.Action("Privacy", "Home")'">
+            <span class="text">Privacy Policy</span>
+            <span class="blob"></span>
+            <span class="blob"></span>
+            <span class="blob"></span>
+            <span class="blob"></span>
+        </button>
+        <div class="copyright">© 2025 - contract_monthly_claim_system_cs</div>
     </div>
 </div>

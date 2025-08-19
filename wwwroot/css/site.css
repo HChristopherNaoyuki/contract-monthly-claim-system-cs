@@ -347,3 +347,71 @@ button {
         padding: 1.5rem;
     }
 }
+
+/* Footer Styles */
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 3rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--border);
+}
+
+.copyright {
+    margin-top: 1rem;
+    color: var(--text-light);
+    font-size: 0.875rem;
+}
+
+/* Button Styles */
+.privacy-button, .home-button {
+    width: 10em;
+}
+
+    .privacy-button .blob:nth-child(2) {
+        background: #0061ff;
+    }
+
+    .privacy-button .blob:nth-child(3) {
+        background: #ff1b6b;
+    }
+
+    .privacy-button .blob:nth-child(4) {
+        background: #bf0fff;
+    }
+
+    .privacy-button .blob:nth-child(5) {
+        background: #ff930f;
+    }
+
+    .home-button .blob:nth-child(2) {
+        background: #ff930f;
+    }
+
+    .home-button .blob:nth-child(3) {
+        background: #0061ff;
+    }
+
+    .home-button .blob:nth-child(4) {
+        background: #ff1b6b;
+    }
+
+    .home-button .blob:nth-child(5) {
+        background: #bf0fff;
+    }
+
+/* Privacy Page Styles */
+.privacy-content {
+    max-width: 800px;
+    margin: 0 auto 2rem;
+}
+
+    .privacy-content ul {
+        margin-left: 1.5rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .privacy-content li {
+        margin-bottom: 0.5rem;
+    }

@@ -25,15 +25,14 @@
         </ul>
     </div>
 
-    <div class="footer-button">
-        <a asp-controller="Home" asp-action="Index">
-            <button type="button">
-                <span class="text">Back to Home</span>
-                <span class="blob"></span>
-                <span class="blob"></span>
-                <span class="blob"></span>
-                <span class="blob"></span>
-            </button>
-        </a>
+    <div class="footer">
+        <button type="button" class="home-button" onclick="location.href='@Url.Action("Index", "Home")'">
+            <span class="text">Back to Home</span>
+            <span class="blob"></span>
+            <span class="blob"></span>
+            <span class="blob"></span>
+            <span class="blob"></span>
+        </button>
+        <div class="copyright">© 2025 - contract_monthly_claim_system_cs</div>
     </div>
 </div>
