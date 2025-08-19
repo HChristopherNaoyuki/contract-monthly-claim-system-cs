@@ -1,43 +1,31 @@
-﻿/* 
- * Minimalist Apple-style layout
- * Color scheme and typography inspired by macOS
- */
-
+﻿/* Minimalist Apple-style layout */
 :root {
-    /* System colors */
     --system-blue: #007AFF;
     --system-gray: #8E8E93;
     --system-light-gray: #F2F2F7;
     --system-white: #FFFFFF;
     --system-border: #D1D1D6;
     --system-text: #1C1C1E;
-    /* Spacing */
-    --spacing-xs: 4px;
     --spacing-sm: 8px;
     --spacing-md: 16px;
     --spacing-lg: 24px;
-    --spacing-xl: 32px;
 }
 
-/* Base styles */
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "San Francisco", sans-serif;
     background-color: var(--system-light-gray);
     color: var(--system-text);
     margin: 0;
-    padding: 0;
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
 }
 
-/* App container */
 .app-container {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 }
 
-/* Header styles */
 .app-header {
     background-color: var(--system-white);
     border-bottom: 1px solid var(--system-border);
@@ -46,7 +34,6 @@ body {
     top: 0;
     z-index: 100;
     backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
 }
 
 .header-content {
@@ -58,7 +45,6 @@ body {
     height: 60px;
 }
 
-/* Logo styles */
 .app-logo {
     display: flex;
     align-items: center;
@@ -75,7 +61,6 @@ body {
         color: var(--system-blue);
     }
 
-/* Navigation styles */
 .app-nav {
     display: flex;
     gap: var(--spacing-lg);
@@ -95,22 +80,6 @@ body {
         color: var(--system-blue);
     }
 
-    .nav-link::after {
-        content: '';
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background-color: var(--system-blue);
-        transition: width 0.3s ease;
-    }
-
-    .nav-link:hover::after {
-        width: 100%;
-    }
-
-/* Main content area */
 .app-main {
     flex: 1;
     padding: var(--spacing-lg);
@@ -119,7 +88,34 @@ body {
     width: 100%;
 }
 
-/* Responsive adjustments */
+.app-footer {
+    background-color: var(--system-white);
+    border-top: 1px solid var(--system-border);
+    padding: var(--spacing-md) var(--spacing-lg);
+}
+
+.footer-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.copyright {
+    color: var(--system-gray);
+    font-size: 13px;
+}
+
+.footer-button {
+    background: none;
+    border: none;
+    color: var(--system-blue);
+    font-size: 15px;
+    cursor: pointer;
+    padding: var(--spacing-sm) var(--spacing-md);
+}
+
 @media (max-width: 768px) {
     .app-header {
         padding: 0 var(--spacing-md);
@@ -131,5 +127,10 @@ body {
 
     .app-nav {
         gap: var(--spacing-md);
+    }
+
+    .footer-content {
+        flex-direction: column;
+        gap: var(--spacing-sm);
     }
 }

@@ -1,4 +1,3 @@
-// Controllers/HomeController.cs
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using contract_monthly_claim_system_cs.Models;
@@ -21,7 +20,7 @@ namespace contract_monthly_claim_system_cs.Controllers
         }
 
         /// <summary>
-        /// Displays the minimalist home page
+        /// Displays the application home page
         /// </summary>
         public IActionResult Index()
         {
@@ -31,13 +30,16 @@ namespace contract_monthly_claim_system_cs.Controllers
         }
 
         /// <summary>
-        /// Displays the privacy page
+        /// Displays the privacy policy page
         /// </summary>
         public IActionResult Privacy()
         {
             return View();
         }
 
+        /// <summary>
+        /// Displays the error page
+        /// </summary>
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
