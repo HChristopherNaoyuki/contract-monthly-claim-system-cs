@@ -407,11 +407,87 @@ button {
     margin: 0 auto 2rem;
 }
 
-    .privacy-content ul {
-        margin-left: 1.5rem;
-        margin-bottom: 1.5rem;
+.privacy-content ul {
+    margin-left: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.privacy-content li {
+    margin-bottom: 0.5rem;
+}
+
+/* 
+ * Base typography and element styles
+ * Complementary to layout.css
+ */
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+}
+
+h1 {
+    font-size: 28px;
+    line-height: 1.2;
+}
+
+h2 {
+    font-size: 22px;
+}
+
+h3 {
+    font-size: 18px;
+}
+
+p {
+    margin-top: 0;
+    margin-bottom: var(--spacing-md);
+}
+
+/* Links */
+a {
+    color: var(--system-blue);
+    text-decoration: none;
+    transition: color 0.2s ease;
+}
+
+    a:hover {
+        color: var(--system-blue);
+        text-decoration: underline;
     }
 
-    .privacy-content li {
-        margin-bottom: 0.5rem;
+/* Forms */
+input, textarea, select {
+    font-family: inherit;
+    font-size: inherit;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border: 1px solid var(--system-border);
+    border-radius: 8px;
+    background-color: var(--system-white);
+    transition: border-color 0.2s ease;
+}
+
+    input:focus, textarea:focus, select:focus {
+        outline: none;
+        border-color: var(--system-blue);
     }
+
+/* Buttons */
+button, .button {
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 500;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    background-color: var(--system-blue);
+    color: var(--system-white);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+button:hover, .button:hover {
+    background-color: #0066CC;
+}

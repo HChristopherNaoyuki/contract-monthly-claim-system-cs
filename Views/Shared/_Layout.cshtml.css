@@ -1,48 +1,135 @@
-﻿/* Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
+﻿/* 
+ * Minimalist Apple-style layout
+ * Color scheme and typography inspired by macOS
+ */
 
-a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+:root {
+    /* System colors */
+    --system-blue: #007AFF;
+    --system-gray: #8E8E93;
+    --system-light-gray: #F2F2F7;
+    --system-white: #FFFFFF;
+    --system-border: #D1D1D6;
+    --system-text: #1C1C1E;
+    /* Spacing */
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
 }
 
-a {
-  color: #0077cc;
+/* Base styles */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "San Francisco", "Segoe UI", Roboto, sans-serif;
+    background-color: var(--system-light-gray);
+    color: var(--system-text);
+    margin: 0;
+    padding: 0;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
 }
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+/* App container */
+.app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+/* Header styles */
+.app-header {
+    background-color: var(--system-white);
+    border-bottom: 1px solid var(--system-border);
+    padding: 0 var(--spacing-lg);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
 }
 
-.border-top {
-  border-top: 1px solid #e5e5e5;
-}
-.border-bottom {
-  border-bottom: 1px solid #e5e5e5;
-}
-
-.box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+.header-content {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
 }
 
-button.accept-policy {
-  font-size: 1rem;
-  line-height: inherit;
+/* Logo styles */
+.app-logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: var(--system-text);
+    font-weight: 500;
+    font-size: 17px;
+    gap: var(--spacing-sm);
 }
 
-.footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px;
+    .app-logo svg {
+        width: 20px;
+        height: 20px;
+        color: var(--system-blue);
+    }
+
+/* Navigation styles */
+.app-nav {
+    display: flex;
+    gap: var(--spacing-lg);
+}
+
+.nav-link {
+    text-decoration: none;
+    color: var(--system-gray);
+    font-size: 15px;
+    font-weight: 400;
+    transition: color 0.2s ease;
+    padding: var(--spacing-sm) 0;
+    position: relative;
+}
+
+    .nav-link:hover {
+        color: var(--system-blue);
+    }
+
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 0;
+        height: 2px;
+        background-color: var(--system-blue);
+        transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+        width: 100%;
+    }
+
+/* Main content area */
+.app-main {
+    flex: 1;
+    padding: var(--spacing-lg);
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .app-header {
+        padding: 0 var(--spacing-md);
+    }
+
+    .app-main {
+        padding: var(--spacing-md);
+    }
+
+    .app-nav {
+        gap: var(--spacing-md);
+    }
 }
