@@ -91,7 +91,6 @@
                         <input type="radio" name="radio" id="nav-home" />
                         <span class="name" onclick="location.href='@Url.Action("Index", "Home")'">Home</span>
                     </label>
-
                     <label class="radio">
                         <input type="radio" name="radio" id="nav-submit" />
                         <span class="name" onclick="location.href='@Url.Action("Submit", "Claims")'">Submit</span>
@@ -100,11 +99,6 @@
                     <label class="radio">
                         <input type="radio" name="radio" id="nav-approve" />
                         <span class="name" onclick="location.href='@Url.Action("Approve", "Claims")'">Approve</span>
-                    </label>
-
-                    <label class="radio">
-                        <input type="radio" name="radio" id="nav-privacy" />
-                        <span class="name" onclick="location.href='@Url.Action("Privacy", "Home")'">Privacy</span>
                     </label>
                 </div>
             </div>
@@ -126,28 +120,19 @@
 
             if (currentPath.includes('/claims/submit')) {
                 document.getElementById('nav-submit').checked = true;
-            document.getElementById('nav-submit').setAttribute('checked', 'checked');
-            document.getElementById('nav-home').removeAttribute('checked');
-            document.getElementById('nav-approve').removeAttribute('checked');
-            document.getElementById('nav-privacy').removeAttribute('checked');
+                document.getElementById('nav-submit').setAttribute('checked', 'checked');
+                document.getElementById('nav-home').removeAttribute('checked');
+                document.getElementById('nav-approve').removeAttribute('checked');
             } else if (currentPath.includes('/claims/approve')) {
                 document.getElementById('nav-approve').checked = true;
                 document.getElementById('nav-approve').setAttribute('checked', 'checked');
                 document.getElementById('nav-home').removeAttribute('checked');
                 document.getElementById('nav-submit').removeAttribute('checked');
-                document.getElementById('nav-privacy').removeAttribute('checked');
-            } else if (currentPath.includes('/home/privacy')) {
-                document.getElementById('nav-privacy').checked = true;
-                document.getElementById('nav-privacy').setAttribute('checked', 'checked');
-                document.getElementById('nav-home').removeAttribute('checked');
-                document.getElementById('nav-submit').removeAttribute('checked');
-                document.getElementById('nav-approve').removeAttribute('checked');
             } else {
                 document.getElementById('nav-home').checked = true;
                 document.getElementById('nav-home').setAttribute('checked', 'checked');
                 document.getElementById('nav-submit').removeAttribute('checked');
                 document.getElementById('nav-approve').removeAttribute('checked');
-                document.getElementById('nav-privacy').removeAttribute('checked');
             }
         });
     </script>

@@ -112,9 +112,6 @@ function setActiveNavigation() {
     } else if (currentPath.includes('/claims/approve')) {
         document.getElementById('nav-approve').checked = true;
         document.getElementById('nav-approve').setAttribute('checked', 'checked');
-    } else if (currentPath.includes('/home/privacy')) {
-        document.getElementById('nav-privacy').checked = true;
-        document.getElementById('nav-privacy').setAttribute('checked', 'checked');
     } else {
         document.getElementById('nav-home').checked = true;
         document.getElementById('nav-home').setAttribute('checked', 'checked');
