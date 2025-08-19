@@ -1,136 +1,97 @@
-﻿/* Minimalist Apple-style layout */
-:root {
-    --system-blue: #007AFF;
-    --system-gray: #8E8E93;
-    --system-light-gray: #F2F2F7;
-    --system-white: #FFFFFF;
-    --system-border: #D1D1D6;
-    --system-text: #1C1C1E;
-    --spacing-sm: 8px;
-    --spacing-md: 16px;
-    --spacing-lg: 24px;
-}
-
-body {
-    font-family: -apple-system, BlinkMacSystemFont, "San Francisco", sans-serif;
-    background-color: var(--system-light-gray);
-    color: var(--system-text);
-    margin: 0;
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-}
-
-.app-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-.app-header {
-    background-color: var(--system-white);
-    border-bottom: 1px solid var(--system-border);
-    padding: 0 var(--spacing-lg);
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    backdrop-filter: blur(10px);
-}
-
-.header-content {
-    max-width: 1200px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 60px;
-}
-
-.app-logo {
-    display: flex;
-    align-items: center;
-    text-decoration: none;
-    color: var(--system-text);
-    font-weight: 500;
-    font-size: 17px;
-    gap: var(--spacing-sm);
-}
-
-    .app-logo svg {
-        width: 20px;
-        height: 20px;
-        color: var(--system-blue);
-    }
-
-.app-nav {
-    display: flex;
-    gap: var(--spacing-lg);
-}
-
-.nav-link {
-    text-decoration: none;
-    color: var(--system-gray);
-    font-size: 15px;
-    font-weight: 400;
-    transition: color 0.2s ease;
-    padding: var(--spacing-sm) 0;
+﻿/* Radio button navigation styles */
+.radio-inputs {
     position: relative;
-}
-
-    .nav-link:hover {
-        color: var(--system-blue);
-    }
-
-.app-main {
-    flex: 1;
-    padding: var(--spacing-lg);
-    max-width: 1200px;
-    margin: 0 auto;
-    width: 100%;
-}
-
-.app-footer {
-    background-color: var(--system-white);
-    border-top: 1px solid var(--system-border);
-    padding: var(--spacing-md) var(--spacing-lg);
-}
-
-.footer-content {
-    max-width: 1200px;
-    margin: 0 auto;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    border-radius: 0.5rem;
+    background-color: var(--system-blue);
+    box-sizing: border-box;
+    font-size: 14px;
+    padding: 1rem 1rem 0 1rem;
+    margin-left: auto;
 }
 
-.copyright {
-    color: var(--system-gray);
-    font-size: 13px;
-}
+    .radio-inputs .radio {
+        flex: 1;
+        text-align: center;
+    }
 
-.footer-button {
-    background: none;
-    border: none;
-    color: var(--system-blue);
-    font-size: 15px;
-    cursor: pointer;
-    padding: var(--spacing-sm) var(--spacing-md);
-}
+        .radio-inputs .radio input {
+            display: none;
+        }
 
+        .radio-inputs .radio .name {
+            display: flex;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+            border: none;
+            padding: 0.5rem 0.8rem;
+            color: rgba(255, 255, 255, 0.8);
+            transition: all 0.15s ease-in-out;
+            position: relative;
+            min-width: 80px;
+        }
+
+        .radio-inputs .radio input:checked + .name {
+            background-color: var(--system-white);
+            font-weight: 600;
+            color: var(--system-text);
+        }
+
+        .radio-inputs .radio input + .name:hover {
+            color: var(--system-white);
+        }
+
+        .radio-inputs .radio input:checked + .name:hover {
+            color: var(--system-text);
+        }
+
+        .radio-inputs .radio input:checked + .name::after,
+        .radio-inputs .radio input:checked + .name::before {
+            content: "";
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background-color: var(--system-blue);
+            bottom: 0;
+        }
+
+        .radio-inputs .radio input:checked + .name::after {
+            right: -10px;
+            border-bottom-left-radius: 300px;
+            box-shadow: -3px 3px 0px 3px var(--system-white);
+        }
+
+        .radio-inputs .radio input:checked + .name::before {
+            left: -10px;
+            border-bottom-right-radius: 300px;
+            box-shadow: 3px 3px 0px 3px var(--system-white);
+        }
+
+/* Responsive adjustments for radio navigation */
 @media (max-width: 768px) {
-    .app-header {
-        padding: 0 var(--spacing-md);
-    }
-
-    .app-main {
-        padding: var(--spacing-md);
-    }
-
-    .app-nav {
-        gap: var(--spacing-md);
-    }
-
-    .footer-content {
+    .radio-inputs {
         flex-direction: column;
-        gap: var(--spacing-sm);
+        width: 100%;
+        padding: 0.5rem;
+        margin-top: 1rem;
+        border-radius: 0.5rem;
+    }
+
+        .radio-inputs .radio .name {
+            border-radius: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .radio-inputs .radio input:checked + .name::after,
+        .radio-inputs .radio input:checked + .name::before {
+            display: none;
+        }
+
+    .header-content {
+        flex-direction: column;
+        align-items: flex-start;
     }
 }

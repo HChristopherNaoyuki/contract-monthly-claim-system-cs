@@ -60,6 +60,26 @@ document.addEventListener('DOMContentLoaded', function () {
             }
         });
     });
+
+    // Radio navigation click handling
+    const radioNames = document.querySelectorAll('.radio-inputs .name');
+    radioNames.forEach(function (name) {
+        name.addEventListener('click', function () {
+            // Uncheck all radio buttons
+            const allRadios = document.querySelectorAll('.radio-inputs input[type="radio"]');
+            allRadios.forEach(function (radio) {
+                radio.removeAttribute('checked');
+                radio.checked = false;
+            });
+
+            // Check the clicked radio button
+            const radio = this.previousElementSibling;
+            if (radio) {
+                radio.checked = true;
+                radio.setAttribute('checked', 'checked');
+            }
+        });
+    });
 });
 
 // Set current year in footer
@@ -68,6 +88,38 @@ function setCurrentYear() {
     const currentYear = new Date().getFullYear();
 
     yearElements.forEach(element => {
-        element.textContent = element.textContent.replace('2025', currentYear);
+        if (element.textContent.includes('2025')) {
+            element.textContent = element.textContent.replace('2025', currentYear);
+        }
     });
 }
+
+// Navigation active state management
+function setActiveNavigation() {
+    const currentPath = window.location.pathname.toLowerCase();
+    const navRadios = document.querySelectorAll('.radio-inputs input[type="radio"]');
+
+    // Uncheck all radios first
+    navRadios.forEach(function (radio) {
+        radio.removeAttribute('checked');
+        radio.checked = false;
+    });
+
+    // Check the appropriate radio based on current path
+    if (currentPath.includes('/claims/submit')) {
+        document.getElementById('nav-submit').checked = true;
+        document.getElementById('nav-submit').setAttribute('checked', 'checked');
+    } else if (currentPath.includes('/claims/approve')) {
+        document.getElementById('nav-approve').checked = true;
+        document.getElementById('nav-approve').setAttribute('checked', 'checked');
+    } else if (currentPath.includes('/home/privacy')) {
+        document.getElementById('nav-privacy').checked = true;
+        document.getElementById('nav-privacy').setAttribute('checked', 'checked');
+    } else {
+        document.getElementById('nav-home').checked = true;
+        document.getElementById('nav-home').setAttribute('checked', 'checked');
+    }
+}
+
+// Call this function when page loads
+setActiveNavigation();

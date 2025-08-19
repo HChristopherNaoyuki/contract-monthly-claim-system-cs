@@ -6,6 +6,72 @@
     <title>@ViewData["Title"] — Contract Claims</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
+    <style>
+        /* Radio button navigation styles - exact template implementation */
+        .radio-inputs {
+            position: relative;
+            display: flex;
+            border-radius: 0.5rem;
+            background-color: #70c489;
+            box-sizing: border-box;
+            font-size: 14px;
+            width: 90%;
+            padding: 1rem 1rem 0 1rem;
+        }
+
+            .radio-inputs .radio input {
+                display: none;
+            }
+
+            .radio-inputs .radio .name {
+                display: flex;
+                cursor: pointer;
+                align-items: center;
+                justify-content: center;
+                border-top-left-radius: 0.5rem;
+                border-top-right-radius: 0.5rem;
+                border: none;
+                padding: 0.5rem 0.8rem;
+                color:;
+                transition: all 0.15s ease-in-out;
+                position: relative;
+            }
+
+            .radio-inputs .radio input:checked + .name {
+                background-color: #e8e8e8;
+                font-weight: 600;
+            }
+
+            .radio-inputs .radio input + .name:hover {
+                color: #fff;
+            }
+
+            .radio-inputs .radio input:checked + .name:hover {
+                color: #1d1d29;
+            }
+
+            .radio-inputs .radio input:checked + .name::after,
+            .radio-inputs .radio input:checked + .name::before {
+                content: "";
+                position: absolute;
+                width: 10px;
+                height: 10px;
+                background-color: #70c489;
+                bottom: 0;
+            }
+
+            .radio-inputs .radio input:checked + .name::after {
+                right: -10px;
+                border-bottom-left-radius: 300px;
+                box-shadow: -3px 3px 0px 3px #e8e8e8;
+            }
+
+            .radio-inputs .radio input:checked + .name::before {
+                left: -10px;
+                border-bottom-right-radius: 300px;
+                box-shadow: 3px 3px 0px 3px #e8e8e8;
+            }
+    </style>
 </head>
 <body>
     <div class="app-container">
@@ -18,12 +84,29 @@
                     </svg>
                     <span>Contract Claims</span>
                 </a>
-                <nav class="app-nav">
-                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
-                    <a class="nav-link" asp-controller="Claims" asp-action="Submit">Submit Claim</a>
-                    <a class="nav-link" asp-controller="Claims" asp-action="Approve">Approve Claims</a>
-                    <a class="nav-link" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                </nav>
+
+                <!-- Radio button style navigation - exact template implementation -->
+                <div class="radio-inputs">
+                    <label class="radio">
+                        <input type="radio" name="radio" id="nav-home" />
+                        <span class="name" onclick="location.href='@Url.Action("Index", "Home")'">Home</span>
+                    </label>
+
+                    <label class="radio">
+                        <input type="radio" name="radio" id="nav-submit" />
+                        <span class="name" onclick="location.href='@Url.Action("Submit", "Claims")'">Submit</span>
+                    </label>
+
+                    <label class="radio">
+                        <input type="radio" name="radio" id="nav-approve" />
+                        <span class="name" onclick="location.href='@Url.Action("Approve", "Claims")'">Approve</span>
+                    </label>
+
+                    <label class="radio">
+                        <input type="radio" name="radio" id="nav-privacy" />
+                        <span class="name" onclick="location.href='@Url.Action("Privacy", "Home")'">Privacy</span>
+                    </label>
+                </div>
             </div>
         </header>
 
@@ -31,18 +114,44 @@
             @RenderBody()
         </main>
 
-        <footer class="app-footer">
-            <div class="footer-content">
-                <div class="copyright">© 2025 Contract Monthly Claim System</div>
-                <button class="footer-button" onclick="location.href='@Url.Action("Privacy", "Home")'">
-                    Privacy Policy
-                </button>
-            </div>
-        </footer>
     </div>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        // Set active navigation based on current page
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentPath = window.location.pathname.toLowerCase();
+
+            if (currentPath.includes('/claims/submit')) {
+                document.getElementById('nav-submit').checked = true;
+            document.getElementById('nav-submit').setAttribute('checked', 'checked');
+            document.getElementById('nav-home').removeAttribute('checked');
+            document.getElementById('nav-approve').removeAttribute('checked');
+            document.getElementById('nav-privacy').removeAttribute('checked');
+            } else if (currentPath.includes('/claims/approve')) {
+                document.getElementById('nav-approve').checked = true;
+                document.getElementById('nav-approve').setAttribute('checked', 'checked');
+                document.getElementById('nav-home').removeAttribute('checked');
+                document.getElementById('nav-submit').removeAttribute('checked');
+                document.getElementById('nav-privacy').removeAttribute('checked');
+            } else if (currentPath.includes('/home/privacy')) {
+                document.getElementById('nav-privacy').checked = true;
+                document.getElementById('nav-privacy').setAttribute('checked', 'checked');
+                document.getElementById('nav-home').removeAttribute('checked');
+                document.getElementById('nav-submit').removeAttribute('checked');
+                document.getElementById('nav-approve').removeAttribute('checked');
+            } else {
+                document.getElementById('nav-home').checked = true;
+                document.getElementById('nav-home').setAttribute('checked', 'checked');
+                document.getElementById('nav-submit').removeAttribute('checked');
+                document.getElementById('nav-approve').removeAttribute('checked');
+                document.getElementById('nav-privacy').removeAttribute('checked');
+            }
+        });
+    </script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
