@@ -5,18 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] — Contract Claims</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/css/layout.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/Shared/_Layout.cshtml.css" asp-append-version="true" />
     <style>
-        /* Radio button navigation styles - exact template implementation */
+        /* Apple Minimalistic Tab Style — Preserving Original Structure */
         .radio-inputs {
             position: relative;
             display: flex;
-            border-radius: 0.5rem;
-            background-color: #70c489;
+            border-radius: 0.75rem;
+            background-color: #ffffff;
             box-sizing: border-box;
             font-size: 14px;
-            width: 90%;
-            padding: 1rem 1rem 0 1rem;
+            width: fit-content;
+            padding: 4px;
+            border: 1px solid #d1d1d6;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
         }
 
             .radio-inputs .radio input {
@@ -28,48 +30,34 @@
                 cursor: pointer;
                 align-items: center;
                 justify-content: center;
-                border-top-left-radius: 0.5rem;
-                border-top-right-radius: 0.5rem;
-                border: none;
-                padding: 0.5rem 0.8rem;
-                color:;
-                transition: all 0.15s ease-in-out;
+                border-radius: 0.5rem;
+                padding: 0.5rem 1rem;
+                color: #1d1d1f;
+                font-weight: 500;
+                transition: background-color 0.2s ease, color 0.2s ease;
                 position: relative;
             }
 
             .radio-inputs .radio input:checked + .name {
-                background-color: #e8e8e8;
+                background-color: #e5e5ea;
+                color: #000;
                 font-weight: 600;
             }
 
             .radio-inputs .radio input + .name:hover {
-                color: #fff;
+                background-color: #f0f0f5;
+                color: #000;
             }
 
             .radio-inputs .radio input:checked + .name:hover {
-                color: #1d1d29;
+                background-color: #dadade;
+                color: #000;
             }
 
+            /* Remove the bottom shape effects for a cleaner Apple-like UI */
             .radio-inputs .radio input:checked + .name::after,
             .radio-inputs .radio input:checked + .name::before {
-                content: "";
-                position: absolute;
-                width: 10px;
-                height: 10px;
-                background-color: #70c489;
-                bottom: 0;
-            }
-
-            .radio-inputs .radio input:checked + .name::after {
-                right: -10px;
-                border-bottom-left-radius: 300px;
-                box-shadow: -3px 3px 0px 3px #e8e8e8;
-            }
-
-            .radio-inputs .radio input:checked + .name::before {
-                left: -10px;
-                border-bottom-right-radius: 300px;
-                box-shadow: 3px 3px 0px 3px #e8e8e8;
+                display: none;
             }
     </style>
 </head>
@@ -77,28 +65,19 @@
     <div class="app-container">
         <header class="app-header">
             <div class="header-content">
-                <a class="app-logo" asp-controller="Home" asp-action="Index">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor" />
-                        <path d="M12 6C8.69 6 6 8.69 6 12C6 15.31 8.69 18 12 18C15.31 18 18 15.31 18 12C18 8.69 15.31 6 12 6ZM12 16C9.79 16 8 14.21 8 12C8 9.79 9.79 8 12 8C14.21 8 16 9.79 16 12C16 14.21 14.21 16 12 16Z" fill="currentColor" />
-                    </svg>
-                    <span>Contract Claims</span>
-                </a>
-
-                <!-- Radio button style navigation - exact template implementation -->
+                <!-- Apple Minimalistic Tab Style - exact template implementation -->
                 <div class="radio-inputs">
                     <label class="radio">
-                        <input type="radio" name="radio" id="nav-home" />
+                        <input type="radio" name="radio" id="nav-home" checked />
                         <span class="name" onclick="location.href='@Url.Action("Index", "Home")'">Home</span>
                     </label>
                     <label class="radio">
-                        <input type="radio" name="radio" id="nav-submit" />
-                        <span class="name" onclick="location.href='@Url.Action("Submit", "Claims")'">Submit</span>
+                        <input type="radio" name="radio" id="nav-claim" />
+                        <span class="name" onclick="location.href='@Url.Action("Submit", "Claims")'">Claim</span>
                     </label>
-
                     <label class="radio">
-                        <input type="radio" name="radio" id="nav-approve" />
-                        <span class="name" onclick="location.href='@Url.Action("Approve", "Claims")'">Approve</span>
+                        <input type="radio" name="radio" id="nav-submit" />
+                        <span class="name" onclick="location.href='@Url.Action("Approve", "Claims")'">Submit</span>
                     </label>
                 </div>
             </div>
@@ -119,20 +98,20 @@
             const currentPath = window.location.pathname.toLowerCase();
 
             if (currentPath.includes('/claims/submit')) {
+                document.getElementById('nav-claim').checked = true;
+                document.getElementById('nav-claim').setAttribute('checked', 'checked');
+                document.getElementById('nav-home').removeAttribute('checked');
+                document.getElementById('nav-submit').removeAttribute('checked');
+            } else if (currentPath.includes('/claims/approve')) {
                 document.getElementById('nav-submit').checked = true;
                 document.getElementById('nav-submit').setAttribute('checked', 'checked');
                 document.getElementById('nav-home').removeAttribute('checked');
-                document.getElementById('nav-approve').removeAttribute('checked');
-            } else if (currentPath.includes('/claims/approve')) {
-                document.getElementById('nav-approve').checked = true;
-                document.getElementById('nav-approve').setAttribute('checked', 'checked');
-                document.getElementById('nav-home').removeAttribute('checked');
-                document.getElementById('nav-submit').removeAttribute('checked');
+                document.getElementById('nav-claim').removeAttribute('checked');
             } else {
                 document.getElementById('nav-home').checked = true;
                 document.getElementById('nav-home').setAttribute('checked', 'checked');
+                document.getElementById('nav-claim').removeAttribute('checked');
                 document.getElementById('nav-submit').removeAttribute('checked');
-                document.getElementById('nav-approve').removeAttribute('checked');
             }
         });
     </script>

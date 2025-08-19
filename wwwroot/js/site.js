@@ -107,11 +107,11 @@ function setActiveNavigation() {
 
     // Check the appropriate radio based on current path
     if (currentPath.includes('/claims/submit')) {
+        document.getElementById('nav-claim').checked = true;
+        document.getElementById('nav-claim').setAttribute('checked', 'checked');
+    } else if (currentPath.includes('/claims/approve')) {
         document.getElementById('nav-submit').checked = true;
         document.getElementById('nav-submit').setAttribute('checked', 'checked');
-    } else if (currentPath.includes('/claims/approve')) {
-        document.getElementById('nav-approve').checked = true;
-        document.getElementById('nav-approve').setAttribute('checked', 'checked');
     } else {
         document.getElementById('nav-home').checked = true;
         document.getElementById('nav-home').setAttribute('checked', 'checked');
