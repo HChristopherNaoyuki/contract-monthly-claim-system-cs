@@ -19,6 +19,7 @@
             padding: 4px;
             border: 1px solid #d1d1d6;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            margin: 0 auto;
         }
 
             .radio-inputs .radio input {
@@ -65,7 +66,7 @@
     <div class="app-container">
         <header class="app-header">
             <div class="header-content">
-                <!-- Apple Minimalistic Tab Style - exact template implementation -->
+                <!-- Apple Minimalistic Tab Style - exact template implementation with 4 options -->
                 <div class="radio-inputs">
                     <label class="radio">
                         <input type="radio" name="radio" id="nav-home" checked />
@@ -78,6 +79,10 @@
                     <label class="radio">
                         <input type="radio" name="radio" id="nav-submit" />
                         <span class="name" onclick="location.href='@Url.Action("Approve", "Claims")'">Submit</span>
+                    </label>
+                    <label class="radio">
+                        <input type="radio" name="radio" id="nav-privacy" />
+                        <span class="name" onclick="location.href='@Url.Action("Privacy", "Home")'">Privacy</span>
                     </label>
                 </div>
             </div>
@@ -97,21 +102,30 @@
         document.addEventListener('DOMContentLoaded', function() {
             const currentPath = window.location.pathname.toLowerCase();
 
+            // Reset all radio buttons
+            document.getElementById('nav-home').removeAttribute('checked');
+            document.getElementById('nav-claim').removeAttribute('checked');
+            document.getElementById('nav-submit').removeAttribute('checked');
+            document.getElementById('nav-privacy').removeAttribute('checked');
+
+            document.getElementById('nav-home').checked = false;
+            document.getElementById('nav-claim').checked = false;
+            document.getElementById('nav-submit').checked = false;
+            document.getElementById('nav-privacy').checked = false;
+
+            // Set the active radio based on current path
             if (currentPath.includes('/claims/submit')) {
                 document.getElementById('nav-claim').checked = true;
                 document.getElementById('nav-claim').setAttribute('checked', 'checked');
-                document.getElementById('nav-home').removeAttribute('checked');
-                document.getElementById('nav-submit').removeAttribute('checked');
             } else if (currentPath.includes('/claims/approve')) {
                 document.getElementById('nav-submit').checked = true;
                 document.getElementById('nav-submit').setAttribute('checked', 'checked');
-                document.getElementById('nav-home').removeAttribute('checked');
-                document.getElementById('nav-claim').removeAttribute('checked');
+            } else if (currentPath.includes('/home/privacy')) {
+                document.getElementById('nav-privacy').checked = true;
+                document.getElementById('nav-privacy').setAttribute('checked', 'checked');
             } else {
                 document.getElementById('nav-home').checked = true;
                 document.getElementById('nav-home').setAttribute('checked', 'checked');
-                document.getElementById('nav-claim').removeAttribute('checked');
-                document.getElementById('nav-submit').removeAttribute('checked');
             }
         });
     </script>
