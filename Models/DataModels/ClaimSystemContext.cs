@@ -1,10 +1,10 @@
-﻿// Models/DataModels/ClaimSystemContext.cs
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using contract_monthly_claim_system_cs.Models.DataModels;
 
 namespace contract_monthly_claim_system_cs.Models.DataModels
 {
     /// <summary>
-    /// Database context for the Claim System
+    /// Database context for the Claim System with user authentication
     /// </summary>
     public class ClaimSystemContext : DbContext
     {
@@ -13,6 +13,7 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
         {
         }
 
+        public DbSet<User> Users { get; set; } = null!;
         public DbSet<Lecturer> Lecturers { get; set; } = null!;
         public DbSet<Claim> Claims { get; set; } = null!;
         public DbSet<Document> Documents { get; set; } = null!;
@@ -39,15 +40,21 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
                 .HasForeignKey(a => a.ClaimId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Seed initial data for prototype
-            modelBuilder.Entity<Lecturer>().HasData(
-                new Lecturer
+            // Add unique constraint for username
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.Username)
+                .IsUnique();
+
+            // Seed initial admin user
+            modelBuilder.Entity<User>().HasData(
+                new User
                 {
-                    LecturerId = 1,
-                    FirstName = "John",
-                    LastName = "Smith",
-                    Email = "john.smith@example.com",
-                    HourlyRate = 150.00m
+                    UserId = 1,
+                    Name = "Admin",
+                    Surname = "System",
+                    Username = "admin",
+                    Password = "admin123", // In production, this should be hashed
+                    Role = UserRole.AcademicManager
                 });
         }
     }

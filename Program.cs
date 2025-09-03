@@ -1,4 +1,3 @@
-// Program.cs
 using contract_monthly_claim_system_cs.Models.DataModels;
 using Microsoft.EntityFrameworkCore;
 
@@ -7,9 +6,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
-// Add DbContext with SQL Server
-builder.Services.AddDbContext<ClaimSystemContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Add session services
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
 
 var app = builder.Build();
 
@@ -25,24 +29,11 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthorization();
 
+// Use session middleware
+app.UseSession();
+
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
-
-// Initialize database (for prototype)
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    try
-    {
-        var context = services.GetRequiredService<ClaimSystemContext>();
-        context.Database.EnsureCreated(); // Creates database if it doesn't exist
-    }
-    catch (Exception ex)
-    {
-        var logger = services.GetRequiredService<ILogger<Program>>();
-        logger.LogError(ex, "An error occurred creating the DB.");
-    }
-}
+    pattern: "{controller=Auth}/{action=Index}/{id?}");
 
 app.Run();

@@ -1,146 +1,20 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] — Contract Claims</title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Shared/_Layout.cshtml.css" asp-append-version="true" />
-    <style>
-        /* Apple Minimalistic Tab Style — Preserving Original Structure */
-        .radio-inputs {
-            position: relative;
-            display: flex;
-            border-radius: 0.75rem;
-            background-color: #ffffff;
-            box-sizing: border-box;
-            font-size: 14px;
-            width: fit-content;
-            padding: 4px;
-            border: 1px solid #d1d1d6;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            margin: 0 auto;
-            /* Shift down by approximately 0.35 inches (25px) */
-            margin-top: 25px;
-        }
-
-            .radio-inputs .radio input {
-                display: none;
+﻿<!-- User profile section -->
+@if (Context.Session.GetString("UserId") != null)
+{
+    <div class="user-profile">
+        <div class="user-avatar">
+            @{
+                var name = Context.Session.GetString("Name");
+                var firstLetter = !string.IsNullOrEmpty(name) ? name[0].ToString().ToUpper() : "U";
             }
-
-            .radio-inputs .radio .name {
-                display: flex;
-                cursor: pointer;
-                align-items: center;
-                justify-content: center;
-                border-radius: 0.5rem;
-                padding: 0.5rem 1rem;
-                color: #1d1d1f;
-                font-weight: 500;
-                transition: background-color 0.2s ease, color 0.2s ease;
-                position: relative;
-            }
-
-            .radio-inputs .radio input:checked + .name {
-                background-color: #e5e5ea;
-                color: #000;
-                font-weight: 600;
-            }
-
-            .radio-inputs .radio input + .name:hover {
-                background-color: #f0f0f5;
-                color: #000;
-            }
-
-            .radio-inputs .radio input:checked + .name:hover {
-                background-color: #dadade;
-                color: #000;
-            }
-
-            /* Remove the bottom shape effects for a cleaner Apple-like UI */
-            .radio-inputs .radio input:checked + .name::after,
-            .radio-inputs .radio input:checked + .name::before {
-                display: none;
-            }
-    </style>
-</head>
-<body>
-    <div class="app-container">
-        <header class="app-header">
-            <div class="header-content">
-                <!-- Apple Minimalistic Tab Style - exact template implementation with 5 options -->
-                <div class="radio-inputs">
-                    <label class="radio">
-                        <input type="radio" name="radio" id="nav-home" checked />
-                        <span class="name" onclick="location.href='@Url.Action("Index", "Home")'">Home</span>
-                    </label>
-                    <label class="radio">
-                        <input type="radio" name="radio" id="nav-submit" />
-                        <span class="name" onclick="location.href='@Url.Action("Submit", "Claims")'">Submit</span>
-                    </label>
-                    <label class="radio">
-                        <input type="radio" name="radio" id="nav-review" />
-                        <span class="name" onclick="location.href='@Url.Action("Approve", "Claims")'">Review</span>
-                    </label>
-                    <label class="radio">
-                        <input type="radio" name="radio" id="nav-track" />
-                        <span class="name" onclick="location.href='@Url.Action("Status", "Claims")'">Track</span>
-                    </label>
-                    <label class="radio">
-                        <input type="radio" name="radio" id="nav-privacy" />
-                        <span class="name" onclick="location.href='@Url.Action("Privacy", "Home")'">Privacy</span>
-                    </label>
-                </div>
-            </div>
-        </header>
-
-        <main class="app-main">
-            @RenderBody()
-        </main>
-
+            @firstLetter
+        </div>
+        <div class="user-info">
+            <span class="username">@Context.Session.GetString("Username")</span>
+            <span class="user-role">@Context.Session.GetString("Role")</span>
+        </div>
+        <form asp-controller="Auth" asp-action="Logout" method="post">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
     </div>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
-    <script>
-        // Set active navigation based on current page
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentPath = window.location.pathname.toLowerCase();
-
-            // Reset all radio buttons
-            document.getElementById('nav-home').removeAttribute('checked');
-            document.getElementById('nav-submit').removeAttribute('checked');
-            document.getElementById('nav-review').removeAttribute('checked');
-            document.getElementById('nav-track').removeAttribute('checked');
-            document.getElementById('nav-privacy').removeAttribute('checked');
-
-            document.getElementById('nav-home').checked = false;
-            document.getElementById('nav-submit').checked = false;
-            document.getElementById('nav-review').checked = false;
-            document.getElementById('nav-track').checked = false;
-            document.getElementById('nav-privacy').checked = false;
-
-            // Set the active radio based on current path
-            if (currentPath.includes('/claims/submit')) {
-                document.getElementById('nav-submit').checked = true;
-                document.getElementById('nav-submit').setAttribute('checked', 'checked');
-            } else if (currentPath.includes('/claims/approve')) {
-                document.getElementById('nav-review').checked = true;
-                document.getElementById('nav-review').setAttribute('checked', 'checked');
-            } else if (currentPath.includes('/claims/status')) {
-                document.getElementById('nav-track').checked = true;
-                document.getElementById('nav-track').setAttribute('checked', 'checked');
-            } else if (currentPath.includes('/home/privacy')) {
-                document.getElementById('nav-privacy').checked = true;
-                document.getElementById('nav-privacy').setAttribute('checked', 'checked');
-            } else {
-                document.getElementById('nav-home').checked = true;
-                document.getElementById('nav-home').setAttribute('checked', 'checked');
-            }
-        });
-    </script>
-
-    @await RenderSectionAsync("Scripts", required: false)
-</body>
-</html>
+}
