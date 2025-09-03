@@ -1,241 +1,152 @@
 # Contract Monthly Claim System (CMCS)
 
 ## Table of Contents
-
 1. [Overview](#overview)
-2. [Key Features](#key-features)
-3. [Technology Stack](#technology-stack)
-4. [System Architecture](#system-architecture)
-5. [Project Structure](#project-structure)
-6. [Database Design](#database-design)
-7. [Installation and Setup](#installation-and-setup)
-   - [Prerequisites](#prerequisites)
-   - [Setup Instructions](#setup-instructions)
-   - [Configuration](#configuration)
-8. [Usage Guide](#usage-guide)
-   - [For Lecturers](#for-lecturers)
-   - [For Coordinators and Managers](#for-coordinators-and-managers)
-9. [Key Components](#key-components)
-   - [Controllers](#controllers)
-   - [View Models](#view-models)
-   - [Data Models](#data-models)
-10. [Styling and Design](#styling-and-design)
-11. [Validation and Error Handling](#validation-and-error-handling)
-12. [Security Features](#security-features)
-13. [Browser Support](#browser-support)
-14. [Support](#support)
-15. [Disclaimer](#disclaimer)
+2. [System Architecture](#system-architecture)
+3. [Project Structure](#project-structure)
+4. [Installation Guide](#installation-guide)
+5. [Usage Manual](#usage-manual)
+6. [Features](#features)
+7. [Technology Stack](#technology-stack)
+8. [Development Notes](#development-notes)
+9. [DISCLAIMER](#disclaimer)
 
 ## Overview
 
 The Contract Monthly Claim System (CMCS) is a comprehensive web-based application developed using ASP.NET Core MVC. 
-This system streamlines the process of submitting, reviewing, and approving monthly claims for Independent Contractor (IC) lecturers in educational institutions. 
-The application features a clean, minimalist user interface, ensuring an intuitive user experience.
-
-## Key Features
-
-- **Lecturer Claim Submission**: Intuitive form interface for lecturers to submit monthly claims with hours worked and supporting documentation
-- **Document Management**: Secure file upload system for supporting documents with type validation and size limits
-- **Approval Workflow**: Streamlined review process for program coordinators and academic managers
-- **Real-time Status Tracking**: Transparent tracking system that shows claim status throughout the approval lifecycle
-- **Automated Calculations**: Automatic calculation of claim amounts based on hours worked and hourly rates
-- **Role-based Access**: Different views and functionalities based on user roles (lecturers, coordinators, managers)
-- **Responsive Design**: Mobile-friendly interface that works across various device sizes
-
-## Technology Stack
-
-- **Framework**: ASP.NET Core 7.0
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Database**: Entity Framework Core with SQL Server
-- **Styling**: Custom CSS with Apple-inspired minimalist design
-- **Architecture**: MVC (Model-View-Controller) pattern
+This system streamlines the process of submitting, reviewing, and approving monthly claims for Independent Contractor (IC) lecturers in educational institutions.
 
 ## System Architecture
 
-The application follows a clean architecture pattern with separation of concerns:
+The application follows the Model-View-Controller (MVC) architectural pattern with clear separation of concerns:
 
-- **Controllers**: Handle HTTP requests and application logic
-- **Models**: Define data structures and business logic
-- **Views**: Render the user interface using Razor templates
-- **ViewModels**: Specialized models for view-specific data presentation
+- **Models**: Data entities and view models
+- **Views**: User interface components
+- **Controllers**: Business logic and request handling
 
 ## Project Structure
 
 ```
 contract-monthly-claim-system-cs/
 ├── Controllers/
-│   ├── HomeController.cs
-│   └── ClaimsController.cs
-├── Documentation/
-│   └── Documentation.txt
+│   ├── AuthController.cs          # Handles authentication (login/register)
+│   ├── ClaimsController.cs        # Manages claim operations
+│   └── HomeController.cs          # Handles home and privacy pages
 ├── Models/
-│   ├── ErrorViewModel.cs
-│   ├── ClaimViewModels/
-│   │   ├── ClaimSubmissionViewModel.cs
-│   │   ├── ClaimApprovalViewModel.cs
-│   │   └── DocumentViewModel.cs
-│   └── DataModels/
-│       ├── Lecturer.cs
-│       ├── Claim.cs
-│       ├── ClaimSystemContext.cs
-│       ├── Document.cs
-│       └── Approval.cs
+│   ├── DataModels/                # Data entities
+│   │   ├── User.cs                # User authentication model
+│   │   ├── Lecturer.cs            # Lecturer entity
+│   │   ├── Claim.cs               # Claim entity
+│   │   ├── Document.cs            # Document entity
+│   │   └── Approval.cs            # Approval entity
+│   ├── ViewModels/                # View-specific models
+│   │   ├── LoginViewModel.cs      # Login form model
+│   │   ├── RegisterViewModel.cs   # Registration form model
+│   │   └── ClaimViewModels/       # Claim-related view models
+│   │       ├── ClaimSubmissionViewModel.cs
+│   │       ├── ClaimApprovalViewModel.cs
+│   │       └── DocumentViewModel.cs
+│   └── ErrorViewModel.cs          # Error page model
 ├── Views/
-│   ├── Home/
-│   │   ├── Index.cshtml
-│   │   └── Privacy.cshtml
-│   ├── Claims/
-│   │   ├── Submit.cshtml
-│   │   ├── Approve.cshtml
-│   │   └── Status.cshtml
-│   └── Shared/
-│       ├── _Layout.cshtml
-│       ├── _Layout.cshtml.css
+│   ├── Auth/                      # Authentication views
+│   │   ├── Index.cshtml           # Login/Register page
+│   │   └── ForgotPassword.cshtml  # Password reset page
+│   ├── Claims/                    # Claim management views
+│   │   ├── Submit.cshtml          # Claim submission form
+│   │   ├── Approve.cshtml         # Claim approval interface
+│   │   └── Status.cshtml          # Claim status tracking
+│   ├── Home/                      # Home controller views
+│   │   ├── Index.cshtml           # Home page
+│   │   └── Privacy.cshtml         # Privacy policy page
+│   └── Shared/                    # Shared layout and components
+│       ├── _Layout.cshtml         # Main layout template
+│       ├── _Layout.cshtml.css     # Layout-specific styles
 │       ├── _ValidationScriptsPartial.cshtml
-│       └── Error.cshtml
+│       └── Error.cshtml           # Error page
 ├── wwwroot/
 │   ├── css/
-│   │   └── site.css
+│   │   └── site.css               # Main stylesheet
 │   ├── js/
-│   │   └── site.js
-│   ├── lib/
+│   │   └── site.js                # Client-side JavaScript
+│   ├── lib/                       # Third-party libraries
 │   └── favicon.ico
-├── appsettings.json
-└── Program.cs
+├── Documentation/
+│   ├── Project_Plan.txt           # Project planning documentation
+│   └── Documentation.txt          # System documentation
+├── appsettings.json               # Application configuration
+└── Program.cs                     # Application entry point
 ```
 
-## Database Design
-
-The system uses a relational database with the following main entities:
-
-- **Lecturers**: Stores information about independent contractor lecturers
-- **Claims**: Tracks monthly claims submitted by lecturers
-- **Documents**: Manages supporting documents uploaded with claims
-- **Approvals**: Records approval decisions and comments
-
-## Installation and Setup
+## Installation Guide
 
 ### Prerequisites
-
 - .NET 7.0 SDK or later
-- SQL Server (LocalDB or full version)
 - Web browser with JavaScript support
 - Git for version control
 
 ### Setup Instructions
+1. Clone the repository
+2. Restore NuGet packages: `dotnet restore`
+3. Build the solution: `dotnet build`
+4. Run the application: `dotnet run`
+5. Access via: `https://localhost:7000` or `http://localhost:5000`
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/HChristopherNaoyuki/contract-monthly-claim-system-cs.git
-   cd contract-monthly-claim-system-cs
-   ```
-
-2. Restore NuGet packages:
-   ```bash
-   dotnet restore
-   ```
-
-3. Update the database connection string in `appsettings.json`
-
-4. Apply database migrations:
-   ```bash
-   dotnet ef database update
-   ```
-
-5. Build the solution:
-   ```bash
-   dotnet build
-   ```
-
-6. Run the application:
-   ```bash
-   dotnet run
-   ```
-
-### Configuration
-
-Update the connection string in `appsettings.json`:
-
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=ContractClaimsDB;Trusted_Connection=true;MultipleActiveResultSets=true"
-  }
-}
-```
-
-## Usage Guide
+## Usage Manual
 
 ### For Lecturers
+1. Register/Login with lecturer credentials
+2. Submit claims with hours worked and hourly rate
+3. Upload supporting documents
+4. Track claim status in real-time
 
-1. Navigate to the Submit Claim page
-2. Enter hours worked (automatically calculates amount based on hourly rate)
-3. Upload supporting documents (PDF, DOC, DOCX formats)
-4. Submit the claim for review
-5. Track claim status on the Status page
+### For Coordinators/Managers
+1. Login with appropriate credentials
+2. Review and approve/reject claims
+3. Monitor claim workflow
+4. Manage user accounts
 
-### For Coordinators and Managers
+## Features
 
-1. Access the Approve Claims page to view pending claims
-2. Review claim details and supporting documents
-3. Approve or reject claims with optional comments
-4. Monitor the approval workflow
+### Core Functionality
+- User authentication and authorization
+- Role-based access control (Lecturer, Coordinator, Manager)
+- Claim submission with editable hourly rates
+- Document upload and management
+- Real-time status tracking
+- Automated calculations
 
-## Key Components
+### User Interface
+- Apple-inspired minimalist design
+- Responsive layout for all devices
+- Intuitive navigation system
+- Clean typography and spacing
 
-### Controllers
-
-- **HomeController**: Handles basic navigation (Home, Privacy pages)
-- **ClaimsController**: Manages all claim-related operations including submission, approval, and status tracking
-
-### View Models
-
-- **ClaimSubmissionViewModel**: Captures data for claim submission form
-- **ClaimApprovalViewModel**: Provides data for claim approval interface
-- **DocumentViewModel**: Handles document-related data presentation
-
-### Data Models
-
-- **Lecturer**: Represents independent contractor lecturers
-- **Claim**: Stores monthly claim information
-- **Document**: Manages uploaded supporting documents
-- **Approval**: Tracks approval decisions and workflow
-
-## Styling and Design
-
-The application features a minimalist Apple-inspired design with:
-
-- Clean typography using system fonts
-- Subtle color palette with appropriate contrast
-- Responsive layout that adapts to different screen sizes
-- Intuitive navigation with tab-based interface
-- Smooth transitions and hover effects
-
-## Validation and Error Handling
-
-- Client-side validation for immediate feedback
-- Server-side validation for data integrity
-- Comprehensive error handling with user-friendly messages
-- File type and size validation for document uploads
-
-## Security Features
-
+### Security Features
+- Session-based authentication
 - Input validation and sanitization
-- Secure file upload handling
 - Role-based access control
-- Protection against common web vulnerabilities
+- Secure file upload handling
 
-## Browser Support
+## Technology Stack
 
-The application supports all modern browsers including:
-- Chrome (latest)
-- Firefox (latest)
-- Safari (latest)
-- Edge (latest)
+- **Backend**: ASP.NET Core 7.0, C# 7.0
+- **Frontend**: HTML5, CSS3, JavaScript
+- **Architecture**: MVC Pattern
+- **Styling**: Custom CSS with Apple design principles
+- **Authentication**: Session-based with role management
 
-## Support
+## Development Notes
 
-For technical support or questions about the Contract Monthly Claim System, please refer to the system documentation.
+This project was developed following:
+- Clean code principles with Allman-style formatting
+- Proper separation of concerns
+- User-centered design approach
+- Accessibility considerations
+- Performance optimization techniques
+
+## Notes
+
+*This system is designed for educational purposes as part of the PROG6212 Programming 2B curriculum. All design and implementation follow academic standards and best practices.*
 
 ## DISCLAIMER
 
