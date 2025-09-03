@@ -30,8 +30,10 @@ namespace contract_monthly_claim_system_cs.Controllers
                 return RedirectToAction("Index", "Auth");
             }
 
+            // Set the welcome message and description
             ViewData["WelcomeMessage"] = "Contract Monthly Claim System";
             ViewData["SystemDescription"] = "Streamlined claim submission and approval";
+
             return View();
         }
 

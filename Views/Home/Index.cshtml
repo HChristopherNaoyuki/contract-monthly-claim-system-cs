@@ -1,5 +1,6 @@
-﻿﻿@{
+﻿@{
     ViewData["Title"] = "Home";
+    Layout = "_Layout"; // Ensure layout is explicitly set
 }
 
 <div class="container">
@@ -63,3 +64,13 @@
         <div class="copyright">© 2025 - Contract Monthly Claim System</div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Set active navigation based on current page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Home is always active when on the index page
+            document.getElementById('nav-home').checked = true;
+        });
+    </script>
+}
