@@ -12,7 +12,7 @@
     <title>@ViewData["Title"] - Contract Claims</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <style>
-        /* Apple Minimalistic Tab Style — Preserving Original Structure */
+        /* Apple Minimalistic Design */
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: #f5f5f7;
@@ -24,342 +24,211 @@
             min-height: 100vh;
         }
 
-        .wrapper {
-            --input-focus: #2d8cf0;
-            --font-color: #323232;
-            --font-color-sub: #666;
-            --bg-color: #fff;
-            --bg-color-alt: #666;
-            --main-color: #323232;
-        }
-
-        .radio-inputs {
-            position: relative;
-            display: flex;
-            flex-wrap: wrap;
-            border-radius: 0.5rem;
-            background-color: #70c489;
-            box-sizing: border-box;
-            font-size: 14px;
-            width: 90%;
-            padding: 1rem 1rem 0 1rem;
-        }
-
-            .radio-inputs .radio {
-                flex: 1 1 auto;
-                text-align: center;
-            }
-
-                .radio-inputs .radio input {
-                    display: none;
-                }
-
-                .radio-inputs .radio .name {
-                    display: flex;
-                    cursor: pointer;
-                    align-items: center;
-                    justify-content: center;
-                    border-radius: 0.5rem;
-                    border: none;
-                    padding: 0.5rem 0;
-                    color: var(--font-color);
-                    transition: all 0.15s ease-in-out;
-                }
-
-                .radio-inputs .radio input:checked + .name {
-                    background-color: #e8e8e8;
-                    font-weight: 600;
-                }
-
-                .radio-inputs .radio input + .name:hover {
-                    background-color: #f0f0f5;
-                }
-
-        /* Card switch styles */
-        .card-switch {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 2rem;
-        }
-
-        .switch {
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            gap: 30px;
-            width: 50px;
-            height: 20px;
-        }
-
-        .toggle {
-            opacity: 0;
-            width: 0;
-            height: 0;
-        }
-
-        .slider {
-            box-sizing: border-box;
-            border-radius: 5px;
-            border: 2px solid var(--main-color);
-            box-shadow: 4px 4px var(--main-color);
-            position: absolute;
-            cursor: pointer;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: var(--bg-color);
-            transition: 0.3s;
-        }
-
-            .slider:before {
-                box-sizing: border-box;
-                position: absolute;
-                content: "";
-                height: 20px;
-                width: 20px;
-                border: 2px solid var(--main-color);
-                border-radius: 5px;
-                left: -2px;
-                bottom: 2px;
-                background-color: var(--bg-color);
-                box-shadow: 0 3px 0 var(--main-color);
-                transition: 0.3s;
-            }
-
-        .toggle:checked + .slider {
-            background-color: var(--input-focus);
-        }
-
-            .toggle:checked + .slider:before {
-                transform: translateX(30px);
-            }
-
-        .card-side::before {
-            position: absolute;
-            content: 'Log in';
-            left: -70px;
-            top: 0;
-            width: 100px;
-            text-decoration: underline;
-            color: var(--font-color);
-            font-weight: 600;
-        }
-
-        .card-side::after {
-            position: absolute;
-            content: 'Sign up';
-            left: 70px;
-            top: 0;
-            width: 100px;
-            text-decoration: none;
-            color: var(--font-color);
-            font-weight: 600;
-        }
-
-        .toggle:checked ~ .card-side:before {
-            text-decoration: none;
-        }
-
-        .toggle:checked ~ .card-side:after {
-            text-decoration: underline;
-        }
-
-        /* Card styles */
-        .flip-card__inner {
-            width: 300px;
-            height: 350px;
-            position: relative;
-            background-color: transparent;
-            perspective: 1000px;
-            text-align: center;
-            transition: transform 0.8s;
-            transform-style: preserve-3d;
-        }
-
-        .toggle:checked ~ .flip-card__inner {
-            transform: rotateY(180deg);
-        }
-
-        .flip-card__front, .flip-card__back {
-            padding: 20px;
-            position: absolute;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            -webkit-backface-visibility: hidden;
-            backface-visibility: hidden;
-            background: lightgrey;
-            gap: 20px;
-            border-radius: 5px;
-            border: 2px solid var(--main-color);
-            box-shadow: 4px 4px var(--main-color);
+        .auth-container {
             width: 100%;
-            height: 100%;
+            max-width: 400px;
+            padding: 20px;
         }
 
-        .flip-card__back {
-            transform: rotateY(180deg);
-        }
-
-        .flip-card__form {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 20px;
+        .card {
+            background: #ffffff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid #e5e5e7;
         }
 
         .title {
-            margin: 20px 0 20px 0;
-            font-size: 25px;
-            font-weight: 900;
+            font-size: 24px;
+            font-weight: 600;
             text-align: center;
-            color: var(--main-color);
+            color: #1d1d1f;
+            margin-bottom: 25px;
         }
 
-        .flip-card__input {
-            width: 250px;
-            height: 40px;
-            border-radius: 5px;
-            border: 2px solid var(--main-color);
-            background-color: var(--bg-color);
-            box-shadow: 4px 4px var(--main-color);
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--font-color);
-            padding: 5px 10px;
-            outline: none;
+        .form-group {
+            margin-bottom: 20px;
         }
 
-            .flip-card__input::placeholder {
-                color: var(--font-color-sub);
-                opacity: 0.8;
+        .form-input {
+            width: 100%;
+            height: 44px;
+            border-radius: 8px;
+            border: 1px solid #d2d2d7;
+            padding: 0 16px;
+            font-size: 16px;
+            color: #1d1d1f;
+            background-color: #ffffff;
+            transition: border-color 0.2s ease;
+        }
+
+            .form-input:focus {
+                outline: none;
+                border-color: #007AFF;
+                box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
             }
 
-            .flip-card__input:focus {
-                border: 2px solid var(--input-focus);
+            .form-input::placeholder {
+                color: #86868b;
             }
 
-        .flip-card__btn {
-            margin: 20px 0 20px 0;
-            width: 120px;
-            height: 40px;
-            border-radius: 5px;
-            border: 2px solid var(--main-color);
-            background-color: var(--bg-color);
-            box-shadow: 4px 4px var(--main-color);
-            font-size: 17px;
-            font-weight: 600;
-            color: var(--font-color);
+        .form-btn {
+            width: 100%;
+            height: 44px;
+            border-radius: 8px;
+            border: none;
+            background-color: #007AFF;
+            color: white;
+            font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
+            transition: background-color 0.2s ease;
         }
 
-            .flip-card__btn:active {
-                box-shadow: 0px 0px var(--main-color);
-                transform: translate(3px, 3px);
+            .form-btn:hover {
+                background-color: #0066CC;
             }
 
-        .flip-card__input + .name:hover {
-            color: #fff;
+            .form-btn:active {
+                transform: scale(0.98);
+            }
+
+        .switch-text {
+            text-align: center;
+            margin-top: 20px;
+            color: #86868b;
+            font-size: 14px;
         }
 
-        .flip-card__input:checked + .name:hover {
-            color: #1d1d29;
+        .switch-link {
+            color: #007AFF;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: 500;
         }
 
-        /* Remove the bottom shape effects for a cleaner Apple-like UI */
-        .flip-card__input:checked + .name::after,
-        .flip-card__input:checked + .name::before {
-            display: none;
-        }
+            .switch-link:hover {
+                text-decoration: underline;
+            }
 
         .validation-error {
             color: #FF3B30;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-
-        .forgot-password {
-            color: var(--input-focus);
-            text-decoration: none;
             font-size: 14px;
-            margin-top: 10px;
+            margin-top: 5px;
+            display: block;
         }
 
-            .forgot-password:hover {
-                text-decoration: underline;
+        .form-select {
+            width: 100%;
+            height: 44px;
+            border-radius: 8px;
+            border: 1px solid #d2d2d7;
+            padding: 0 16px;
+            font-size: 16px;
+            color: #1d1d1f;
+            background-color: #ffffff;
+            appearance: menulist;
+        }
+
+            .form-select:focus {
+                outline: none;
+                border-color: #007AFF;
+                box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
             }
+
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <div class="card-switch">
-            <label class="switch">
-                <input type="checkbox" class="toggle" id="auth-toggle">
-                <span class="slider"></span>
-                <span class="card-side"></span>
-            </label>
-            <div class="flip-card__inner">
-                <div class="flip-card__front">
-                    <div class="title">Log in</div>
-                    <form class="flip-card__form" asp-action="Login" method="post">
-                        <input class="flip-card__input" asp-for="Username" placeholder="Username" required>
+    <div class="auth-container">
+        <div class="card">
+            <!-- Login Form -->
+            <div id="login-form">
+                <div class="title">Log in</div>
+                <form asp-action="Login" method="post">
+                    <div class="form-group">
+                        <input class="form-input" asp-for="Username" placeholder="Username" required>
                         <span asp-validation-for="Username" class="validation-error"></span>
+                    </div>
 
-                        <input class="flip-card__input" asp-for="Password" placeholder="Password" type="password" required>
+                    <div class="form-group">
+                        <input class="form-input" asp-for="Password" placeholder="Password" type="password" required>
                         <span asp-validation-for="Password" class="validation-error"></span>
+                    </div>
 
-                        <button class="flip-card__btn">Let's go!</button>
+                    <button type="submit" class="form-btn">Let's go!</button>
+                </form>
 
-                        <a href="@Url.Action("ForgotPassword", "Auth")" class="forgot-password">Forgot password?</a>
-                    </form>
+                <div class="switch-text">
+                    Don't have an account? <a class="switch-link" onclick="showRegister()">Sign up</a>
                 </div>
-                <div class="flip-card__back">
-                    <div class="title">Sign up</div>
-                    <form class="flip-card__form" asp-action="Register" method="post">
-                        <input class="flip-card__input" name="Name" placeholder="Name" required>
+
+                <div class="switch-text">
+                    <a href="@Url.Action("ForgotPassword", "Auth")" class="switch-link">Forgot password?</a>
+                </div>
+            </div>
+
+            <!-- Register Form -->
+            <div id="register-form" class="hidden">
+                <div class="title">Sign up</div>
+                <form asp-action="Register" method="post">
+                    <div class="form-group">
+                        <input class="form-input" name="Name" placeholder="Name" required>
                         <span class="validation-error" data-valmsg-for="Name"></span>
+                    </div>
 
-                        <input class="flip-card__input" name="Surname" placeholder="Surname" required>
+                    <div class="form-group">
+                        <input class="form-input" name="Surname" placeholder="Surname" required>
                         <span class="validation-error" data-valmsg-for="Surname"></span>
+                    </div>
 
-                        <input class="flip-card__input" name="Username" placeholder="Username" required>
+                    <div class="form-group">
+                        <input class="form-input" name="Username" placeholder="Username" required>
                         <span class="validation-error" data-valmsg-for="Username"></span>
+                    </div>
 
-                        <input class="flip-card__input" name="Password" placeholder="Password" type="password" required>
+                    <div class="form-group">
+                        <input class="form-input" name="Password" placeholder="Password" type="password" required>
                         <span class="validation-error" data-valmsg-for="Password"></span>
+                    </div>
 
-                        <input class="flip-card__input" name="ConfirmPassword" placeholder="Confirm Password" type="password" required>
+                    <div class="form-group">
+                        <input class="form-input" name="ConfirmPassword" placeholder="Confirm Password" type="password" required>
                         <span class="validation-error" data-valmsg-for="ConfirmPassword"></span>
+                    </div>
 
-                        <select class="flip-card__input" name="Role" required style="appearance: menulist; height: 44px;">
+                    <div class="form-group">
+                        <select class="form-select" name="Role" required>
                             <option value="">Select Role</option>
                             <option value="Lecturer">Lecturer</option>
                             <option value="ProgrammeCoordinator">Programme Coordinator</option>
                             <option value="AcademicManager">Academic Manager</option>
                         </select>
                         <span class="validation-error" data-valmsg-for="Role"></span>
+                    </div>
 
-                        <button class="flip-card__btn">Confirm!</button>
-                    </form>
+                    <button type="submit" class="form-btn">Confirm!</button>
+                </form>
+
+                <div class="switch-text">
+                    Already have an account? <a class="switch-link" onclick="showLogin()">Log in</a>
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        // Handle the toggle functionality
-        document.getElementById('auth-toggle').addEventListener('change', function() {
-            const innerCard = document.querySelector('.flip-card__inner');
-            if (this.checked) {
-                innerCard.style.transform = 'rotateY(180deg)';
-            } else {
-                innerCard.style.transform = 'rotateY(0deg)';
-            }
-        });
+        function showRegister() {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('register-form').classList.remove('hidden');
+        }
+
+        function showLogin() {
+            document.getElementById('register-form').classList.add('hidden');
+            document.getElementById('login-form').classList.remove('hidden');
+        }
 
         // Add client-side validation for registration form
         document.querySelector('form[asp-action="Register"]').addEventListener('submit', function(e) {
@@ -403,5 +272,9 @@
             });
         });
     </script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </body>
 </html>

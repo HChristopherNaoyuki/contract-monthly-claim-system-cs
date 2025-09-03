@@ -1,5 +1,4 @@
-﻿// Models/ClaimViewModels/ClaimSubmissionViewModel.cs
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using contract_monthly_claim_system_cs.Models.ViewModels;
+using contract_monthly_claim_system_cs.Models.ClaimViewModels;
 using System;
 using System.Collections.Generic;
 
