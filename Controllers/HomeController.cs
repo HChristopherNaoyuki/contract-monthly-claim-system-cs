@@ -24,6 +24,12 @@ namespace contract_monthly_claim_system_cs.Controllers
         /// </summary>
         public IActionResult Index()
         {
+            // Check if user is authenticated
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
+
             ViewData["WelcomeMessage"] = "Contract Monthly Claim System";
             ViewData["SystemDescription"] = "Streamlined claim submission and approval";
             return View();
@@ -34,6 +40,12 @@ namespace contract_monthly_claim_system_cs.Controllers
         /// </summary>
         public IActionResult Privacy()
         {
+            // Check if user is authenticated
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
+
             return View();
         }
 

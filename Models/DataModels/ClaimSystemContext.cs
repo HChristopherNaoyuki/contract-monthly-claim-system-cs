@@ -1,10 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using contract_monthly_claim_system_cs.Models.DataModels;
+﻿// This file is no longer needed for the prototype phase
+// Database functionality has been removed for prototype demonstration
+
+/*
+using Microsoft.EntityFrameworkCore;
 
 namespace contract_monthly_claim_system_cs.Models.DataModels
 {
     /// <summary>
-    /// Database context for the Claim System with user authentication
+    /// Database context for the Claim System
     /// </summary>
     public class ClaimSystemContext : DbContext
     {
@@ -13,7 +16,6 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
         {
         }
 
-        public DbSet<User> Users { get; set; } = null!;
         public DbSet<Lecturer> Lecturers { get; set; } = null!;
         public DbSet<Claim> Claims { get; set; } = null!;
         public DbSet<Document> Documents { get; set; } = null!;
@@ -40,22 +42,17 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
                 .HasForeignKey(a => a.ClaimId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // Add unique constraint for username
-            modelBuilder.Entity<User>()
-                .HasIndex(u => u.Username)
-                .IsUnique();
-
-            // Seed initial admin user
-            modelBuilder.Entity<User>().HasData(
-                new User
+            // Seed initial data for prototype
+            modelBuilder.Entity<Lecturer>().HasData(
+                new Lecturer
                 {
-                    UserId = 1,
-                    Name = "Admin",
-                    Surname = "System",
-                    Username = "admin",
-                    Password = "admin123", // In production, this should be hashed
-                    Role = UserRole.AcademicManager
+                    LecturerId = 1,
+                    FirstName = "John",
+                    LastName = "Smith",
+                    Email = "john.smith@example.com",
+                    HourlyRate = 150.00m
                 });
         }
     }
 }
+*/

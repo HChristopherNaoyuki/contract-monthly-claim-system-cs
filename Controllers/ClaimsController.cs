@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using contract_monthly_claim_system_cs.Models.ClaimViewModels;
+using contract_monthly_claim_system_cs.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 
@@ -15,6 +15,12 @@ namespace contract_monthly_claim_system_cs.Controllers
         /// </summary>
         public IActionResult Submit()
         {
+            // Check if user is authenticated
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
+
             var viewModel = new ClaimSubmissionViewModel
             {
                 HourlyRate = 150.00m // Default value
@@ -27,6 +33,12 @@ namespace contract_monthly_claim_system_cs.Controllers
         /// </summary>
         public IActionResult Approve()
         {
+            // Check if user is authenticated
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
+
             var viewModel = new List<ClaimApprovalViewModel>
             {
                 new ClaimApprovalViewModel
@@ -49,6 +61,12 @@ namespace contract_monthly_claim_system_cs.Controllers
         /// </summary>
         public IActionResult Status(int claimId)
         {
+            // Check if user is authenticated
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
+
             var viewModel = new ClaimApprovalViewModel
             {
                 ClaimId = claimId,
