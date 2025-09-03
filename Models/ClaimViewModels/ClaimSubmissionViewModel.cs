@@ -6,6 +6,7 @@ namespace contract_monthly_claim_system_cs.Models.ClaimViewModels
 {
     /// <summary>
     /// ViewModel for claim submission form
+    /// Allows editing of hourly rate
     /// </summary>
     public class ClaimSubmissionViewModel
     {
@@ -14,6 +15,8 @@ namespace contract_monthly_claim_system_cs.Models.ClaimViewModels
         [Display(Name = "Hours Worked")]
         public decimal HoursWorked { get; set; }
 
+        [Required(ErrorMessage = "Hourly rate is required")]
+        [Range(0, 999.99, ErrorMessage = "Hourly rate must be between 0 and 999.99")]
         [Display(Name = "Hourly Rate")]
         public decimal HourlyRate { get; set; }
 

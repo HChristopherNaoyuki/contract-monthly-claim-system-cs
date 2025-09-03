@@ -11,7 +11,7 @@ namespace contract_monthly_claim_system_cs.Controllers
     public class ClaimsController : Controller
     {
         /// <summary>
-        /// Displays the claim submission form
+        /// Displays the claim submission form with editable hourly rate
         /// </summary>
         public IActionResult Submit()
         {
@@ -23,9 +23,29 @@ namespace contract_monthly_claim_system_cs.Controllers
 
             var viewModel = new ClaimSubmissionViewModel
             {
-                HourlyRate = 150.00m // Default value
+                HourlyRate = 150.00m // Default value, now editable
             };
             return View(viewModel);
+        }
+
+        /// <summary>
+        /// Handles claim submission with editable hourly rate
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Submit(ClaimSubmissionViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                // Calculate amount based on user-input hours and rate
+                model.Amount = model.HoursWorked * model.HourlyRate;
+
+                // In a real application, this would save to database
+                // For prototype, redirect to status page with sample data
+                return RedirectToAction("Status", new { claimId = 1 });
+            }
+
+            return View(model);
         }
 
         /// <summary>
@@ -47,17 +67,17 @@ namespace contract_monthly_claim_system_cs.Controllers
                     LecturerName = "John Smith",
                     ClaimDate = DateTime.Now.AddDays(-2),
                     HoursWorked = 40,
-                    HourlyRate = 150.00m,
-                    Amount = 6000.00m,
+                    HourlyRate = 175.00m, // Updated to show different rate
+                    Amount = 7000.00m, // Updated calculation
                     Status = "Submitted",
-                    DocumentNames = new List<string> { "Timesheet.pdf" }
+                    DocumentNames = new List<string> { "Timesheet.pdf", "Contract.pdf" }
                 }
             };
             return View(viewModel);
         }
 
         /// <summary>
-        /// Displays claim status
+        /// Displays claim status in table format
         /// </summary>
         public IActionResult Status(int claimId)
         {
@@ -73,10 +93,10 @@ namespace contract_monthly_claim_system_cs.Controllers
                 LecturerName = "John Smith",
                 ClaimDate = DateTime.Now.AddDays(-2),
                 HoursWorked = 40,
-                HourlyRate = 150.00m,
-                Amount = 6000.00m,
+                HourlyRate = 175.00m, // Updated to show different rate
+                Amount = 7000.00m, // Updated calculation
                 Status = "Submitted",
-                DocumentNames = new List<string> { "Timesheet.pdf" }
+                DocumentNames = new List<string> { "Timesheet.pdf", "Contract.pdf" }
             };
             return View(viewModel);
         }

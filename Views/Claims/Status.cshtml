@@ -1,5 +1,4 @@
 ﻿@model contract_monthly_claim_system_cs.Models.ClaimViewModels.ClaimApprovalViewModel
-
 @{
     ViewData["Title"] = "Claim Status";
 }
@@ -7,32 +6,66 @@
 <div class="container">
     <h1>@ViewData["Title"]</h1>
 
+    <!-- Claims Status Table -->
     <div class="card">
         <div class="card-content">
             <h3>Claim #@Model.ClaimId</h3>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--spacing-lg); margin-bottom: var(--spacing-lg);">
-                <div>
-                    <p><strong>Lecturer:</strong> @Model.LecturerName</p>
-                    <p><strong>Claim Date:</strong> @Model.ClaimDate.ToShortDateString()</p>
-                    <p><strong>Hours Worked:</strong> @Model.HoursWorked</p>
-                </div>
-                <div>
-                    <p><strong>Hourly Rate:</strong> @Model.HourlyRate.ToString("C")</p>
-                    <p><strong>Claim Amount:</strong> @Model.Amount.ToString("C")</p>
-                    <p><strong>Status:</strong> <span class="status-badge status-@Model.Status.ToLower()">@Model.Status</span></p>
-                </div>
-            </div>
+            <table class="status-table">
+                <thead>
+                    <tr>
+                        <th>Field</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Lecturer</strong></td>
+                        <td>@Model.LecturerName</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Claim Date</strong></td>
+                        <td>@Model.ClaimDate.ToShortDateString()</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hours Worked</strong></td>
+                        <td>@Model.HoursWorked</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Hourly Rate</strong></td>
+                        <td>@Model.HourlyRate.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Claim Amount</strong></td>
+                        <td>@Model.Amount.ToString("C")</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Status</strong></td>
+                        <td>
+                            <span class="status-badge status-@Model.Status.ToLower()">@Model.Status</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
 
             <h4>Supporting Documents</h4>
             @if (Model.DocumentNames.Any())
             {
-                <ul>
-                    @foreach (var doc in Model.DocumentNames)
-                    {
-                        <li>@doc</li>
-                    }
-                </ul>
+                <table class="documents-table">
+                    <thead>
+                        <tr>
+                            <th>Document Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var doc in Model.DocumentNames)
+                        {
+                            <tr>
+                                <td>@doc</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
             }
             else
             {
@@ -43,6 +76,71 @@
 
     <div class="footer">
         <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Back to Home</a>
-        <div class="copyright">© 2025 - Contract Monthly Claim System</div>
+        <div class="copyright">© @DateTime.Now.Year - Contract Monthly Claim System</div>
     </div>
 </div>
+
+<style>
+    /* Table Styles */
+    .status-table, .documents-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+        .status-table th, .status-table td,
+        .documents-table th, .documents-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e5e5e7;
+        }
+
+        .status-table th, .documents-table th {
+            background-color: #f5f5f7;
+            font-weight: 600;
+            color: #1d1d1f;
+        }
+
+        .status-table tr:last-child td,
+        .documents-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .status-table tr:hover,
+        .documents-table tr:hover {
+            background-color: #fafafa;
+        }
+
+    /* Status Badges */
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .status-submitted {
+        background-color: rgba(0, 122, 255, 0.1);
+        color: #007AFF;
+    }
+
+    .status-approved {
+        background-color: rgba(52, 199, 89, 0.1);
+        color: #34C759;
+    }
+
+    .status-rejected {
+        background-color: rgba(255, 59, 48, 0.1);
+        color: #FF3B30;
+    }
+
+    .status-pending {
+        background-color: rgba(255, 149, 0, 0.1);
+        color: #FF9500;
+    }
+</style>

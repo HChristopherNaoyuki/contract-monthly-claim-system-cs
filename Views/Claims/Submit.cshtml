@@ -15,7 +15,8 @@
 
         <div class="form-group">
             <label asp-for="HourlyRate">Hourly Rate</label>
-            <input asp-for="HourlyRate" class="form-input" readonly>
+            <input asp-for="HourlyRate" class="form-input" placeholder="Enter your hourly rate">
+            <span asp-validation-for="HourlyRate" class="validation-error"></span>
         </div>
 
         <div class="form-group">
@@ -45,18 +46,21 @@
 
     <div class="footer">
         <a class="btn btn-secondary" asp-controller="Home" asp-action="Privacy">Privacy Policy</a>
-        <div class="copyright">© 2025 - Contract Monthly Claim System</div>
+        <div class="copyright">© @DateTime.Now.Year - Contract Monthly Claim System</div>
     </div>
 </div>
 
 @section Scripts {
     <script>
-        // Calculate amount based on hours worked
-        document.getElementById('HoursWorked').addEventListener('input', function() {
-            const hours = parseFloat(this.value) || 0;
+        // Calculate amount based on hours worked and hourly rate
+        document.getElementById('HoursWorked').addEventListener('input', calculateAmount);
+        document.getElementById('HourlyRate').addEventListener('input', calculateAmount);
+
+        function calculateAmount() {
+            const hours = parseFloat(document.getElementById('HoursWorked').value) || 0;
             const rate = parseFloat(document.getElementById('HourlyRate').value) || 0;
             document.getElementById('Amount').value = (hours * rate).toFixed(2);
-        });
+        }
 
         // File upload handling
         document.getElementById('file').addEventListener('change', function(e) {
@@ -66,11 +70,14 @@
             if (this.files.length > 0) {
                 const fileNames = Array.from(this.files).map(file => file.name).join(', ');
                 textSpan.textContent = `${this.files.length} file(s) selected`;
-                container.style.borderColor = 'var(--system-blue)';
+                container.style.borderColor = '#007AFF';
             } else {
                 textSpan.textContent = 'Click to upload supporting documents';
-                container.style.borderColor = 'var(--system-border)';
+                container.style.borderColor = '#D2D2D7';
             }
         });
+
+        // Initialize calculation on page load
+        calculateAmount();
     </script>
 }
