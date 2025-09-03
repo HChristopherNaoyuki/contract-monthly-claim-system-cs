@@ -3,10 +3,10 @@
 
 ## System Overview
 
-The Contract Monthly Claim System (CMCS) is a web-based application designed to streamline 
-the monthly claim submission and approval process for Independent Contractor lecturers in 
-educational institutions. This documentation covers the technical specifications, architecture, 
-and implementation details for Part 1 of the project.
+The Contract Monthly Claim System (CMCS) is a web-based application designed to 
+streamline the monthly claim submission and approval process for Independent 
+Contractor lecturers in educational institutions. This documentation covers the 
+technical specifications, architecture, and implementation details for Part 1 of the project.
 
 ## Table of Contents
 1. [System Architecture](#system-architecture)
@@ -109,19 +109,18 @@ System -> User: Auto-Login & Redirect to Home
 - **IDE**: Visual Studio 2022
 - **Framework**: .NET 7.0
 - **Language**: C# 7.0
-- **Web Server**: Kestrel
 - **Version Control**: Git
 
 ### Frontend Technologies
 - HTML5 with Razor syntax
-- CSS3 with custom Apple-inspired styling
+- CSS3 with custom styling
 - JavaScript for client-side interactions
 - Responsive design principles
 
 ### Backend Technologies
 - ASP.NET Core MVC 7.0
 - Session-based authentication
-- In-memory data storage (prototype phase)
+- In-memory data storage
 - Model-View-Controller architecture
 
 ### Security Implementation
@@ -135,7 +134,6 @@ System -> User: Auto-Login & Redirect to Home
 
 ### Authentication System
 ```csharp
-// User model implementation
 public class User
 {
     public int UserId { get; set; }
@@ -156,7 +154,6 @@ public enum UserRole
 
 ### Claim Management
 ```csharp
-// Claim submission ViewModel
 public class ClaimSubmissionViewModel
 {
     [Required]
@@ -174,7 +171,6 @@ public class ClaimSubmissionViewModel
 
 ### Session Management
 ```csharp
-// Session key constants
 public static class SessionKeys
 {
     public const string UserId = "UserId";
@@ -208,26 +204,16 @@ public static class SessionKeys
 
 ### Development Environment
 1. Install .NET 7.0 SDK
-2. Clone repository: `git clone <repository-url>`
+2. Clone repository
 3. Restore packages: `dotnet restore`
 4. Build solution: `dotnet build`
 5. Run application: `dotnet run`
 
-### Configuration
-- Update appsettings.json for environment-specific settings
-- Configure session timeout as needed
-- Set appropriate security headers
-
 ### Build Process
 ```bash
-# Clean build
 dotnet clean
 dotnet build
-
-# Run with specific environment
-ASPNETCORE_ENVIRONMENT=Development dotnet run
-
-# Publish for production
+dotnet run
 dotnet publish -c Release
 ```
 
@@ -246,15 +232,15 @@ dotnet publish -c Release
 - This document: Technical specifications and implementation details
 
 ### External References
-- ASP.NET Core Documentation: https://docs.microsoft.com/en-us/aspnet/core/
-- MVC Pattern: https://dotnet.microsoft.com/en-us/apps/aspnet/mvc
-- HTML5 Specification: https://html.spec.whatwg.org/
-- CSS3 Guidelines: https://www.w3.org/Style/CSS/
+- ASP.NET Core Documentation
+- MVC Pattern
+- HTML5 Specification
+- CSS3 Guidelines
 
 ### Development Standards
-- C# Coding Conventions: https://docs.microsoft.com/en-us/dotnet/csharp/fundamentals/coding-style/coding-conventions
-- ASP.NET Core Best Practices: https://docs.microsoft.com/en-us/dotnet/architecture/modern-web-apps-azure/
-- Web Content Accessibility Guidelines: https://www.w3.org/WAI/standards-guidelines/wcag/
+- C# Coding Conventions
+- ASP.NET Core Best Practices
+- Web Content Accessibility Guidelines
 
 ## Support
 

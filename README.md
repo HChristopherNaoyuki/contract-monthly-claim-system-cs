@@ -9,72 +9,72 @@
 6. [Features](#features)
 7. [Technology Stack](#technology-stack)
 8. [Development Notes](#development-notes)
-9. [DISCLAIMER](#disclaimer)
+9. [Documentation](#documentation)
+10. [Notes](#notes)
+11. [Disclaimer](#disclaimer)
 
 ## Overview
 
-The Contract Monthly Claim System (CMCS) is a comprehensive web-based application developed using ASP.NET Core MVC. 
-This system streamlines the process of submitting, reviewing, and approving monthly claims for Independent Contractor (IC) lecturers in educational institutions.
+The Contract Monthly Claim System (CMCS) is a comprehensive web-based application developed 
+using ASP.NET Core MVC. This system streamlines the process of submitting, reviewing, and 
+approving monthly claims for Independent Contractor (IC) lecturers in educational institutions.
 
 ## System Architecture
 
-The application follows the Model-View-Controller (MVC) architectural pattern with clear separation of concerns:
-
-- **Models**: Data entities and view models
-- **Views**: User interface components
-- **Controllers**: Business logic and request handling
+The application follows the Model-View-Controller (MVC) architectural pattern with clear separation 
+of concerns. For detailed architecture documentation, see the [Technical Documentation](./Documentation/Documentation.md).
 
 ## Project Structure
 
 ```
 contract-monthly-claim-system-cs/
 ├── Controllers/
-│   ├── AuthController.cs          # Handles authentication (login/register)
-│   ├── ClaimsController.cs        # Manages claim operations
-│   └── HomeController.cs          # Handles home and privacy pages
+│   ├── AuthController.cs
+│   ├── ClaimsController.cs
+│   └── HomeController.cs
 ├── Models/
-│   ├── DataModels/                # Data entities
-│   │   ├── User.cs                # User authentication model
-│   │   ├── Lecturer.cs            # Lecturer entity
-│   │   ├── Claim.cs               # Claim entity
-│   │   ├── Document.cs            # Document entity
-│   │   └── Approval.cs            # Approval entity
-│   ├── ViewModels/                # View-specific models
-│   │   ├── LoginViewModel.cs      # Login form model
-│   │   ├── RegisterViewModel.cs   # Registration form model
-│   │   └── ClaimViewModels/       # Claim-related view models
+│   ├── DataModels/
+│   │   ├── User.cs
+│   │   ├── Lecturer.cs
+│   │   ├── Claim.cs
+│   │   ├── Document.cs
+│   │   └── Approval.cs
+│   ├── ViewModels/
+│   │   ├── LoginViewModel.cs
+│   │   ├── RegisterViewModel.cs
+│   │   └── ClaimViewModels/
 │   │       ├── ClaimSubmissionViewModel.cs
 │   │       ├── ClaimApprovalViewModel.cs
 │   │       └── DocumentViewModel.cs
-│   └── ErrorViewModel.cs          # Error page model
+│   └── ErrorViewModel.cs
 ├── Views/
-│   ├── Auth/                      # Authentication views
-│   │   ├── Index.cshtml           # Login/Register page
-│   │   └── ForgotPassword.cshtml  # Password reset page
-│   ├── Claims/                    # Claim management views
-│   │   ├── Submit.cshtml          # Claim submission form
-│   │   ├── Approve.cshtml         # Claim approval interface
-│   │   └── Status.cshtml          # Claim status tracking
-│   ├── Home/                      # Home controller views
-│   │   ├── Index.cshtml           # Home page
-│   │   └── Privacy.cshtml         # Privacy policy page
-│   └── Shared/                    # Shared layout and components
-│       ├── _Layout.cshtml         # Main layout template
-│       ├── _Layout.cshtml.css     # Layout-specific styles
+│   ├── Auth/
+│   │   ├── Index.cshtml
+│   │   └── ForgotPassword.cshtml
+│   ├── Claims/
+│   │   ├── Submit.cshtml
+│   │   ├── Approve.cshtml
+│   │   └── Status.cshtml
+│   ├── Home/
+│   │   ├── Index.cshtml
+│   │   └── Privacy.cshtml
+│   └── Shared/
+│       ├── _Layout.cshtml
+│       ├── _Layout.cshtml.css
 │       ├── _ValidationScriptsPartial.cshtml
-│       └── Error.cshtml           # Error page
+│       └── Error.cshtml
 ├── wwwroot/
 │   ├── css/
-│   │   └── site.css               # Main stylesheet
+│   │   └── site.css
 │   ├── js/
-│   │   └── site.js                # Client-side JavaScript
-│   ├── lib/                       # Third-party libraries
+│   │   └── site.js
+│   ├── lib/
 │   └── favicon.ico
 ├── Documentation/
-│   ├── Project_Plan.txt           # Project planning documentation
-│   └── Documentation.txt          # System documentation
-├── appsettings.json               # Application configuration
-└── Program.cs                     # Application entry point
+│   ├── Project_Plan.md
+│   └── Documentation.md
+├── appsettings.json
+└── Program.cs
 ```
 
 ## Installation Guide
@@ -116,7 +116,7 @@ contract-monthly-claim-system-cs/
 - Automated calculations
 
 ### User Interface
-- Apple-inspired minimalist design
+- Minimalist design approach
 - Responsive layout for all devices
 - Intuitive navigation system
 - Clean typography and spacing
@@ -132,7 +132,7 @@ contract-monthly-claim-system-cs/
 - **Backend**: ASP.NET Core 7.0, C# 7.0
 - **Frontend**: HTML5, CSS3, JavaScript
 - **Architecture**: MVC Pattern
-- **Styling**: Custom CSS with Apple design principles
+- **Styling**: Custom CSS with clean design principles
 - **Authentication**: Session-based with role management
 
 ## Development Notes
@@ -144,9 +144,17 @@ This project was developed following:
 - Accessibility considerations
 - Performance optimization techniques
 
+## Documentation
+
+Comprehensive documentation is available in the Documentation folder:
+
+- [Project Plan](./Documentation/Project_Plan.md) - Detailed project planning and timeline
+- [Technical Documentation](./Documentation/Documentation.md) - System architecture and implementation details
+
 ## Notes
 
-*This system is designed for educational purposes as part of the PROG6212 Programming 2B curriculum. All design and implementation follow academic standards and best practices.*
+This system is designed for educational purposes as part of the PROG6212 Programming 2B curriculum. 
+All design and implementation follow academic standards and best practices.
 
 ## DISCLAIMER
 
