@@ -46,6 +46,7 @@ The application follows the Model-View-Controller architectural pattern:
 ## UML Diagrams
 
 ### Class Diagram
+
 ```
 +----------------+       +----------------+       +----------------+
 |     User       |       |    Claim       |       |   Document     |
@@ -248,6 +249,5 @@ For technical support or questions about the Contract Monthly Claim System:
 1. Refer to the README.md file for setup instructions
 2. Review this documentation for technical details
 3. Check the project plan for development timeline
-4. Contact the development team for specific issues
 
 ---

@@ -30,5 +30,4 @@ For detailed project planning information, please refer to the complete [Project
 
 ## Related Documentation
 - [Technical Documentation](./Documentation.md)
-- [UML Diagrams](./UML_Diagrams.md)
 - [System Architecture](../README.md#system-architecture)
