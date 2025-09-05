@@ -27,8 +27,8 @@
                     <th>Hourly Rate</th>
                     <th>Amount</th>
                     <th>Status</th>
-                    <th>Documents</th>
-                    <th>Comments</th>
+                    <th>Submission Comments</th>
+                    <th>Approval Comments</th>
                 </tr>
             </thead>
             <tbody>
@@ -44,22 +44,26 @@
                         <td>
                             <span class="status-badge status-@claim.Status.ToLower()">@claim.Status</span>
                         </td>
-                        <td>
-                            @if (claim.DocumentNames.Any())
+                        <td style="max-width: 200px;">
+                            @if (string.IsNullOrEmpty(claim.SubmissionComments))
                             {
-                                <ul style="margin: 0; padding-left: 16px;">
-                                    @foreach (var doc in claim.DocumentNames)
-                                    {
-                                        <li style="font-size: 13px;">@doc</li>
-                                    }
-                                </ul>
+                                <span style="color: var(--system-gray); font-size: 13px;">No comments</span>
                             }
                             else
                             {
-                                <span style="color: var(--system-gray); font-size: 13px;">No documents</span>
+                                <div style="font-size: 13px; word-wrap: break-word;">@claim.SubmissionComments</div>
                             }
                         </td>
-                        <td>@(string.IsNullOrEmpty(claim.Comments) ? "N/A" : claim.Comments)</td>
+                        <td style="max-width: 200px;">
+                            @if (string.IsNullOrEmpty(claim.ApprovalComments))
+                            {
+                                <span style="color: var(--system-gray); font-size: 13px;">No comments</span>
+                            }
+                            else
+                            {
+                                <div style="font-size: 13px; word-wrap: break-word;">@claim.ApprovalComments</div>
+                            }
+                        </td>
                     </tr>
                 }
             </tbody>

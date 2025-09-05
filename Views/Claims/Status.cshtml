@@ -25,7 +25,7 @@
                     </tr>
                     <tr>
                         <td><strong>Claim Date</strong></td>
-                        <td>@Model.ClaimDate.ToShortDateString()</td>
+                        <td>@Model.ClaimDate.ToString("yyyy-MM-dd")</td>
                     </tr>
                     <tr>
                         <td><strong>Hours Worked</strong></td>
@@ -45,6 +45,26 @@
                             <span class="status-badge status-@Model.Status.ToLower()">@Model.Status</span>
                         </td>
                     </tr>
+                    <tr>
+                        <td><strong>Submission Comments</strong></td>
+                        <td>
+                            @if (string.IsNullOrEmpty(Model.SubmissionComments))
+                            {
+                                <span style="color: var(--system-gray);">No comments provided</span>
+                            }
+                            else
+                            {
+                                @Model.SubmissionComments
+                            }
+                        </td>
+                    </tr>
+                    @if (!string.IsNullOrEmpty(Model.ApprovalComments))
+                    {
+                        <tr>
+                            <td><strong>Approval Comments</strong></td>
+                            <td>@Model.ApprovalComments</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
 

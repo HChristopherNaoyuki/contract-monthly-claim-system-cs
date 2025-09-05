@@ -6,7 +6,7 @@ namespace contract_monthly_claim_system_cs.Models.ClaimViewModels
 {
     /// <summary>
     /// ViewModel for claim submission form
-    /// Allows editing of hourly rate
+    /// Allows editing of hourly rate and includes comments
     /// </summary>
     public class ClaimSubmissionViewModel
     {
@@ -22,6 +22,10 @@ namespace contract_monthly_claim_system_cs.Models.ClaimViewModels
 
         [Display(Name = "Total Amount")]
         public decimal Amount { get; set; }
+
+        [Display(Name = "Comments")]
+        [StringLength(500, ErrorMessage = "Comments cannot exceed 500 characters")]
+        public string Comments { get; set; } = string.Empty;
 
         [Display(Name = "Supporting Documents")]
         public List<IFormFile> Documents { get; set; } = new List<IFormFile>();

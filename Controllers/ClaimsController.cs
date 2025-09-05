@@ -70,7 +70,8 @@ namespace contract_monthly_claim_system_cs.Controllers
                     HourlyRate = model.HourlyRate,
                     Amount = model.Amount,
                     Status = "Submitted",
-                    DocumentNames = documentNames
+                    DocumentNames = documentNames,
+                    SubmissionComments = model.Comments
                 };
 
                 _claims.Add(claim);
@@ -109,7 +110,7 @@ namespace contract_monthly_claim_system_cs.Controllers
             if (claim != null)
             {
                 claim.Status = isApproved ? "Approved" : "Rejected";
-                claim.Comments = comments;
+                claim.ApprovalComments = comments;
             }
 
             return RedirectToAction("Approve");
@@ -139,7 +140,8 @@ namespace contract_monthly_claim_system_cs.Controllers
                     HourlyRate = 175.00m,
                     Amount = 7000.00m,
                     Status = "Not Found",
-                    DocumentNames = new List<string>()
+                    DocumentNames = new List<string>(),
+                    SubmissionComments = "Sample comment for demonstration"
                 };
             }
 

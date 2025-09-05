@@ -32,8 +32,12 @@ namespace contract_monthly_claim_system_cs.Models.ClaimViewModels
         [Display(Name = "Documents")]
         public List<string> DocumentNames { get; set; } = new List<string>();
 
+        [Display(Name = "Submission Comments")]
+        [StringLength(500, ErrorMessage = "Comments cannot exceed 500 characters")]
+        public string SubmissionComments { get; set; } = string.Empty;
+
         [Display(Name = "Approval Comments")]
         [StringLength(500, ErrorMessage = "Comments cannot exceed 500 characters")]
-        public string? Comments { get; set; }
+        public string ApprovalComments { get; set; } = string.Empty;
     }
 }

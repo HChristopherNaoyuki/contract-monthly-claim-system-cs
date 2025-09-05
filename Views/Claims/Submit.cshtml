@@ -25,6 +25,15 @@
         </div>
 
         <div class="form-group">
+            <label asp-for="Comments">Comments (Optional)</label>
+            <textarea asp-for="Comments" class="form-input" placeholder="Add any additional comments about your claim" rows="3" maxlength="500"></textarea>
+            <span asp-validation-for="Comments" class="validation-error"></span>
+            <div style="font-size: 12px; color: var(--system-gray); margin-top: 4px;">
+                <span id="charCount">0</span>/500 characters
+            </div>
+        </div>
+
+        <div class="form-group">
             <label>Supporting Documents</label>
             <div class="file-upload" id="fileUploadContainer" onclick="document.getElementById('file').click()">
                 <div class="icon">
@@ -62,6 +71,14 @@
             const rate = parseFloat(document.getElementById('HourlyRate').value) || 0;
             document.getElementById('Amount').value = (hours * rate).toFixed(2);
         }
+
+        // Character count for comments
+        const commentsTextarea = document.getElementById('Comments');
+        const charCount = document.getElementById('charCount');
+
+        commentsTextarea.addEventListener('input', function() {
+            charCount.textContent = this.value.length;
+        });
 
         // File upload handling
         document.getElementById('file').addEventListener('change', function(e) {
@@ -151,5 +168,8 @@
 
         // Initialize calculation on page load
         calculateAmount();
+
+        // Initialize character count
+        charCount.textContent = commentsTextarea.value.length;
     </script>
 }
