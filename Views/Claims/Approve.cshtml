@@ -7,52 +7,85 @@
 <div class="container">
     <h1>@ViewData["Title"]</h1>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Lecturer</th>
-                <th>Claim Date</th>
-                <th>Hours</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Documents</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var claim in Model)
-            {
+    @if (!Model.Any())
+    {
+        <div class="card">
+            <div class="card-content">
+                <p style="color: var(--system-gray); text-align: center;">No claims pending approval</p>
+            </div>
+        </div>
+    }
+    else
+    {
+        <table class="table">
+            <thead>
                 <tr>
-                    <td>@claim.LecturerName</td>
-                    <td>@claim.ClaimDate.ToShortDateString()</td>
-                    <td>@claim.HoursWorked</td>
-                    <td>@claim.Amount.ToString("C")</td>
-                    <td>
-                        <span class="status-badge status-@claim.Status.ToLower()">@claim.Status</span>
-                    </td>
-                    <td>
-                        @if (claim.DocumentNames.Any())
-                        {
-                            <ul style="margin: 0; padding-left: 16px;">
-                                @foreach (var doc in claim.DocumentNames)
-                                {
-                                    <li style="font-size: 13px;">@doc</li>
-                                }
-                            </ul>
-                        }
-                        else
-                        {
-                            <span style="color: var(--system-gray); font-size: 13px;">No documents</span>
-                        }
-                    </td>
-                    <td>
-                        <div style="display: flex; gap: 8px;">
-                            <a href="#" class="btn btn-success" style="padding: 8px 12px; font-size: 14px;">Approve</a>
-                            <a href="#" class="btn btn-danger" style="padding: 8px 12px; font-size: 14px;">Reject</a>
-                        </div>
-                    </td>
+                    <th>Lecturer</th>
+                    <th>Claim Date</th>
+                    <th>Hours</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Documents</th>
+                    <th>Actions</th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var claim in Model)
+                {
+                    <tr>
+                        <td>@claim.LecturerName</td>
+                        <td>@claim.ClaimDate.ToShortDateString()</td>
+                        <td>@claim.HoursWorked</td>
+                        <td>@claim.Amount.ToString("C")</td>
+                        <td>
+                            <span class="status-badge status-@claim.Status.ToLower()">@claim.Status</span>
+                        </td>
+                        <td>
+                            @if (claim.DocumentNames.Any())
+                            {
+                                <ul style="margin: 0; padding-left: 16px;">
+                                    @foreach (var doc in claim.DocumentNames)
+                                    {
+                                        <li style="font-size: 13px;">@doc</li>
+                                    }
+                                </ul>
+                            }
+                            else
+                            {
+                                <span style="color: var(--system-gray); font-size: 13px;">No documents</span>
+                            }
+                        </td>
+                        <td>
+                            <div style="display: flex; gap: 8px;">
+                                <form asp-action="ApproveClaim" method="post" style="display: inline;">
+                                    <input type="hidden" name="claimId" value="@claim.ClaimId" />
+                                    <input type="hidden" name="isApproved" value="true" />
+                                    <button type="submit" class="btn btn-success" style="padding: 8px 12px; font-size: 14px;">Approve</button>
+                                </form>
+                                <form asp-action="ApproveClaim" method="post" style="display: inline;">
+                                    <input type="hidden" name="claimId" value="@claim.ClaimId" />
+                                    <input type="hidden" name="isApproved" value="false" />
+                                    <button type="submit" class="btn btn-danger" style="padding: 8px 12px; font-size: 14px;">Reject</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    }
 </div>
+
+@section Scripts {
+    <script>
+        // Add confirmation for approval/rejection actions
+        document.querySelectorAll('form[asp-action="ApproveClaim"]').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                const action = this.querySelector('input[name="isApproved"]').value === 'true' ? 'approve' : 'reject';
+                if (!confirm(`Are you sure you want to ${action} this claim?`)) {
+                    e.preventDefault();
+                }
+            });
+        });
+    </script>
+}

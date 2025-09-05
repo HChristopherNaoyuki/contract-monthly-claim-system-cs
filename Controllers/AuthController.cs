@@ -24,6 +24,24 @@ namespace contract_monthly_claim_system_cs.Controllers
                 Username = "admin",
                 Password = "admin123",
                 Role = UserRole.AcademicManager
+            },
+            new User
+            {
+                UserId = 2,
+                Name = "John",
+                Surname = "Smith",
+                Username = "lecturer",
+                Password = "lecturer123",
+                Role = UserRole.Lecturer
+            },
+            new User
+            {
+                UserId = 3,
+                Name = "Sarah",
+                Surname = "Johnson",
+                Username = "coordinator",
+                Password = "coordinator123",
+                Role = UserRole.ProgrammeCoordinator
             }
         };
 
@@ -52,7 +70,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                     // Store user information in session
                     HttpContext.Session.SetInt32("UserId", user.UserId);
                     HttpContext.Session.SetString("Username", user.Username);
-                    HttpContext.Session.SetString("Name", user.Name);
+                    HttpContext.Session.SetString("Name", $"{user.Name} {user.Surname}");
                     HttpContext.Session.SetString("Role", user.Role.ToString());
 
                     return RedirectToAction("Index", "Home");
@@ -95,7 +113,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                 // Auto-login after registration
                 HttpContext.Session.SetInt32("UserId", user.UserId);
                 HttpContext.Session.SetString("Username", user.Username);
-                HttpContext.Session.SetString("Name", user.Name);
+                HttpContext.Session.SetString("Name", $"{user.Name} {user.Surname}");
                 HttpContext.Session.SetString("Role", user.Role.ToString());
 
                 return RedirectToAction("Index", "Home");

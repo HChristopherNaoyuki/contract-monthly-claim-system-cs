@@ -27,6 +27,16 @@
 
     <div class="footer">
         <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Back to Home</a>
-        <div class="copyright">© 2025 - Contract Monthly Claim System</div>
+        <div class="copyright">© <span id="currentYear">2025</span> - Contract Monthly Claim System</div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        // Update footer year dynamically
+        document.addEventListener('DOMContentLoaded', function() {
+            const currentYear = new Date().getFullYear();
+            document.getElementById('currentYear').textContent = currentYear;
+        });
+    </script>
+}

@@ -107,11 +107,17 @@ function setActiveNavigation() {
 
     // Check the appropriate radio based on current path
     if (currentPath.includes('/claims/submit')) {
-        document.getElementById('nav-claim').checked = true;
-        document.getElementById('nav-claim').setAttribute('checked', 'checked');
-    } else if (currentPath.includes('/claims/approve')) {
         document.getElementById('nav-submit').checked = true;
         document.getElementById('nav-submit').setAttribute('checked', 'checked');
+    } else if (currentPath.includes('/claims/approve')) {
+        document.getElementById('nav-review').checked = true;
+        document.getElementById('nav-review').setAttribute('checked', 'checked');
+    } else if (currentPath.includes('/claims/status')) {
+        document.getElementById('nav-track').checked = true;
+        document.getElementById('nav-track').setAttribute('checked', 'checked');
+    } else if (currentPath.includes('/home/privacy')) {
+        document.getElementById('nav-privacy').checked = true;
+        document.getElementById('nav-privacy').setAttribute('checked', 'checked');
     } else {
         document.getElementById('nav-home').checked = true;
         document.getElementById('nav-home').setAttribute('checked', 'checked');
@@ -120,3 +126,29 @@ function setActiveNavigation() {
 
 // Call this function when page loads
 setActiveNavigation();
+
+// File upload validation
+function validateFileUpload(input) {
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    const allowedTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'image/jpeg', 'image/png'];
+
+    if (input.files.length > 0) {
+        for (let i = 0; i < input.files.length; i++) {
+            const file = input.files[i];
+
+            if (file.size > maxSize) {
+                alert(`File ${file.name} is too large. Maximum size is 5MB.`);
+                input.value = '';
+                return false;
+            }
+
+            if (!allowedTypes.includes(file.type)) {
+                alert(`File ${file.name} is not a supported file type. Please upload PDF, DOC, DOCX, JPG, or PNG files.`);
+                input.value = '';
+                return false;
+            }
+        }
+    }
+
+    return true;
+}

@@ -10,6 +10,10 @@ namespace contract_monthly_claim_system_cs.Controllers
     /// </summary>
     public class ClaimsController : Controller
     {
+        // Static list to store claims in memory for prototype
+        private static List<ClaimApprovalViewModel> _claims = new List<ClaimApprovalViewModel>();
+        private static int _nextClaimId = 1;
+
         /// <summary>
         /// Displays the claim submission form with editable hourly rate
         /// </summary>
@@ -40,9 +44,23 @@ namespace contract_monthly_claim_system_cs.Controllers
                 // Calculate amount based on user-input hours and rate
                 model.Amount = model.HoursWorked * model.HourlyRate;
 
-                // In a real application, this would save to database
-                // For prototype, redirect to status page with sample data
-                return RedirectToAction("Status", new { claimId = 1 });
+                // Create and store the claim for prototype
+                var claim = new ClaimApprovalViewModel
+                {
+                    ClaimId = _nextClaimId++,
+                    LecturerName = HttpContext.Session.GetString("Name") ?? "Unknown Lecturer",
+                    ClaimDate = DateTime.Now,
+                    HoursWorked = model.HoursWorked,
+                    HourlyRate = model.HourlyRate,
+                    Amount = model.Amount,
+                    Status = "Submitted",
+                    DocumentNames = new List<string>()
+                };
+
+                _claims.Add(claim);
+
+                // Redirect to status page with the new claim ID
+                return RedirectToAction("Status", new { claimId = claim.ClaimId });
             }
 
             return View(model);
@@ -59,21 +77,25 @@ namespace contract_monthly_claim_system_cs.Controllers
                 return RedirectToAction("Index", "Auth");
             }
 
-            var viewModel = new List<ClaimApprovalViewModel>
+            // Return all claims for approval
+            return View(_claims);
+        }
+
+        /// <summary>
+        /// Handles claim approval
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult ApproveClaim(int claimId, bool isApproved, string comments)
+        {
+            var claim = _claims.Find(c => c.ClaimId == claimId);
+            if (claim != null)
             {
-                new ClaimApprovalViewModel
-                {
-                    ClaimId = 1,
-                    LecturerName = "John Smith",
-                    ClaimDate = DateTime.Now.AddDays(-2),
-                    HoursWorked = 40,
-                    HourlyRate = 175.00m, // Updated to show different rate
-                    Amount = 7000.00m, // Updated calculation
-                    Status = "Submitted",
-                    DocumentNames = new List<string> { "Timesheet.pdf", "Contract.pdf" }
-                }
-            };
-            return View(viewModel);
+                claim.Status = isApproved ? "Approved" : "Rejected";
+                claim.Comments = comments;
+            }
+
+            return RedirectToAction("Approve");
         }
 
         /// <summary>
@@ -87,18 +109,24 @@ namespace contract_monthly_claim_system_cs.Controllers
                 return RedirectToAction("Index", "Auth");
             }
 
-            var viewModel = new ClaimApprovalViewModel
+            var claim = _claims.Find(c => c.ClaimId == claimId);
+            if (claim == null)
             {
-                ClaimId = claimId,
-                LecturerName = "John Smith",
-                ClaimDate = DateTime.Now.AddDays(-2),
-                HoursWorked = 40,
-                HourlyRate = 175.00m, // Updated to show different rate
-                Amount = 7000.00m, // Updated calculation
-                Status = "Submitted",
-                DocumentNames = new List<string> { "Timesheet.pdf", "Contract.pdf" }
-            };
-            return View(viewModel);
+                // Return sample data if claim not found
+                claim = new ClaimApprovalViewModel
+                {
+                    ClaimId = claimId,
+                    LecturerName = "John Smith",
+                    ClaimDate = DateTime.Now.AddDays(-2),
+                    HoursWorked = 40,
+                    HourlyRate = 175.00m,
+                    Amount = 7000.00m,
+                    Status = "Submitted",
+                    DocumentNames = new List<string> { "Timesheet.pdf", "Contract.pdf" }
+                };
+            }
+
+            return View(claim);
         }
     }
 }
