@@ -15,14 +15,22 @@
 
 ## Overview
 
-The Contract Monthly Claim System (CMCS) is a comprehensive web-based application developed 
-using ASP.NET Core MVC. This system streamlines the process of submitting, reviewing, and 
-approving monthly claims for Independent Contractor (IC) lecturers in educational institutions.
+The Contract Monthly Claim System (CMCS) is a comprehensive web-based application developed using .NET Core MVC framework. 
+This system streamlines the process of submitting, reviewing, and approving monthly claims for independent contractor lecturers. 
+The application provides three distinct user roles with specific functionalities to ensure an efficient workflow management system.
+
+Repository Link: https://github.com/HChristopherNaoyuki/contract-monthly-claim-system-cs.git
 
 ## System Architecture
 
-The application follows the Model-View-Controller (MVC) architectural pattern with clear separation 
-of concerns. For detailed architecture documentation, see the [Technical Documentation](./Documentation/Documentation.md).
+The CMCS follows a Model-View-Controller (MVC) architectural pattern with clear separation of concerns:
+
+- **Models**: Data entities and view models handling business logic and data validation
+- **Views**: Razor pages providing user interface components
+- **Controllers**: Handle user requests, process data, and return appropriate views
+
+The system implements session-based authentication with role-based access control, ensuring secure access to 
+appropriate functionalities based on user roles.
 
 ## Project Structure
 
@@ -54,7 +62,8 @@ contract-monthly-claim-system-cs/
 │   ├── Claims/
 │   │   ├── Submit.cshtml
 │   │   ├── Approve.cshtml
-│   │   └── Status.cshtml
+│   │   ├── Status.cshtml
+│   │   └── Track.cshtml
 │   ├── Home/
 │   │   ├── Index.cshtml
 │   │   └── Privacy.cshtml
@@ -72,7 +81,9 @@ contract-monthly-claim-system-cs/
 │   └── favicon.ico
 ├── Documentation/
 │   ├── Project_Plan.md
-│   └── Documentation.md
+│   ├── Documentation.md
+│   ├── DOCUMENTATION.docx
+│   └── DOCUMENTATION.pdf
 ├── appsettings.json
 └── Program.cs
 ```
@@ -80,81 +91,157 @@ contract-monthly-claim-system-cs/
 ## Installation Guide
 
 ### Prerequisites
-- .NET 7.0 SDK or later
-- Web browser with JavaScript support
-- Git for version control
+- .NET Core SDK 3.1 or later
+- Web browser (Chrome, Firefox, Safari, or Edge)
+- Git client (for cloning repository)
 
-### Setup Instructions
-1. Clone the repository
-2. Restore NuGet packages: `dotnet restore`
-3. Build the solution: `dotnet build`
-4. Run the application: `dotnet run`
-5. Access via: `https://localhost:7000` or `http://localhost:5000`
+### Installation Steps
+1. Clone the repository:
+   ```
+   git clone https://github.com/HChristopherNaoyuki/contract-monthly-claim-system-cs.git
+   ```
+
+2. Navigate to the project directory:
+   ```
+   cd contract-monthly-claim-system-cs
+   ```
+
+3. Restore NuGet packages:
+   ```
+   dotnet restore
+   ```
+
+4. Build the application:
+   ```
+   dotnet build
+   ```
+
+5. Run the application:
+   ```
+   dotnet run
+   ```
+
+6. Open your web browser and navigate to:
+   ```
+   https://localhost:7000 (or the port shown in the console)
+   ```
 
 ## Usage Manual
 
-### For Lecturers
-1. Register/Login with lecturer credentials
-2. Submit claims with hours worked and hourly rate
-3. Upload supporting documents
-4. Track claim status in real-time
+### User Authentication
+1. Access the login page through the main application URL
+2. Use one of the predefined test accounts:
+   - Lecturer: username: `lecturer`, password: `lecturer123`
+   - Coordinator: username: `coordinator`, password: `coordinator123`
+   - Manager: username: `admin`, password: `admin123`
 
-### For Coordinators/Managers
-1. Login with appropriate credentials
-2. Review and approve/reject claims
-3. Monitor claim workflow
-4. Manage user accounts
+### For Lecturers
+1. Login with lecturer credentials
+2. Navigate to "Submit" section
+3. Fill in hours worked and hourly rate
+4. Add optional comments
+5. Upload supporting documents
+6. Submit claim for review
+
+### For Coordinators
+1. Login with coordinator credentials
+2. Navigate to "Review" section
+3. View pending claims
+4. Verify claim details and documents
+5. Add approval comments if needed
+
+### For Academic Managers
+1. Login with manager credentials
+2. Navigate to "Review" section
+3. Approve or reject verified claims
+4. Provide final decision comments
+
+### Tracking Claims
+All users can track claim status through the "Track" section, which shows complete history and current status of all claims.
 
 ## Features
 
 ### Core Functionality
-- User authentication and authorization
-- Role-based access control (Lecturer, Coordinator, Manager)
-- Claim submission with editable hourly rates
-- Document upload and management
+- Role-based user authentication system
+- Claim submission with automatic amount calculation
+- Document upload with file validation
+- Multi-stage approval workflow
 - Real-time status tracking
-- Automated calculations
+- Comments system for communication
 
 ### User Interface
-- Minimalist design approach
-- Responsive layout for all devices
+- Minimalist Apple-inspired design
+- Responsive layout for desktop and mobile
 - Intuitive navigation system
-- Clean typography and spacing
+- Clean typography and visual hierarchy
+- Accessibility features including keyboard navigation
 
-### Security Features
-- Session-based authentication
-- Input validation and sanitization
-- Role-based access control
-- Secure file upload handling
+### Technical Features
+- Session management and security
+- Client-side form validation
+- File type and size validation
+- Dynamic content updates
+- Error handling and user feedback
 
 ## Technology Stack
 
-- **Backend**: ASP.NET Core 7.0, C# 7.0
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Architecture**: MVC Pattern
-- **Styling**: Custom CSS with clean design principles
-- **Authentication**: Session-based with role management
+### Backend Technologies
+- ASP.NET Core MVC
+- C# 7.0
+- Session-based authentication
+- Model-View-Controller architecture
+
+### Frontend Technologies
+- HTML5 with Razor syntax
+- CSS3 with custom properties
+- JavaScript for client-side functionality
+- Responsive design principles
+
+### Development Tools
+- .NET Core SDK
+- Git version control
+- Modern web browsers for testing
 
 ## Development Notes
 
-This project was developed following:
-- Clean code principles with Allman-style formatting
-- Proper separation of concerns
-- User-centered design approach
-- Accessibility considerations
-- Performance optimization techniques
+### Code Standards
+- Allman style bracketing throughout codebase
+- C# 7.0 language features
+- Consistent naming conventions
+- Comprehensive code comments
+
+### Prototype Limitations
+This initial version focuses on core functionality without:
+- Database persistence (uses in-memory storage)
+- Email notifications
+- Advanced reporting features
+- External system integrations
+- Administrative user management
+
+### Future Enhancement Areas
+- Database integration with Entity Framework
+- Automated email notifications
+- Advanced reporting dashboard
+- Enhanced security features
+- Administrative controls
+- API development for external integrations
 
 ## Documentation
 
-Comprehensive documentation is available in the Documentation folder:
+The Documentation folder contains comprehensive project documentation:
 
-- [Project Plan](./Documentation/Project_Plan.md) - Detailed project planning and timeline
-- [Technical Documentation](./Documentation/Documentation.md) - System architecture and implementation details
+- **Project_Plan.md**: Detailed project timeline, task breakdown, and milestones
+- **Documentation.md**: Technical documentation including system architecture and API references
+- **DOCUMENTATION.docx**: Complete project documentation in Microsoft Word format
+- **DOCUMENTATION.pdf**: Portable document format version of complete documentation
 
 ## Notes
 
-This system is designed for educational purposes as part of the PROG6212 Programming 2B curriculum. 
-All design and implementation follow academic standards and best practices.
+1. This is a prototype version designed for demonstration and testing purposes
+2. All data is stored in memory and will be lost on application restart
+3. The system includes sample data for testing all functionalities
+4. File uploads are simulated for the prototype phase
+5. The design follows Apple's human interface guidelines for consistency
 
 ## DISCLAIMER
 
@@ -171,5 +258,3 @@ IF YOU ENCOUNTER ANY PROBLEMS OR ERRORS, PLEASE DO NOT ATTEMPT TO FIX THEM
 SILENTLY OR OUTSIDE THE PROJECT. INSTEAD, KINDLY SUBMIT A PULL REQUEST 
 OR OPEN AN ISSUE ON THE CORRESPONDING GITHUB REPOSITORY, SO THAT IT CAN 
 BE ADDRESSED APPROPRIATELY BY THE MAINTAINERS OR CONTRIBUTORS.
-
----

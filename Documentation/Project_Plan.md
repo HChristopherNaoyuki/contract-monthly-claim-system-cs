@@ -1,33 +1,34 @@
-# Contract Monthly Claim System (CMCS) - Project Plan
-# Part 1: Project Planning and Prototype Development
+**Project Plan: Contract Monthly Claim System**
 
-## Project Overview
-The Contract Monthly Claim System (CMCS) is a web-based application designed to streamline the monthly claim 
-submission and approval process for Independent Contractor lecturers.
+**Project Overview**
+The Contract Monthly Claim System is a 12-week development project to create a web-based application 
+for managing lecturer claim submissions and approvals. The project follows agile methodology with two-week 
+sprints focusing on specific functionality milestones.
 
-## Project Objectives
-1. Develop a functional prototype of the Contract Monthly Claim System
-2. Create comprehensive documentation including UML diagrams
-3. Design a user-friendly interface with minimalist aesthetics
-4. Implement core authentication and authorization functionality
-5. Establish the foundation for future development phases
+**Phase 1: Planning & Design (Weeks 1-2)**
+Requirements gathering and analysis, UML diagram creation, and project architecture planning. 
+Deliverables include comprehensive documentation and system design specifications.
 
-## Complete Project Plan
-For detailed project planning information, please refer to the complete [Project Plan](./Project_Plan.md).
+**Phase 2: Core Development (Weeks 3-8)**
+Implementation of authentication system, claim submission module, and basic user interface. 
+Development of calculation engine, document upload functionality, and role-based access control.
 
-## Timeline and Milestones
-- **Week 1-2**: Foundation Setup
-- **Week 3-4**: Core Functionality  
-- **Week 5-6**: UI/UX Refinement
-- **Week 7-8**: Documentation and Finalization
+**Phase 3: Workflow Implementation (Weeks 9-10)**
+Building review and approval systems, status tracking features, and notification mechanisms. 
+Implementation of comments system and audit trail functionality.
 
-## Technical Specifications
-- **Framework**: ASP.NET Core 7.0
-- **Frontend**: HTML5, CSS3, JavaScript
-- **Architecture**: MVC Pattern
-- **Authentication**: Session-based
-- **Storage**: In-memory collections
+**Phase 4: Testing & Refinement (Weeks 11-12)**
+Comprehensive testing including unit tests, integration testing, and user acceptance testing. 
+UI/UX refinement, performance optimization, and documentation completion.
 
-## Related Documentation
-- [Technical Documentation](./Documentation.md)
-- [System Architecture](../README.md#system-architecture)
+**Milestones**
+Week 2: Completed design documentation
+Week 4: Functional authentication system
+Week 6: Claim submission module operational
+Week 8: Basic approval workflow implemented
+Week 10: Full feature completion
+Week 12: Testing completed and final delivery
+
+**Resources**
+
+Tools: Visual Studio, Git version control, .NET Core SDK
