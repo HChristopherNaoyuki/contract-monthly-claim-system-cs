@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using contract_monthly_claim_system_cs.Models.ClaimViewModels;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace contract_monthly_claim_system_cs.Controllers
 {
@@ -44,6 +46,20 @@ namespace contract_monthly_claim_system_cs.Controllers
                 // Calculate amount based on user-input hours and rate
                 model.Amount = model.HoursWorked * model.HourlyRate;
 
+                // Process uploaded files
+                var documentNames = new List<string>();
+                if (model.Documents != null && model.Documents.Count > 0)
+                {
+                    foreach (var file in model.Documents)
+                    {
+                        if (file.Length > 0)
+                        {
+                            // For prototype, just store the file name
+                            documentNames.Add(file.FileName);
+                        }
+                    }
+                }
+
                 // Create and store the claim for prototype
                 var claim = new ClaimApprovalViewModel
                 {
@@ -54,7 +70,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                     HourlyRate = model.HourlyRate,
                     Amount = model.Amount,
                     Status = "Submitted",
-                    DocumentNames = new List<string>()
+                    DocumentNames = documentNames
                 };
 
                 _claims.Add(claim);
@@ -77,8 +93,9 @@ namespace contract_monthly_claim_system_cs.Controllers
                 return RedirectToAction("Index", "Auth");
             }
 
-            // Return all claims for approval
-            return View(_claims);
+            // Return only submitted claims for approval
+            var submittedClaims = _claims.Where(c => c.Status == "Submitted").ToList();
+            return View(submittedClaims);
         }
 
         /// <summary>
@@ -121,12 +138,27 @@ namespace contract_monthly_claim_system_cs.Controllers
                     HoursWorked = 40,
                     HourlyRate = 175.00m,
                     Amount = 7000.00m,
-                    Status = "Submitted",
-                    DocumentNames = new List<string> { "Timesheet.pdf", "Contract.pdf" }
+                    Status = "Not Found",
+                    DocumentNames = new List<string>()
                 };
             }
 
             return View(claim);
+        }
+
+        /// <summary>
+        /// Displays all claims for tracking
+        /// </summary>
+        public IActionResult Track()
+        {
+            // Check if user is authenticated
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
+
+            // Return all claims for tracking
+            return View(_claims);
         }
     }
 }

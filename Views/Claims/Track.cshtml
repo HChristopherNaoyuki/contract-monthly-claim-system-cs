@@ -1,7 +1,7 @@
 ﻿@model List<contract_monthly_claim_system_cs.Models.ClaimViewModels.ClaimApprovalViewModel>
 
 @{
-    ViewData["Title"] = "Approve Claims";
+    ViewData["Title"] = "Track Claims";
 }
 
 <div class="container">
@@ -11,7 +11,7 @@
     {
         <div class="card">
             <div class="card-content">
-                <p style="color: var(--system-gray); text-align: center;">No claims pending approval</p>
+                <p style="color: var(--system-gray); text-align: center;">No claims found</p>
             </div>
         </div>
     }
@@ -26,8 +26,9 @@
                     <th>Hours</th>
                     <th>Hourly Rate</th>
                     <th>Amount</th>
+                    <th>Status</th>
                     <th>Documents</th>
-                    <th>Actions</th>
+                    <th>Comments</th>
                 </tr>
             </thead>
             <tbody>
@@ -40,6 +41,9 @@
                         <td>@claim.HoursWorked</td>
                         <td>@claim.HourlyRate.ToString("C")</td>
                         <td>@claim.Amount.ToString("C")</td>
+                        <td>
+                            <span class="status-badge status-@claim.Status.ToLower()">@claim.Status</span>
+                        </td>
                         <td>
                             @if (claim.DocumentNames.Any())
                             {
@@ -55,20 +59,7 @@
                                 <span style="color: var(--system-gray); font-size: 13px;">No documents</span>
                             }
                         </td>
-                        <td>
-                            <div style="display: flex; gap: 8px; flex-direction: column;">
-                                <form asp-action="ApproveClaim" method="post" style="display: inline;">
-                                    <input type="hidden" name="claimId" value="@claim.ClaimId" />
-                                    <input type="hidden" name="isApproved" value="true" />
-                                    <button type="submit" class="btn btn-success" style="padding: 8px 12px; font-size: 14px; width: 100%;">Approve</button>
-                                </form>
-                                <form asp-action="ApproveClaim" method="post" style="display: inline;">
-                                    <input type="hidden" name="claimId" value="@claim.ClaimId" />
-                                    <input type="hidden" name="isApproved" value="false" />
-                                    <button type="submit" class="btn btn-danger" style="padding: 8px 12px; font-size: 14px; width: 100%;">Reject</button>
-                                </form>
-                            </div>
-                        </td>
+                        <td>@(string.IsNullOrEmpty(claim.Comments) ? "N/A" : claim.Comments)</td>
                     </tr>
                 }
             </tbody>
@@ -80,17 +71,3 @@
         <div class="copyright">© @DateTime.Now.Year - Contract Monthly Claim System</div>
     </div>
 </div>
-
-@section Scripts {
-    <script>
-        // Add confirmation for approval/rejection actions
-        document.querySelectorAll('form[asp-action="ApproveClaim"]').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                const action = this.querySelector('input[name="isApproved"]').value === 'true' ? 'approve' : 'reject';
-                if (!confirm(`Are you sure you want to ${action} this claim?`)) {
-                    e.preventDefault();
-                }
-            });
-        });
-    </script>
-}
