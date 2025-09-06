@@ -26,7 +26,8 @@
 
         <div class="form-group">
             <label asp-for="Comments">Comments (Optional)</label>
-            <textarea asp-for="Comments" class="form-input" placeholder="Add any additional comments about your claim" rows="3" maxlength="500"></textarea>
+            <textarea asp-for="Comments" class="form-input" placeholder="Add any additional comments about your claim"
+                      rows="4" maxlength="500" style="resize: vertical; min-height: 100px;"></textarea>
             <span asp-validation-for="Comments" class="validation-error"></span>
             <div style="font-size: 12px; color: var(--system-gray); margin-top: 4px;">
                 <span id="charCount">0</span>/500 characters
@@ -78,6 +79,9 @@
 
         commentsTextarea.addEventListener('input', function() {
             charCount.textContent = this.value.length;
+
+            // Allow normal text input including spaces and line breaks
+            // No need to prevent default behavior for spaces
         });
 
         // File upload handling

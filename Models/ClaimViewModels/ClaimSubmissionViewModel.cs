@@ -25,6 +25,7 @@ namespace contract_monthly_claim_system_cs.Models.ClaimViewModels
 
         [Display(Name = "Comments")]
         [StringLength(500, ErrorMessage = "Comments cannot exceed 500 characters")]
+        [DataType(DataType.MultilineText)]
         public string Comments { get; set; } = string.Empty;
 
         [Display(Name = "Supporting Documents")]
