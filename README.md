@@ -241,7 +241,6 @@ The Documentation folder contains comprehensive project documentation:
 2. All data is stored in memory and will be lost on application restart
 3. The system includes sample data for testing all functionalities
 4. File uploads are simulated for the prototype phase
-5. The design follows Apple's human interface guidelines for consistency
 
 ## DISCLAIMER
 
