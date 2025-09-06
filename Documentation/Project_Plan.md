@@ -22,12 +22,12 @@ Comprehensive testing including unit tests, integration testing, and user accept
 UI/UX refinement, performance optimization, and documentation completion.
 
 **Milestones**
-Week 2: Completed design documentation
-Week 4: Functional authentication system
-Week 6: Claim submission module operational
-Week 8: Basic approval workflow implemented
-Week 10: Full feature completion
-Week 12: Testing completed and final delivery
+- Week 2: Completed design documentation
+- Week 4: Functional authentication system
+- Week 6: Claim submission module operational
+- Week 8: Basic approval workflow implemented
+- Week 10: Full feature completion
+- Week 12: Testing completed and final delivery
 
 **Resources**
 
