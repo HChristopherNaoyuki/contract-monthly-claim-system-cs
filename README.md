@@ -170,7 +170,6 @@ All users can track claim status through the "Track" section, which shows comple
 - Comments system for communication
 
 ### User Interface
-- Minimalist Apple-inspired design
 - Responsive layout for desktop and mobile
 - Intuitive navigation system
 - Clean typography and visual hierarchy
