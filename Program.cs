@@ -1,6 +1,11 @@
 using contract_monthly_claim_system_cs.Middleware;
+using Microsoft.Extensions.FileProviders;
 
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+{
+    Args = args,
+    WebRootPath = "wwwroot"
+});
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -29,8 +34,27 @@ else
     app.UseMiddleware<ExceptionHandlingMiddleware>();
 }
 
+// Ensure wwwroot directory exists
+var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+if (!Directory.Exists(webRootPath))
+{
+    Directory.CreateDirectory(webRootPath);
+
+    // Create subdirectories
+    Directory.CreateDirectory(Path.Combine(webRootPath, "css"));
+    Directory.CreateDirectory(Path.Combine(webRootPath, "js"));
+    Directory.CreateDirectory(Path.Combine(webRootPath, "lib"));
+}
+
 app.UseHttpsRedirection();
-app.UseStaticFiles();
+
+// Use static files with explicit configuration
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(webRootPath),
+    RequestPath = ""
+});
+
 app.UseRouting();
 app.UseAuthorization();
 

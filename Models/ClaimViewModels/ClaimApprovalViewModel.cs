@@ -11,6 +11,8 @@ namespace contract_monthly_claim_system_cs.Models.ClaimViewModels
     {
         public int ClaimId { get; set; }
 
+        public int LecturerId { get; set; }
+
         [Display(Name = "Lecturer Name")]
         public string LecturerName { get; set; } = string.Empty;
 
@@ -52,11 +54,29 @@ namespace contract_monthly_claim_system_cs.Models.ClaimViewModels
         [Display(Name = "Approved By")]
         public string ApprovedBy { get; set; } = string.Empty;
 
+        [Display(Name = "Approver Role")]
+        public string ApproverRole { get; set; } = string.Empty;
+
         [Display(Name = "Approval Date")]
         [DataType(DataType.DateTime)]
         public DateTime? ApprovalDate { get; set; }
 
         [Display(Name = "Days Pending")]
-        public int DaysPending => (int)(DateTime.Now - ClaimDate).TotalDays;
+        public int DaysPending
+        {
+            get
+            {
+                return (int)(DateTime.Now - ClaimDate).TotalDays;
+            }
+        }
+
+        [Display(Name = "Is Urgent")]
+        public bool IsUrgent
+        {
+            get
+            {
+                return DaysPending > 7 && Status == "Submitted";
+            }
+        }
     }
 }
