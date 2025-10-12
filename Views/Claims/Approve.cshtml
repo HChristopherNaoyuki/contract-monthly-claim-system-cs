@@ -1,339 +1,95 @@
 ﻿@model List<contract_monthly_claim_system_cs.Models.ClaimViewModels.ClaimApprovalViewModel>
-    @{
+@{
     ViewData["Title"] = "Approve Claims";
-    var userRole = ViewBag.UserRole as string ?? "Unknown";
-    }
+}
 
-    <div class="container">
-        <h1>@ViewData["Title"]</h1>
-        <p class="subtitle">Review and approve pending claims as @userRole</p>
+<div class="container">
+    <h1>@ViewData["Title"]</h1>
 
-        @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success">
-            @TempData["SuccessMessage"]
-        </div>
-    }
-
-        @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">
-            @TempData["ErrorMessage"]
-        </div>
-    }
-
-        @if (!Model.Any())
+    @if (!Model.Any())
     {
         <div class="card">
             <div class="card-content">
-                <div style="text-align: center; padding: 40px;">
-                    <div style="font-size: 48px; color: var(--system-gray); margin-bottom: 16px;">📋</div>
-                    <h3 style="color: var(--system-gray); margin-bottom: 8px;">No Claims Pending</h3>
-                    <p style="color: var(--system-gray);">There are no claims waiting for your approval.</p>
-                </div>
+                <p style="color: #8E8E93; text-align: center;">No claims pending approval</p>
             </div>
         </div>
     }
     else
     {
-        <div class="card">
-            <div class="card-content">
-                <div class="table-responsive">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th>Claim ID</th>
-                                <th>Lecturer</th>
-                                <th>Claim Date</th>
-                                <th>Hours</th>
-                                <th>Hourly Rate</th>
-                                <th>Amount</th>
-                                <th>Documents</th>
-                                <th>Comments</th>
-                                <th>Days Pending</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var claim in Model)
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Claim ID</th>
+                    <th>Lecturer</th>
+                    <th>Claim Date</th>
+                    <th>Hours</th>
+                    <th>Hourly Rate</th>
+                    <th>Amount</th>
+                    <th>Documents</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var claim in Model)
+                {
+                    <tr>
+                        <td>@claim.ClaimId</td>
+                        <td>@claim.LecturerName</td>
+                        <td>@claim.ClaimDate.ToString("yyyy-MM-dd")</td>
+                        <td>@claim.HoursWorked</td>
+                        <td>@claim.HourlyRate.ToString("C")</td>
+                        <td>@claim.Amount.ToString("C")</td>
+                        <td>
+                            @if (claim.DocumentNames.Any())
                             {
-                            <tr>
-                                <td><strong>#@claim.ClaimId</strong></td>
-                                <td>@claim.LecturerName</td>
-                                <td>@claim.ClaimDate.ToString("MMM dd, yyyy")</td>
-                                <td>@claim.HoursWorked</td>
-                                <td>@claim.HourlyRate.ToString("C")</td>
-                                <td><strong>@claim.Amount.ToString("C")</strong></td>
-                                <td>
-                                    @if (claim.DocumentNames.Any())
-                                        {
-                                    <div class="document-list">
-                                        @foreach (var doc in claim.DocumentNames.Take(2))
-                                                {
-                                        <span class="document-tag">@doc</span>
-                                                }
-                                        @if (claim.DocumentNames.Count > 2)
-                                                {
-                                        <span class="document-tag">+@(claim.DocumentNames.Count - 2) more</span>
-                                                }
-                                    </div>
-                                        }
-                                        else
-                                        {
-                                    <span class="no-documents">No documents</span>
-                                        }
-                                </td>
-                                <td>
-                                    @if (!string.IsNullOrEmpty(claim.SubmissionComments))
-                                        {
-                                    <div class="comments-preview" title="@claim.SubmissionComments">
-                                        @(claim.SubmissionComments.Length > 50 ? claim.SubmissionComments.Substring(0, 50) + "..." : claim.SubmissionComments)
-                                    </div>
-                                        }
-                                        else
-                                        {
-                                    <span class="no-comments">No comments</span>
-                                        }
-                                </td>
-                                <td>
-                                    <span class="days-badge @(claim.DaysPending > 7 ? "warning" : "normal")">
-                                        @claim.DaysPending day@(claim.DaysPending != 1 ? "s" : "")
-                                    </span>
-                                </td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button type="button" class="btn btn-success btn-sm"
-                                                onclick="showApprovalModal(@claim.ClaimId, true)">
-                                            Approve
-                                        </button>
-                                        <button type="button" class="btn btn-danger btn-sm"
-                                                onclick="showApprovalModal(@claim.ClaimId, false)">
-                                            Reject
-                                        </button>
-                                        <button type="button" class="btn btn-secondary btn-sm"
-                                                onclick="viewClaimDetails(@claim.ClaimId)">
-                                            Details
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                                <ul style="margin: 0; padding-left: 16px;">
+                                    @foreach (var doc in claim.DocumentNames)
+                                    {
+                                        <li style="font-size: 13px;">@doc</li>
+                                    }
+                                </ul>
                             }
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
+                            else
+                            {
+                                <span style="color: #8E8E93; font-size: 13px;">No documents</span>
+                            }
+                        </td>
+                        <td>
+                            <div style="display: flex; gap: 8px; flex-direction: column;">
+                                <form asp-action="ApproveClaim" method="post" style="display: inline;">
+                                    <input type="hidden" name="claimId" value="@claim.ClaimId" />
+                                    <input type="hidden" name="isApproved" value="true" />
+                                    <button type="submit" class="btn btn-success" style="padding: 8px 12px; font-size: 14px; width: 100%;">Approve</button>
+                                </form>
+                                <form asp-action="ApproveClaim" method="post" style="display: inline;">
+                                    <input type="hidden" name="claimId" value="@claim.ClaimId" />
+                                    <input type="hidden" name="isApproved" value="false" />
+                                    <button type="submit" class="btn btn-danger" style="padding: 8px 12px; font-size: 14px; width: 100%;">Reject</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     }
 
-        <!-- Approval Modal -->
-        <div id="approvalModal" class="modal">
-            <div class="modal-content">
-                <span class="close">&times;</span>
-                <h3 id="modalTitle">Approve Claim</h3>
-                <form id="approvalForm" method="post">
-                    <input type="hidden" id="modalClaimId" name="claimId" />
-                    <input type="hidden" id="modalIsApproved" name="isApproved" />
-
-                    <div class="form-group">
-                        <label for="approvalComments">Comments (Optional):</label>
-                        <textarea id="approvalComments" name="approvalComments" class="form-input"
-                                  rows="4" placeholder="Add comments for the lecturer..." maxlength="500"></textarea>
-                        <div class="char-count">
-                            <span id="commentsCharCount">0</span>/500 characters
-                        </div>
-                    </div>
-
-                    <div class="modal-actions">
-                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                        <button type="submit" class="btn" id="modalSubmitBtn">Confirm</button>
-                    </div>
-                </form>
-            </div>
-        </div>
+    <div class="footer">
+        <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Back to Home</a>
+        <div class="copyright">© @DateTime.Now.Year - Contract Monthly Claim System</div>
     </div>
+</div>
 
-    @section Scripts {
-        <script>
-        // Modal functionality
-        const modal = document.getElementById('approvalModal');
-        const approvalForm = document.getElementById('approvalForm');
-        const commentsTextarea = document.getElementById('approvalComments');
-        const charCount = document.getElementById('commentsCharCount');
-
-        function showApprovalModal(claimId, isApproved) {
-            document.getElementById('modalClaimId').value = claimId;
-            document.getElementById('modalIsApproved').value = isApproved;
-            document.getElementById('modalTitle').textContent = isApproved ? 'Approve Claim' : 'Reject Claim';
-            document.getElementById('modalSubmitBtn').className = isApproved ? 'btn btn-success' : 'btn btn-danger';
-            document.getElementById('modalSubmitBtn').textContent = isApproved ? 'Approve Claim' : 'Reject Claim';
-
-            modal.style.display = 'block';
-        }
-
-        function viewClaimDetails(claimId) {
-            window.location.href = '@Url.Action("Status", "Claims")?claimId=' + claimId;
-        }
-
-        function closeModal() {
-            modal.style.display = 'none';
-            commentsTextarea.value = '';
-            charCount.textContent = '0';
-        }
-
-        // Character count for comments
-        commentsTextarea.addEventListener('input', function() {
-            charCount.textContent = this.value.length;
-        });
-
-        // Form submission
-        approvalForm.addEventListener('submit', function(e) {
-            const isApproved = document.getElementById('modalIsApproved').value === 'true';
-            const action = isApproved ? 'approve' : 'reject';
-
-            if (!confirm(`Are you sure you want to ${action} this claim?`)) {
-                e.preventDefault();
-            }
-        });
-
-        // Close modal when clicking outside
-        window.addEventListener('click', function(e) {
-            if (e.target === modal) {
-                closeModal();
-            }
-        });
-
-        // Close button
-        document.querySelector('.close').addEventListener('click', closeModal);
-        </script>
-
-        <style>
-            .document-list {
-                display: flex;
-                flex-direction: column;
-                gap: 4px;
-            }
-
-            .document-tag {
-                background: rgba(0, 122, 255, 0.1);
-                color: #007AFF;
-                padding: 2px 8px;
-                border-radius: 12px;
-                font-size: 12px;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                max-width: 120px;
-            }
-
-            .no-documents, .no-comments {
-                color: var(--system-gray);
-                font-size: 12px;
-                font-style: italic;
-            }
-
-            .comments-preview {
-                font-size: 12px;
-                color: var(--system-gray);
-                cursor: help;
-            }
-
-            .days-badge {
-                padding: 4px 8px;
-                border-radius: 12px;
-                font-size: 12px;
-                font-weight: 500;
-            }
-
-                .days-badge.normal {
-                    background: rgba(52, 199, 89, 0.1);
-                    color: #34C759;
+@section Scripts {
+    <script>
+        // Add confirmation for approval/rejection actions
+        document.querySelectorAll('form[asp-action="ApproveClaim"]').forEach(form => {
+            form.addEventListener('submit', function(e) {
+                const action = this.querySelector('input[name="isApproved"]').value === 'true' ? 'approve' : 'reject';
+                if (!confirm(`Are you sure you want to ${action} this claim?`)) {
+                    e.preventDefault();
                 }
-
-                .days-badge.warning {
-                    background: rgba(255, 149, 0, 0.1);
-                    color: #FF9500;
-                }
-
-            .action-buttons {
-                display: flex;
-                flex-direction: column;
-                gap: 4px;
-            }
-
-            .btn-sm {
-                padding: 6px 12px;
-                font-size: 12px;
-            }
-
-            /* Modal Styles */
-            .modal {
-                display: none;
-                position: fixed;
-                z-index: 1000;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                background-color: rgba(0,0,0,0.5);
-            }
-
-            .modal-content {
-                background-color: var(--system-white);
-                margin: 10% auto;
-                padding: 24px;
-                border-radius: var(--border-radius);
-                width: 90%;
-                max-width: 500px;
-                position: relative;
-            }
-
-            .close {
-                color: var(--system-gray);
-                float: right;
-                font-size: 24px;
-                font-weight: bold;
-                cursor: pointer;
-                line-height: 1;
-            }
-
-                .close:hover {
-                    color: var(--system-text);
-                }
-
-            .modal-actions {
-                display: flex;
-                gap: 12px;
-                justify-content: flex-end;
-                margin-top: 20px;
-            }
-
-            .char-count {
-                font-size: 12px;
-                color: var(--system-gray);
-                text-align: right;
-                margin-top: 4px;
-            }
-
-            .alert {
-                padding: 12px 16px;
-                border-radius: var(--border-radius);
-                margin-bottom: 20px;
-            }
-
-            .alert-success {
-                background-color: rgba(52, 199, 89, 0.1);
-                color: #34C759;
-                border: 1px solid rgba(52, 199, 89, 0.2);
-            }
-
-            .alert-danger {
-                background-color: rgba(255, 59, 48, 0.1);
-                color: #FF3B30;
-                border: 1px solid rgba(255, 59, 48, 0.2);
-            }
-
-            .table-responsive {
-                overflow-x: auto;
-            }
-        </style>
-    }
+            });
+        });
+    </script>
+}

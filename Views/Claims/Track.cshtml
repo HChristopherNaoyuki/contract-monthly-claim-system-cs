@@ -11,7 +11,7 @@
     {
         <div class="card">
             <div class="card-content">
-                <p style="color: var(--system-gray); text-align: center;">No claims found</p>
+                <p style="color: #8E8E93; text-align: center;">No claims found</p>
             </div>
         </div>
     }
@@ -47,7 +47,7 @@
                         <td style="max-width: 200px;">
                             @if (string.IsNullOrEmpty(claim.SubmissionComments))
                             {
-                                <span style="color: var(--system-gray); font-size: 13px;">No comments</span>
+                                <span style="color: #8E8E93; font-size: 13px;">No comments</span>
                             }
                             else
                             {
@@ -57,7 +57,7 @@
                         <td style="max-width: 200px;">
                             @if (string.IsNullOrEmpty(claim.ApprovalComments))
                             {
-                                <span style="color: var(--system-gray); font-size: 13px;">No comments</span>
+                                <span style="color: #8E8E93; font-size: 13px;">No comments</span>
                             }
                             else
                             {
@@ -75,3 +75,33 @@
         <div class="copyright">© @DateTime.Now.Year - Contract Monthly Claim System</div>
     </div>
 </div>
+
+<style>
+    .status-badge {
+        display: inline-block;
+        padding: 4px 12px;
+        border-radius: 16px;
+        font-size: 13px;
+        font-weight: 500;
+    }
+
+    .status-submitted {
+        background-color: rgba(0, 122, 255, 0.1);
+        color: #007AFF;
+    }
+
+    .status-approved {
+        background-color: rgba(52, 199, 89, 0.1);
+        color: #34C759;
+    }
+
+    .status-rejected {
+        background-color: rgba(255, 59, 48, 0.1);
+        color: #FF3B30;
+    }
+
+    .status-pending {
+        background-color: rgba(255, 149, 0, 0.1);
+        color: #FF9500;
+    }
+</style>

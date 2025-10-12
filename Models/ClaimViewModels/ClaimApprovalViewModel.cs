@@ -25,5 +25,13 @@ namespace contract_monthly_claim_system_cs.Models.ClaimViewModels
         public string SubmissionComments { get; set; } = string.Empty;
 
         public string ApprovalComments { get; set; } = string.Empty;
+
+        public int DaysPending
+        {
+            get
+            {
+                return (int)(DateTime.Now - ClaimDate).TotalDays;
+            }
+        }
     }
 }
