@@ -1,279 +1,88 @@
-/* Enhanced Minimalist Apple-style CSS */
-:root {
-    --system-blue: #007AFF;
-    --system-gray: #8E8E93;
-    --system-light-gray: #F2F2F7;
-    --system-white: #FFFFFF;
-    --system-border: #D1D1D6;
-    --system-text: #1C1C1E;
-    --system-green: #34C759;
-    --system-red: #FF3B30;
-    --system-orange: #FF9500;
-}
-
-* {
-    box-sizing: border-box;
-}
-
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    background-color: var(--system-light-gray);
-    color: var(--system-text);
-    line-height: 1.47059;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    min-height: 100vh;
+    background-color: #f8f9fa;
 }
 
-/* Container styles */
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-/* Hero Section */
-.hero {
-    text-align: center;
-    margin-bottom: 40px;
-    padding: 40px 0;
+.header {
+    background: white;
+    padding: 15px 0;
+    border-bottom: 1px solid #dee2e6;
 }
 
-    .hero h1 {
-        font-size: 48px;
-        font-weight: 700;
-        margin-bottom: 16px;
-        color: var(--system-text);
-    }
-
-.subtitle {
-    font-size: 21px;
-    color: var(--system-gray);
-    margin-bottom: 32px;
-}
-
-/* Card Grid */
-.card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 24px;
-    margin-top: 32px;
-}
-
-.card {
-    background-color: var(--system-white);
-    border-radius: 16px;
-    padding: 24px;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    text-decoration: none;
-    color: inherit;
-    display: block;
-}
-
-    .card:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    }
-
-.card-title {
-    font-size: 22px;
-    font-weight: 600;
-    margin-bottom: 12px;
-    color: var(--system-text);
-}
-
-.card-desc {
-    color: var(--system-gray);
-    font-size: 17px;
-    line-height: 1.47059;
-    margin-bottom: 20px;
-}
-
-.card-action {
-    display: inline-flex;
+.nav {
+    display: flex;
+    gap: 15px;
     align-items: center;
-    gap: 6px;
-    color: var(--system-blue);
-    font-size: 17px;
-    font-weight: 500;
-    text-decoration: none;
 }
 
-/* Form Styles */
-.claim-form {
-    max-width: 600px;
-    margin: 0 auto;
-}
+    .nav a {
+        padding: 8px 16px;
+        text-decoration: none;
+        color: #007bff;
+        border: 1px solid #007bff;
+        border-radius: 4px;
+    }
+
+        .nav a:hover {
+            background: #007bff;
+            color: white;
+        }
 
 .form-group {
-    margin-bottom: 24px;
+    margin-bottom: 15px;
 }
 
-label {
-    display: block;
-    margin-bottom: 8px;
-    font-weight: 500;
-    color: var(--system-text);
-    font-size: 17px;
-}
-
-.form-input {
+.form-control {
     width: 100%;
-    padding: 16px;
-    border: 1px solid var(--system-border);
-    border-radius: 12px;
-    font-size: 17px;
-    transition: border-color 0.2s ease;
-    background-color: var(--system-white);
+    padding: 8px;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
 }
 
-    .form-input:focus {
-        outline: none;
-        border-color: var(--system-blue);
-    }
-
-.validation-error {
-    color: var(--system-red);
-    font-size: 15px;
-    margin-top: 6px;
-    display: block;
-}
-
-/* Button Styles */
 .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    font-family: inherit;
-    font-size: 17px;
-    font-weight: 500;
-    padding: 16px 24px;
-    background-color: var(--system-blue);
-    color: var(--system-white);
+    padding: 10px 20px;
     border: none;
-    border-radius: 12px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.2s ease;
     text-decoration: none;
+    display: inline-block;
 }
 
-    .btn:hover {
-        background-color: #0066CC;
-    }
+.btn-primary {
+    background: #007bff;
+    color: white;
+}
 
 .btn-success {
-    background-color: var(--system-green);
+    background: #28a745;
+    color: white;
 }
-
-    .btn-success:hover {
-        background-color: #30B852;
-    }
 
 .btn-danger {
-    background-color: var(--system-red);
+    background: #dc3545;
+    color: white;
 }
 
-    .btn-danger:hover {
-        background-color: #E6352B;
-    }
-
-.btn-secondary {
-    background-color: var(--system-gray);
-}
-
-    .btn-secondary:hover {
-        background-color: #7D7D82;
-    }
-
-/* Table Styles */
 .table {
     width: 100%;
     border-collapse: collapse;
-    background-color: var(--system-white);
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    background: white;
 }
 
-    .table th,
-    .table td {
-        padding: 16px;
+    .table th, .table td {
+        padding: 12px;
+        border: 1px solid #dee2e6;
         text-align: left;
-        border-bottom: 1px solid var(--system-border);
     }
 
     .table th {
-        font-weight: 600;
-        background-color: #F9F9FB;
-        color: var(--system-text);
+        background: #f8f9fa;
     }
-
-    .table tr:last-child td {
-        border-bottom: none;
-    }
-
-/* Status Badges */
-.status-badge {
-    display: inline-block;
-    padding: 6px 12px;
-    border-radius: 16px;
-    font-size: 15px;
-    font-weight: 500;
-}
-
-.status-submitted {
-    background-color: rgba(0, 122, 255, 0.1);
-    color: var(--system-blue);
-}
-
-.status-approved {
-    background-color: rgba(52, 199, 89, 0.1);
-    color: var(--system-green);
-}
-
-.status-rejected {
-    background-color: rgba(255, 59, 48, 0.1);
-    color: var(--system-red);
-}
-
-/* Footer Styles */
-.footer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 40px;
-    padding: 24px 0;
-    border-top: 1px solid var(--system-border);
-}
-
-.copyright {
-    margin-top: 16px;
-    color: var(--system-gray);
-    font-size: 15px;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .container {
-        padding: 16px;
-    }
-
-    .hero h1 {
-        font-size: 36px;
-    }
-
-    .subtitle {
-        font-size: 18px;
-    }
-
-    .card-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-    }
-
-    .table {
-        display: block;
-        overflow-x: auto;
-    }
-}

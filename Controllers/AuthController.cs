@@ -7,13 +7,8 @@ using System.Linq;
 
 namespace contract_monthly_claim_system_cs.Controllers
 {
-    /// <summary>
-    /// Controller for handling user authentication operations
-    /// Uses in-memory storage for prototype phase
-    /// </summary>
     public class AuthController : Controller
     {
-        // In-memory user storage for prototype
         private static readonly List<User> _users = new List<User>
         {
             new User
@@ -45,20 +40,13 @@ namespace contract_monthly_claim_system_cs.Controllers
             }
         };
 
-        /// <summary>
-        /// Displays the login/register page
-        /// </summary>
         [HttpGet]
         public IActionResult Index()
         {
-            // Clear any existing session
             HttpContext.Session.Clear();
             return View();
         }
 
-        /// <summary>
-        /// Handles user login
-        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Login(LoginViewModel model)
@@ -69,7 +57,6 @@ namespace contract_monthly_claim_system_cs.Controllers
 
                 if (user != null)
                 {
-                    // Store user information in session
                     HttpContext.Session.SetInt32("UserId", user.UserId);
                     HttpContext.Session.SetString("Username", user.Username);
                     HttpContext.Session.SetString("Name", $"{user.Name} {user.Surname}");
@@ -84,16 +71,12 @@ namespace contract_monthly_claim_system_cs.Controllers
             return View("Index", model);
         }
 
-        /// <summary>
-        /// Handles user registration
-        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Register(RegisterViewModel model)
         {
             if (ModelState.IsValid)
             {
-                // Check if username already exists
                 if (_users.Any(u => u.Username == model.Username))
                 {
                     ModelState.AddModelError("", "Username already exists");
@@ -112,7 +95,6 @@ namespace contract_monthly_claim_system_cs.Controllers
 
                 _users.Add(user);
 
-                // Auto-login after registration
                 HttpContext.Session.SetInt32("UserId", user.UserId);
                 HttpContext.Session.SetString("Username", user.Username);
                 HttpContext.Session.SetString("Name", $"{user.Name} {user.Surname}");
@@ -124,9 +106,6 @@ namespace contract_monthly_claim_system_cs.Controllers
             return View("Index", model);
         }
 
-        /// <summary>
-        /// Handles user logout
-        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Logout()
@@ -135,26 +114,17 @@ namespace contract_monthly_claim_system_cs.Controllers
             return RedirectToAction("Index");
         }
 
-        /// <summary>
-        /// Displays forgot password page
-        /// </summary>
         [HttpGet]
         public IActionResult ForgotPassword()
         {
             return View();
         }
 
-        /// <summary>
-        /// Handles password reset request
-        /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ForgotPassword(string username)
         {
-            // In a real application, this would send a password reset email
-            // For this demo, we'll just show a confirmation message
             ViewBag.Message = "If the username exists, a password reset link has been sent to the associated email.";
-
             return View();
         }
     }

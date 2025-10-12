@@ -2,9 +2,6 @@
 
 namespace contract_monthly_claim_system_cs.Models.DataModels
 {
-    /// <summary>
-    /// Represents a system user with authentication credentials
-    /// </summary>
     public class User
     {
         [Key]
@@ -23,16 +20,12 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
         public string Username { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Password is required")]
-        [DataType(DataType.Password)]
         public string Password { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Role is required")]
         public UserRole Role { get; set; }
     }
 
-    /// <summary>
-    /// Enumeration for user role types
-    /// </summary>
     public enum UserRole
     {
         Lecturer,

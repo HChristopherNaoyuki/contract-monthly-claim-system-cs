@@ -4,6 +4,12 @@ namespace contract_monthly_claim_system_cs.Models
     {
         public string? RequestId { get; set; }
 
-        public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
+        public bool ShowRequestId
+        {
+            get
+            {
+                return !string.IsNullOrEmpty(RequestId);
+            }
+        }
     }
 }

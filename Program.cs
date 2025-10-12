@@ -1,72 +1,63 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.FileProviders;
-using Microsoft.AspNetCore.Http;
+using System.IO;
 
-var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+namespace contract_monthly_claim_system_cs
 {
-    Args = args,
-    WebRootPath = "wwwroot",
-    ContentRootPath = Directory.GetCurrentDirectory()
-});
-
-// Add services to the container with proper MVC configuration
-builder.Services.AddControllersWithViews()
-    .AddRazorRuntimeCompilation();
-
-// Add session services
-builder.Services.AddDistributedMemoryCache();
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
-});
-
-var app = builder.Build();
-
-// Ensure wwwroot directory exists
-var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
-if (!Directory.Exists(webRootPath))
-{
-    Directory.CreateDirectory(webRootPath);
-
-    // Create subdirectories
-    Directory.CreateDirectory(Path.Combine(webRootPath, "css"));
-    Directory.CreateDirectory(Path.Combine(webRootPath, "js"));
-    Directory.CreateDirectory(Path.Combine(webRootPath, "lib"));
-
-    // Create default CSS file if it doesn't exist
-    var defaultCssPath = Path.Combine(webRootPath, "css", "site.css");
-    if (!File.Exists(defaultCssPath))
+    public class Program
     {
-        await File.WriteAllTextAsync(defaultCssPath, "/* Default CSS */\nbody { margin: 0; padding: 0; }");
+        public static void Main(string[] args)
+        {
+            var builder = WebApplication.CreateBuilder(new WebApplicationOptions
+            {
+                Args = args,
+                WebRootPath = "wwwroot",
+                ContentRootPath = Directory.GetCurrentDirectory()
+            });
+
+            // Add services to the container with proper MVC configuration
+            builder.Services.AddControllersWithViews()
+                .AddRazorRuntimeCompilation();
+
+            // Add session services
+            builder.Services.AddDistributedMemoryCache();
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = System.TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            var app = builder.Build();
+
+            // Ensure wwwroot directory exists
+            var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            if (!Directory.Exists(webRootPath))
+            {
+                Directory.CreateDirectory(webRootPath);
+            }
+
+            // Configure the HTTP request pipeline
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseExceptionHandler("/Home/Error");
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseStaticFiles();
+            app.UseRouting();
+            app.UseAuthorization();
+            app.UseSession();
+
+            app.MapControllerRoute(
+                name: "default",
+                pattern: "{controller=Auth}/{action=Index}/{id?}");
+
+            app.Run();
+        }
     }
 }
-
-// Configure the HTTP request pipeline
-if (!app.Environment.IsDevelopment())
-{
-    app.UseExceptionHandler("/Home/Error");
-    app.UseHsts();
-}
-
-app.UseHttpsRedirection();
-
-// Use static files with explicit configuration
-app.UseStaticFiles(new StaticFileOptions
-{
-    FileProvider = new PhysicalFileProvider(webRootPath),
-    RequestPath = ""
-});
-
-app.UseRouting();
-app.UseAuthorization();
-
-// Use session middleware
-app.UseSession();
-
-app.MapControllerRoute(
-    name: "default",
-    pattern: "{controller=Auth}/{action=Index}/{id?}");
-
-app.Run();

@@ -1,280 +1,88 @@
 ﻿@model contract_monthly_claim_system_cs.Models.ViewModels.LoginViewModel
 @{
     ViewData["Title"] = "Login / Register";
-    Layout = null; // This is correct - auth pages shouldn't use the main layout
+    Layout = null;
 }
 
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Contract Claims</title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <title>@ViewData["Title"]</title>
     <style>
-        /* Apple Minimalistic Design */
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f5f5f7;
+            font-family: Arial, sans-serif;
             margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-        }
-
-        .auth-container {
-            width: 100%;
-            max-width: 400px;
             padding: 20px;
+            background: #f5f5f5;
         }
-
-        .card {
-            background: #ffffff;
-            border-radius: 12px;
-            padding: 30px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            border: 1px solid #e5e5e7;
+        .container {
+            max-width: 400px;
+            margin: 100px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
-
-        .title {
-            font-size: 24px;
-            font-weight: 600;
-            text-align: center;
-            color: #1d1d1f;
-            margin-bottom: 25px;
-        }
-
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 15px;
         }
-
-        .form-input {
+        input {
             width: 100%;
-            height: 44px;
-            border-radius: 8px;
-            border: 1px solid #d2d2d7;
-            padding: 0 16px;
-            font-size: 16px;
-            color: #1d1d1f;
-            background-color: #ffffff;
-            transition: border-color 0.2s ease;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
-
-            .form-input:focus {
-                outline: none;
-                border-color: #007AFF;
-                box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-            }
-
-            .form-input::placeholder {
-                color: #86868b;
-            }
-
-        .form-btn {
+        button {
             width: 100%;
-            height: 44px;
-            border-radius: 8px;
-            border: none;
-            background-color: #007AFF;
+            padding: 10px;
+            background: #007bff;
             color: white;
-            font-size: 16px;
-            font-weight: 500;
+            border: none;
+            border-radius: 4px;
             cursor: pointer;
-            transition: background-color 0.2s ease;
         }
-
-            .form-btn:hover {
-                background-color: #0066CC;
-            }
-
-            .form-btn:active {
-                transform: scale(0.98);
-            }
-
-        .switch-text {
-            text-align: center;
-            margin-top: 20px;
-            color: #86868b;
-            font-size: 14px;
+        button:hover {
+            background: #0056b3;
         }
-
-        .switch-link {
-            color: #007AFF;
-            text-decoration: none;
-            cursor: pointer;
-            font-weight: 500;
-        }
-
-            .switch-link:hover {
-                text-decoration: underline;
-            }
-
-        .validation-error {
-            color: #FF3B30;
-            font-size: 14px;
-            margin-top: 5px;
-            display: block;
-        }
-
-        .form-select {
-            width: 100%;
-            height: 44px;
-            border-radius: 8px;
-            border: 1px solid #d2d2d7;
-            padding: 0 16px;
-            font-size: 16px;
-            color: #1d1d1f;
-            background-color: #ffffff;
-            appearance: menulist;
-        }
-
-            .form-select:focus {
-                outline: none;
-                border-color: #007AFF;
-                box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-            }
-
-        .hidden {
-            display: none;
+        .error {
+            color: red;
+            font-size: 12px;
         }
     </style>
 </head>
 <body>
-    <div class="auth-container">
-        <div class="card">
-            <!-- Login Form -->
-            <div id="login-form">
-                <div class="title">Log in</div>
-                <form asp-action="Login" method="post">
-                    <div class="form-group">
-                        <input class="form-input" asp-for="Username" placeholder="Username" required>
-                        <span asp-validation-for="Username" class="validation-error"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <input class="form-input" asp-for="Password" placeholder="Password" type="password" required>
-                        <span asp-validation-for="Password" class="validation-error"></span>
-                    </div>
-
-                    <button type="submit" class="form-btn">Let's go!</button>
-                </form>
-
-                <div class="switch-text">
-                    Don't have an account? <a class="switch-link" onclick="showRegister()">Sign up</a>
-                </div>
-
-                <div class="switch-text">
-                    <a href="@Url.Action("ForgotPassword", "Auth")" class="switch-link">Forgot password?</a>
-                </div>
+    <div class="container">
+        <h2>Login</h2>
+        <form asp-action="Login" method="post">
+            <div class="form-group">
+                <input asp-for="Username" placeholder="Username" required>
+                <span asp-validation-for="Username" class="error"></span>
             </div>
-
-            <!-- Register Form -->
-            <div id="register-form" class="hidden">
-                <div class="title">Sign up</div>
-                <form asp-action="Register" method="post">
-                    <div class="form-group">
-                        <input class="form-input" name="Name" placeholder="Name" required>
-                        <span class="validation-error" data-valmsg-for="Name"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <input class="form-input" name="Surname" placeholder="Surname" required>
-                        <span class="validation-error" data-valmsg-for="Surname"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <input class="form-input" name="Username" placeholder="Username" required>
-                        <span class="validation-error" data-valmsg-for="Username"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <input class="form-input" name="Password" placeholder="Password" type="password" required>
-                        <span class="validation-error" data-valmsg-for="Password"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <input class="form-input" name="ConfirmPassword" placeholder="Confirm Password" type="password" required>
-                        <span class="validation-error" data-valmsg-for="ConfirmPassword"></span>
-                    </div>
-
-                    <div class="form-group">
-                        <select class="form-select" name="Role" required>
-                            <option value="">Select Role</option>
-                            <option value="Lecturer">Lecturer</option>
-                            <option value="ProgrammeCoordinator">Programme Coordinator</option>
-                            <option value="AcademicManager">Academic Manager</option>
-                        </select>
-                        <span class="validation-error" data-valmsg-for="Role"></span>
-                    </div>
-
-                    <button type="submit" class="form-btn">Confirm!</button>
-                </form>
-
-                <div class="switch-text">
-                    Already have an account? <a class="switch-link" onclick="showLogin()">Log in</a>
-                </div>
+            <div class="form-group">
+                <input asp-for="Password" type="password" placeholder="Password" required>
+                <span asp-validation-for="Password" class="error"></span>
             </div>
-        </div>
+            <button type="submit">Login</button>
+        </form>
+
+        <hr>
+
+        <h3>Register</h3>
+        <form asp-action="Register" method="post">
+            <input type="text" name="Name" placeholder="Name" required>
+            <input type="text" name="Surname" placeholder="Surname" required>
+            <input type="text" name="Username" placeholder="Username" required>
+            <input type="password" name="Password" placeholder="Password" required>
+            <input type="password" name="ConfirmPassword" placeholder="Confirm Password" required>
+            <select name="Role" required>
+                <option value="">Select Role</option>
+                <option value="0">Lecturer</option>
+                <option value="1">Programme Coordinator</option>
+                <option value="2">Academic Manager</option>
+            </select>
+            <button type="submit">Register</button>
+        </form>
     </div>
-
-    <script>
-        function showRegister() {
-            document.getElementById('login-form').classList.add('hidden');
-            document.getElementById('register-form').classList.remove('hidden');
-        }
-
-        function showLogin() {
-            document.getElementById('register-form').classList.add('hidden');
-            document.getElementById('login-form').classList.remove('hidden');
-        }
-
-        // Add client-side validation for registration form
-        document.querySelector('form[asp-action="Register"]').addEventListener('submit', function(e) {
-            let isValid = true;
-            const inputs = this.querySelectorAll('input[required], select[required]');
-
-            inputs.forEach(input => {
-                if (!input.value.trim()) {
-                    isValid = false;
-                    const errorSpan = document.querySelector(`[data-valmsg-for="${input.name}"]`);
-                    if (errorSpan) {
-                        errorSpan.textContent = 'This field is required';
-                    }
-                }
-            });
-
-            // Validate password confirmation
-            const password = this.querySelector('input[name="Password"]');
-            const confirmPassword = this.querySelector('input[name="ConfirmPassword"]');
-
-            if (password.value !== confirmPassword.value) {
-                isValid = false;
-                const errorSpan = document.querySelector('[data-valmsg-for="ConfirmPassword"]');
-                if (errorSpan) {
-                    errorSpan.textContent = 'Passwords do not match';
-                }
-            }
-
-            if (!isValid) {
-                e.preventDefault();
-            }
-        });
-
-        // Clear validation messages on input
-        document.querySelectorAll('input, select').forEach(input => {
-            input.addEventListener('input', function() {
-                const errorSpan = document.querySelector(`[data-valmsg-for="${this.name}"]`);
-                if (errorSpan) {
-                    errorSpan.textContent = '';
-                }
-            });
-        });
-    </script>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 </body>
 </html>
