@@ -51,6 +51,8 @@ namespace contract_monthly_claim_system_cs.Controllers
         [HttpGet]
         public IActionResult Index()
         {
+            // Clear any existing session
+            HttpContext.Session.Clear();
             return View();
         }
 

@@ -5,17 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] — Contract Claims</title>
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Shared/_Layout.cshtml.css" asp-append-version="true" />
     <style>
+        /* Basic reset and layout */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f5f5f7;
+            color: #1d1d1f;
+            line-height: 1.47059;
+        }
+
+        .app-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .app-header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #d2d2d7;
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .app-main {
+            flex: 1;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Navigation styles */
+        .nav-center {
+            display: flex;
+            gap: 8px;
+        }
+
+        .nav-button {
+            padding: 10px 20px;
+            background: none;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            color: #1d1d1f;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+            .nav-button:hover {
+                background-color: #007AFF;
+                color: white;
+                border-color: #007AFF;
+            }
+
         /* User profile styles */
         .user-profile {
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-left: auto;
-            padding: 8px 16px;
-            border-radius: 8px;
-            background-color: #f5f5f7;
         }
 
         .user-avatar {
@@ -39,7 +104,6 @@
         .username {
             font-weight: 600;
             font-size: 14px;
-            color: #1d1d1f;
         }
 
         .user-role {
@@ -49,153 +113,92 @@
 
         .logout-btn {
             background: none;
-            border: none;
-            color: #007AFF;
+            border: 1px solid #ff3b30;
+            color: #ff3b30;
+            padding: 8px 16px;
+            border-radius: 6px;
             cursor: pointer;
             font-size: 14px;
-            padding: 8px;
-            border-radius: 6px;
-            transition: background-color 0.2s ease;
+            transition: all 0.2s ease;
         }
 
             .logout-btn:hover {
-                background-color: rgba(0, 122, 255, 0.1);
-            }
-
-        /* Header layout */
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* Navigation positioning */
-        .nav-center {
-            position: absolute;
-            left: 50%;
-            top: 5mm;
-            transform: translateX(-50%);
-        }
-
-        /* Minimalist Apple-style radio navigation */
-        .apple-radio-nav {
-            display: flex;
-            background-color: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            padding: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.03), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-        }
-
-        .apple-radio-item {
-            position: relative;
-            flex: 1;
-            text-align: center;
-        }
-
-            .apple-radio-item input[type="radio"] {
-                position: absolute;
-                opacity: 0;
-                width: 0;
-                height: 0;
-            }
-
-            .apple-radio-item label {
-                display: block;
-                padding: 10px 20px;
-                font-size: 14px;
-                font-weight: 500;
-                color: #6e6e73;
-                cursor: pointer;
-                border-radius: 8px;
-                transition: all 0.2s ease;
-                user-select: none;
-                -webkit-user-select: none;
-                -moz-user-select: none;
-                -ms-user-select: none;
-            }
-
-            .apple-radio-item input[type="radio"]:checked + label {
-                background-color: #007AFF;
+                background-color: #ff3b30;
                 color: white;
-                font-weight: 600;
-                box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3);
             }
 
-            .apple-radio-item input[type="radio"]:not(:checked) + label:hover {
-                background-color: rgba(0, 122, 255, 0.08);
-                color: #007AFF;
-            }
+        /* Container styles */
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
 
-            .apple-radio-item input[type="radio"]:checked + label:hover {
+        /* Card styles */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        /* Button styles */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: #007AFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.2s ease;
+        }
+
+            .btn:hover {
                 background-color: #0066CC;
-                box-shadow: 0 2px 12px rgba(0, 122, 255, 0.4);
             }
 
-            .apple-radio-item input[type="radio"]:focus + label {
-                outline: 2px solid #007AFF;
-                outline-offset: 2px;
-            }
-
-        /* Responsive design for navigation */
-        @@media (max-width: 768px) {
-            .apple-radio-nav {
-                flex-direction: column;
-                width: 200px;
-                padding: 8px;
-            }
-
-            .apple-radio-item {
-                margin-bottom: 4px;
-            }
-
-                .apple-radio-item:last-child {
-                    margin-bottom: 0;
-                }
-
-                .apple-radio-item label {
-                    padding: 12px 16px;
-                    font-size: 15px;
-                }
-
-            .nav-center {
-                position: static;
-                transform: none;
-                margin: 0 auto;
-            }
-
-            .header-content {
-                flex-direction: column;
-                gap: 16px;
-                padding: 16px;
-            }
-
-            .user-profile {
-                margin-left: 0;
-                width: 100%;
-                justify-content: center;
-            }
+        .btn-secondary {
+            background-color: #8E8E93;
         }
 
-        /* Smooth transitions */
-        .apple-radio-item label {
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            .btn-secondary:hover {
+                background-color: #7D7D82;
+            }
+
+        /* Form styles */
+        .form-group {
+            margin-bottom: 20px;
         }
 
-        /* Focus states for accessibility */
-        .apple-radio-item input[type="radio"]:focus-visible + label {
-            outline: 2px solid #007AFF;
-            outline-offset: 2px;
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d2d2d7;
+            border-radius: 8px;
+            font-size: 16px;
         }
 
-        /* Active state */
-        .apple-radio-item input[type="radio"]:active + label {
-            transform: scale(0.98);
+            .form-input:focus {
+                outline: none;
+                border-color: #007AFF;
+            }
+
+        /* Footer styles */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            border-top: 1px solid #d2d2d7;
+        }
+
+        .copyright {
+            color: #86868b;
+            font-size: 14px;
+            margin-top: 10px;
         }
     </style>
 </head>
@@ -203,54 +206,37 @@
     <div class="app-container">
         <header class="app-header">
             <div class="header-content">
-                <!-- Role-based navigation -->
+                <!-- Navigation -->
                 @if (Context.Session.GetString("UserId") != null)
                 {
-                    <div class="nav-center">
-                        <div class="apple-radio-nav">
-                            <div class="apple-radio-item">
-                                <input type="radio" name="nav-radio" id="nav-home" />
-                                <label for="nav-home" onclick="location.href='@Url.Action("Index", "Home")'">Home</label>
-                            </div>
-                            <div class="apple-radio-item">
-                                <input type="radio" name="nav-radio" id="nav-submit" />
-                                <label for="nav-submit" onclick="location.href='@Url.Action("Submit", "Claims")'">Submit</label>
-                            </div>
-                            <div class="apple-radio-item">
-                                <input type="radio" name="nav-radio" id="nav-review" />
-                                <label for="nav-review" onclick="location.href='@Url.Action("Approve", "Claims")'">Review</label>
-                            </div>
-                            <div class="apple-radio-item">
-                                <input type="radio" name="nav-radio" id="nav-track" />
-                                <label for="nav-track" onclick="location.href='@Url.Action("Track", "Claims")'">Track</label>
-                            </div>
-                            <div class="apple-radio-item">
-                                <input type="radio" name="nav-radio" id="nav-privacy" />
-                                <label for="nav-privacy" onclick="location.href='@Url.Action("Privacy", "Home")'">Privacy</label>
-                            </div>
-                        </div>
-                    </div>
+                <div class="nav-center">
+                    <a href="@Url.Action("Index", "Home")" class="nav-button">Home</a>
+                    <a href="@Url.Action("Submit", "Claims")" class="nav-button">Submit Claim</a>
+                    <a href="@Url.Action("Approve", "Claims")" class="nav-button">Review Claims</a>
+                    <a href="@Url.Action("Track", "Claims")" class="nav-button">Track Claims</a>
+                    <a href="@Url.Action("Privacy", "Home")" class="nav-button">Privacy</a>
+                </div>
                 }
 
-                <!-- User profile section - top right -->
+                <!-- User profile section -->
                 @if (Context.Session.GetString("UserId") != null)
                 {
-                    <div class="user-profile">
-                        <div class="user-avatar">
-                            @{
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        @{
                                 var name = Context.Session.GetString("Name");
                                 var firstLetter = !string.IsNullOrEmpty(name) ? name[0].ToString().ToUpper() : "U";
-                            }
-                            @firstLetter
-                        </div>
-                        <div class="user-info">
-                            <span class="username">@Context.Session.GetString("Username")</span>
-                            <span class="user-role">@Context.Session.GetString("Role")</span>
-                        </div>
-                        <form asp-controller="Auth" asp-action="Logout" method="post">
-                            <button type="submit" class="logout-btn">Logout</button>
-                        </form>
+                        }
+                        @firstLetter
                     </div>
+                    <div class="user-info">
+                        <span class="username">@Context.Session.GetString("Username")</span>
+                        <span class="user-role">@Context.Session.GetString("Role")</span>
+                    </div>
+                    <form asp-controller="Auth" asp-action="Logout" method="post">
+                        <button type="submit" class="logout-btn">Logout</button>
+                    </form>
+                </div>
                 }
             </div>
         </header>
@@ -260,108 +246,6 @@
             @RenderBody()
         </main>
     </div>
-
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
-    <script>
-        // Set active navigation based on current page
-        document.addEventListener('DOMContentLoaded', function() {
-            const currentPath = window.location.pathname.toLowerCase();
-            const navRadios = document.querySelectorAll('.apple-radio-nav input[type="radio"]');
-
-            // Uncheck all radios first
-            navRadios.forEach(radio => {
-                radio.checked = false;
-            });
-
-            // Set the active radio based on current path
-            if (currentPath.includes('/claims/submit')) {
-                document.getElementById('nav-submit').checked = true;
-            } else if (currentPath.includes('/claims/approve')) {
-                document.getElementById('nav-review').checked = true;
-            } else if (currentPath.includes('/claims/track')) {
-                document.getElementById('nav-track').checked = true;
-            } else if (currentPath.includes('/claims/status')) {
-                document.getElementById('nav-track').checked = true;
-            } else if (currentPath.includes('/home/privacy')) {
-                document.getElementById('nav-privacy').checked = true;
-            } else {
-                document.getElementById('nav-home').checked = true;
-            }
-        });
-
-        // Add smooth navigation transitions
-        document.querySelectorAll('.apple-radio-item label').forEach(label => {
-            label.addEventListener('click', function(e) {
-                // Add a subtle ripple effect
-                const ripple = document.createElement('span');
-                ripple.style.cssText = `
-                    position: absolute;
-                    background: rgba(255, 255, 255, 0.3);
-                    border-radius: 50%;
-                    transform: scale(0);
-                    animation: ripple 0.6s linear;
-                    pointer-events: none;
-                `;
-
-                const rect = this.getBoundingClientRect();
-                const size = Math.max(rect.width, rect.height);
-                const x = e.clientX - rect.left - size / 2;
-                const y = e.clientY - rect.top - size / 2;
-
-                ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = x + 'px';
-                ripple.style.top = y + 'px';
-
-                this.appendChild(ripple);
-
-                setTimeout(() => {
-                    ripple.remove();
-                }, 600);
-            });
-        });
-
-        // Add keyboard navigation support
-        document.addEventListener('keydown', function(e) {
-            const navItems = document.querySelectorAll('.apple-radio-item');
-            const currentIndex = Array.from(navItems).findIndex(item =>
-                item.querySelector('input[type="radio"]').checked
-            );
-
-            if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-                e.preventDefault();
-                const nextIndex = (currentIndex + 1) % navItems.length;
-                navItems[nextIndex].querySelector('input[type="radio"]').checked = true;
-                navItems[nextIndex].querySelector('label').focus();
-            } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-                e.preventDefault();
-                const prevIndex = (currentIndex - 1 + navItems.length) % navItems.length;
-                navItems[prevIndex].querySelector('input[type="radio"]').checked = true;
-                navItems[prevIndex].querySelector('label').focus();
-            } else if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                const activeItem = navItems[currentIndex];
-                const link = activeItem.querySelector('label').getAttribute('onclick');
-                if (link) {
-                    const url = link.match(/location\.href='([^']+)'/)[1];
-                    window.location.href = url;
-                }
-            }
-        });
-
-        // Add CSS for ripple animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @@keyframes ripple {
-                to {
-                    transform: scale(4);
-                    opacity: 0;
-                }
-            }
-        `;
-        document.head.appendChild(style);
-    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
