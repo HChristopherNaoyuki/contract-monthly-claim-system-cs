@@ -105,7 +105,7 @@ contract-monthly-claim-system-cs/
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/your-username/contract-monthly-claim-system-cs.git
+   git clone https://github.com/HChristopherNaoyuki/contract-monthly-claim-system-cs.git
    cd contract-monthly-claim-system-cs
    ```
 
