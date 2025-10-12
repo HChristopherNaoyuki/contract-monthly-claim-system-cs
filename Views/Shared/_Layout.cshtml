@@ -3,39 +3,57 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Contract Claims</title>
-    <link rel="stylesheet" href="~/css/site.css" />
+    <title>@ViewData["Title"] — Contract Claims</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
 </head>
 <body>
-    <header>
-        <nav class="navbar">
-            <div class="container">
-                <a href="@Url.Action("Index", "Home")" class="navbar-brand">Contract Claims</a>
-                <div class="navbar-nav">
-                    @if (Context.Session.GetInt32("UserId") != null)
-                    {
-                        <a href="@Url.Action("Index", "Home")" class="nav-link">Home</a>
-                        <a href="@Url.Action("Submit", "Claims")" class="nav-link">Submit Claim</a>
-                        <a href="@Url.Action("Approve", "Claims")" class="nav-link">Review Claims</a>
-                        <a href="@Url.Action("Track", "Claims")" class="nav-link">Track Claims</a>
-                        <a href="@Url.Action("Privacy", "Home")" class="nav-link">Privacy</a>
-                        <form asp-controller="Auth" asp-action="Logout" method="post" style="display: inline;">
-                            <button type="submit" class="nav-link btn-link">Logout</button>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-content">
+                <!-- Navigation -->
+                @if (Context.Session.GetString("UserId") != null)
+                {
+                    <div class="nav-center">
+                        <a href="@Url.Action("Index", "Home")" class="nav-button">Home</a>
+                        <a href="@Url.Action("Submit", "Claims")" class="nav-button">Submit Claim</a>
+                        <a href="@Url.Action("Approve", "Claims")" class="nav-button">Review Claims</a>
+                        <a href="@Url.Action("Track", "Claims")" class="nav-button">Track Claims</a>
+                        <a href="@Url.Action("Privacy", "Home")" class="nav-button">Privacy</a>
+                    </div>
+                }
+
+                <!-- User profile section -->
+                @if (Context.Session.GetString("UserId") != null)
+                {
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            @{
+                                var name = Context.Session.GetString("Name");
+                                var firstLetter = !string.IsNullOrEmpty(name) ? name[0].ToString().ToUpper() : "U";
+                            }
+                            @firstLetter
+                        </div>
+                        <div class="user-info">
+                            <span class="username">@Context.Session.GetString("Username")</span>
+                            <span class="user-role">@Context.Session.GetString("Role")</span>
+                        </div>
+                        <form asp-controller="Auth" asp-action="Logout" method="post">
+                            <button type="submit" class="logout-btn">Logout</button>
                         </form>
-                    }
-                </div>
+                    </div>
+                }
             </div>
-        </nav>
-    </header>
+        </header>
 
-    <main class="container">
-        @RenderBody()
-    </main>
+        <main class="app-main">
+            @RenderBody()
+        </main>
+    </div>
 
-    <footer class="footer">
-        <div class="container">
-            &copy; 2024 - Contract Monthly Claim System
-        </div>
-    </footer>
+    <!-- Render Scripts section only if it's defined in the view -->
+    @if (IsSectionDefined("Scripts"))
+    {
+        @RenderSection("Scripts", required: false)
+    }
 </body>
 </html>

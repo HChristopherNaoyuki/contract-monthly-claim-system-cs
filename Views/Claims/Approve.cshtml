@@ -4,92 +4,109 @@
 }
 
 <div class="container">
-    <h1>@ViewData["Title"]</h1>
+    <div class="hero">
+        <h1 class="hero-title">Review Claims</h1>
+        <p class="hero-subtitle">Approve or reject pending claims with comments</p>
+    </div>
 
     @if (!Model.Any())
     {
         <div class="card">
-            <div class="card-content">
-                <p style="color: #8E8E93; text-align: center;">No claims pending approval</p>
+            <div class="card-content text-center">
+                <div style="padding: var(--spacing-xxl);">
+                    <div style="font-size: 48px; color: var(--system-gray-3); margin-bottom: var(--spacing-md);">📋</div>
+                    <h3 style="color: var(--system-text-tertiary); margin-bottom: var(--spacing-sm);">No Claims Pending</h3>
+                    <p style="color: var(--system-text-tertiary);">There are no claims waiting for your approval.</p>
+                </div>
             </div>
         </div>
     }
     else
     {
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Claim ID</th>
-                    <th>Lecturer</th>
-                    <th>Claim Date</th>
-                    <th>Hours</th>
-                    <th>Hourly Rate</th>
-                    <th>Amount</th>
-                    <th>Documents</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var claim in Model)
-                {
-                    <tr>
-                        <td>@claim.ClaimId</td>
-                        <td>@claim.LecturerName</td>
-                        <td>@claim.ClaimDate.ToString("yyyy-MM-dd")</td>
-                        <td>@claim.HoursWorked</td>
-                        <td>@claim.HourlyRate.ToString("C")</td>
-                        <td>@claim.Amount.ToString("C")</td>
-                        <td>
-                            @if (claim.DocumentNames.Any())
+        <div class="card">
+            <div class="card-content">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Claim ID</th>
+                                <th>Lecturer</th>
+                                <th>Claim Date</th>
+                                <th>Hours</th>
+                                <th>Hourly Rate</th>
+                                <th>Amount</th>
+                                <th>Documents</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var claim in Model)
                             {
-                                <ul style="margin: 0; padding-left: 16px;">
-                                    @foreach (var doc in claim.DocumentNames)
-                                    {
-                                        <li style="font-size: 13px;">@doc</li>
-                                    }
-                                </ul>
+                                <tr>
+                                    <td><strong>#@claim.ClaimId</strong></td>
+                                    <td>@claim.LecturerName</td>
+                                    <td>@claim.ClaimDate.ToString("MMM dd, yyyy")</td>
+                                    <td>@claim.HoursWorked</td>
+                                    <td>@claim.HourlyRate.ToString("C")</td>
+                                    <td><strong>@claim.Amount.ToString("C")</strong></td>
+                                    <td>
+                                        @if (claim.DocumentNames.Any())
+                                        {
+                                            <div style="display: flex; flex-direction: column; gap: 2px;">
+                                                @foreach (var doc in claim.DocumentNames.Take(2))
+                                                {
+                                                    <span class="status-badge status-submitted" style="font-size: 11px; padding: 2px 6px;">@doc</span>
+                                                }
+                                                @if (claim.DocumentNames.Count > 2)
+                                                {
+                                                    <span class="text-muted" style="font-size: 11px;">+@(claim.DocumentNames.Count - 2) more</span>
+                                                }
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted" style="font-size: 12px;">No documents</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <div style="display: flex; gap: 6px; flex-direction: column;">
+                                            <form asp-action="ApproveClaim" method="post" style="display: inline;">
+                                                <input type="hidden" name="claimId" value="@claim.ClaimId" />
+                                                <input type="hidden" name="isApproved" value="true" />
+                                                <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                            </form>
+                                            <form asp-action="ApproveClaim" method="post" style="display: inline;">
+                                                <input type="hidden" name="claimId" value="@claim.ClaimId" />
+                                                <input type="hidden" name="isApproved" value="false" />
+                                                <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
                             }
-                            else
-                            {
-                                <span style="color: #8E8E93; font-size: 13px;">No documents</span>
-                            }
-                        </td>
-                        <td>
-                            <div style="display: flex; gap: 8px; flex-direction: column;">
-                                <form asp-action="ApproveClaim" method="post" style="display: inline;">
-                                    <input type="hidden" name="claimId" value="@claim.ClaimId" />
-                                    <input type="hidden" name="isApproved" value="true" />
-                                    <button type="submit" class="btn btn-success" style="padding: 8px 12px; font-size: 14px; width: 100%;">Approve</button>
-                                </form>
-                                <form asp-action="ApproveClaim" method="post" style="display: inline;">
-                                    <input type="hidden" name="claimId" value="@claim.ClaimId" />
-                                    <input type="hidden" name="isApproved" value="false" />
-                                    <button type="submit" class="btn btn-danger" style="padding: 8px 12px; font-size: 14px; width: 100%;">Reject</button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     }
 
-    <div class="footer">
-        <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Back to Home</a>
-        <div class="copyright">© @DateTime.Now.Year - Contract Monthly Claim System</div>
+    <div class="footer-content">
+        <a class="btn btn-outline" asp-controller="Home" asp-action="Index">Back to Home</a>
     </div>
 </div>
 
-@section Scripts {
-    <script>
-        // Add confirmation for approval/rejection actions
-        document.querySelectorAll('form[asp-action="ApproveClaim"]').forEach(form => {
-            form.addEventListener('submit', function(e) {
-                const action = this.querySelector('input[name="isApproved"]').value === 'true' ? 'approve' : 'reject';
-                if (!confirm(`Are you sure you want to ${action} this claim?`)) {
-                    e.preventDefault();
-                }
-            });
+<script>
+    // Add confirmation for approval/rejection actions
+    document.querySelectorAll('form[asp-action="ApproveClaim"]').forEach(form =>
+    {
+        form.addEventListener('submit', function(e)
+        {
+            const action = this.querySelector('input[name="isApproved"]').value === 'true' ? 'approve' : 'reject';
+            if (!confirm(`Are you sure you want to ${action} this claim?`))
+            {
+                e.preventDefault();
+            }
         });
-    </script>
-}
+    });
+</script>
