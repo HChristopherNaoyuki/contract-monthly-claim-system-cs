@@ -5,58 +5,474 @@
 }
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>@ViewData["Title"]</title>
-    <link rel="stylesheet" href="~/css/site.css" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Contract Claims</title>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <style>
+        /* Auth Page Specific Styles */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+        }
+
+        .auth-card {
+            display: flex;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .auth-left {
+            flex: 1;
+            background: linear-gradient(135deg, #d30073, #ff6b6b);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+            .auth-left::before {
+                content: '';
+                position: absolute;
+                top: -50%;
+                left: -50%;
+                width: 200%;
+                height: 200%;
+                background: radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px);
+                background-size: 20px 20px;
+                animation: float 20s linear infinite;
+            }
+
+        .auth-right {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .welcome-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .welcome-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            line-height: 1.6;
+            position: relative;
+            z-index: 1;
+        }
+
+        .form-container {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .form-title {
+            font-size: 28px;
+            font-weight: 600;
+            letter-spacing: -1px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            padding-left: 30px;
+            color: #d30073;
+            margin-bottom: 10px;
+        }
+
+            .form-title::before,
+            .form-title::after {
+                position: absolute;
+                content: "";
+                height: 16px;
+                width: 16px;
+                border-radius: 50%;
+                left: 0px;
+                background-color: #d30073;
+            }
+
+            .form-title::after {
+                animation: pulse 1s linear infinite;
+            }
+
+        .form-message {
+            font-size: 14.5px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .form-flex {
+            display: flex;
+            width: 100%;
+            gap: 10px;
+        }
+
+        .form-group-custom {
+            position: relative;
+            flex: 1;
+        }
+
+        .form-input-custom {
+            background-color: #f8f9fa;
+            color: #212121;
+            width: 100%;
+            padding: 20px 10px 10px 10px;
+            outline: 0;
+            border: 1px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+            .form-input-custom:focus {
+                border-color: #d30073;
+                background-color: white;
+                box-shadow: 0 0 0 3px rgba(211, 0, 115, 0.1);
+            }
+
+        .form-label-custom {
+            color: #666;
+            position: absolute;
+            left: 10px;
+            top: 0px;
+            font-size: 0.9em;
+            cursor: text;
+            transition: 0.3s ease;
+            pointer-events: none;
+            transform-origin: left top;
+        }
+
+        .form-input-custom:placeholder-shown + .form-label-custom {
+            top: 15px;
+            font-size: 0.9em;
+            transform: none;
+        }
+
+        .form-input-custom:focus + .form-label-custom,
+        .form-input-custom:not(:placeholder-shown) + .form-label-custom {
+            color: #d30073;
+            top: 0px;
+            font-size: 0.7em;
+            font-weight: 600;
+            transform: translateY(-5px);
+        }
+
+        .form-submit {
+            border: none;
+            outline: none;
+            padding: 15px;
+            border-radius: 10px;
+            color: #d30073;
+            font-size: 16px;
+            font-weight: 600;
+            transition: 0.3s ease;
+            background-color: white;
+            border: 2px solid #d30073;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+            .form-submit:hover {
+                background-color: #d30073;
+                color: white;
+                transform: translateY(-2px);
+                box-shadow: 0 5px 15px rgba(211, 0, 115, 0.3);
+            }
+
+        .form-switch {
+            text-align: center;
+            font-size: 14.5px;
+            color: #666;
+            margin-top: 20px;
+        }
+
+            .form-switch a {
+                color: #d30073;
+                text-decoration: none;
+                font-weight: 600;
+            }
+
+                .form-switch a:hover {
+                    text-decoration: underline;
+                }
+
+        .form-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #e1e5e9;
+        }
+
+        .form-tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            font-weight: 600;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 3px solid transparent;
+        }
+
+            .form-tab.active {
+                color: #d30073;
+                border-bottom-color: #d30073;
+            }
+
+            .form-tab:hover {
+                color: #d30073;
+            }
+
+        .form-content {
+            display: none;
+        }
+
+            .form-content.active {
+                display: block;
+            }
+
+        .validation-error {
+            color: #ff3b30;
+            font-size: 12px;
+            margin-top: 5px;
+            display: block;
+        }
+
+        @@keyframes pulse {
+            from {
+                transform: scale(0.9);
+                opacity: 1;
+            }
+
+            to {
+                transform: scale(1.8);
+                opacity: 0;
+            }
+        }
+
+        @@keyframes float {
+            0% {
+                transform: translate(0, 0) rotate(0deg);
+            }
+
+            100% {
+                transform: translate(50px, 50px) rotate(360deg);
+            }
+        }
+
+        /* Responsive Design */
+        @@media (max-width: 768px) {
+            .auth-card {
+                flex-direction: column;
+            }
+
+            .auth-left {
+                padding: 30px 20px;
+                text-align: center;
+            }
+
+            .auth-right {
+                padding: 30px 20px;
+            }
+
+            .form-flex {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .welcome-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
-<body class="auth-body">
+<body>
     <div class="auth-container">
         <div class="auth-card">
-            <h2>Login to Contract Claims</h2>
+            <!-- Left Side - Welcome Message -->
+            <div class="auth-left">
+                <h1 class="welcome-title">Welcome to Contract Claims</h1>
+                <p class="welcome-subtitle">
+                    Streamline your monthly claim submissions and approvals with our intuitive platform.
+                    Join thousands of lecturers and administrators who trust our system.
+                </p>
+            </div>
 
-            <form asp-action="Login" method="post" class="auth-form">
-                <div class="form-group">
-                    <input asp-for="Username" class="form-control" placeholder="Username" required>
-                    <span asp-validation-for="Username" class="text-danger"></span>
+            <!-- Right Side - Auth Forms -->
+            <div class="auth-right">
+                <div class="form-tabs">
+                    <div class="form-tab active" onclick="showForm('login')">Login</div>
+                    <div class="form-tab" onclick="showForm('register')">Register</div>
                 </div>
-                <div class="form-group">
-                    <input asp-for="Password" type="password" class="form-control" placeholder="Password" required>
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <button type="submit" class="btn btn-primary btn-block">Login</button>
-            </form>
 
-            <hr>
+                <!-- Login Form -->
+                <div id="login-form" class="form-content active">
+                    <form asp-action="Login" method="post" class="form-container">
+                        <p class="form-title">Welcome Back</p>
+                        <p class="form-message">Sign in to access your account and manage claims.</p>
 
-            <h3>Register New Account</h3>
-            <form asp-action="Register" method="post" class="auth-form">
-                <div class="form-group">
-                    <input type="text" name="Name" class="form-control" placeholder="First Name" required>
+                        <div class="form-group-custom">
+                            <input asp-for="Username" class="form-input-custom" placeholder=" " required />
+                            <span class="form-label-custom">Username</span>
+                            <span asp-validation-for="Username" class="validation-error"></span>
+                        </div>
+
+                        <div class="form-group-custom">
+                            <input asp-for="Password" type="password" class="form-input-custom" placeholder=" " required />
+                            <span class="form-label-custom">Password</span>
+                            <span asp-validation-for="Password" class="validation-error"></span>
+                        </div>
+
+                        <button type="submit" class="form-submit">Sign In</button>
+
+                        <p class="form-switch">
+                            Don't have an account? <a href="#" onclick="showForm('register')">Sign up</a>
+                        </p>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <input type="text" name="Surname" class="form-control" placeholder="Last Name" required>
+
+                <!-- Register Form -->
+                <div id="register-form" class="form-content">
+                    <form asp-action="Register" method="post" class="form-container">
+                        <p class="form-title">Create Account</p>
+                        <p class="form-message">Sign up now and get full access to our platform.</p>
+
+                        <div class="form-flex">
+                            <div class="form-group-custom">
+                                <input type="text" name="Name" class="form-input-custom" placeholder=" " required />
+                                <span class="form-label-custom">First Name</span>
+                            </div>
+
+                            <div class="form-group-custom">
+                                <input type="text" name="Surname" class="form-input-custom" placeholder=" " required />
+                                <span class="form-label-custom">Last Name</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group-custom">
+                            <input type="text" name="Username" class="form-input-custom" placeholder=" " required />
+                            <span class="form-label-custom">Username</span>
+                        </div>
+
+                        <div class="form-group-custom">
+                            <input type="password" name="Password" class="form-input-custom" placeholder=" " required />
+                            <span class="form-label-custom">Password</span>
+                        </div>
+
+                        <div class="form-group-custom">
+                            <input type="password" name="ConfirmPassword" class="form-input-custom" placeholder=" " required />
+                            <span class="form-label-custom">Confirm Password</span>
+                        </div>
+
+                        <div class="form-group-custom">
+                            <select name="Role" class="form-input-custom" required style="padding-top: 15px; padding-bottom: 15px;">
+                                <option value="">Select Role</option>
+                                <option value="0">Lecturer</option>
+                                <option value="1">Programme Coordinator</option>
+                                <option value="2">Academic Manager</option>
+                            </select>
+                            <span class="form-label-custom" style="top: -10px; font-size: 0.7em;">Role</span>
+                        </div>
+
+                        <button type="submit" class="form-submit">Create Account</button>
+
+                        <p class="form-switch">
+                            Already have an account? <a href="#" onclick="showForm('login')">Sign in</a>
+                        </p>
+                    </form>
                 </div>
-                <div class="form-group">
-                    <input type="text" name="Username" class="form-control" placeholder="Username" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" name="Password" class="form-control" placeholder="Password" required>
-                </div>
-                <div class="form-group">
-                    <input type="password" name="ConfirmPassword" class="form-control" placeholder="Confirm Password" required>
-                </div>
-                <div class="form-group">
-                    <select name="Role" class="form-control" required>
-                        <option value="">Select Role</option>
-                        <option value="0">Lecturer</option>
-                        <option value="1">Programme Coordinator</option>
-                        <option value="2">Academic Manager</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-success btn-block">Register</button>
-            </form>
+            </div>
         </div>
     </div>
+
+    <script>
+        function showForm(formType)
+        {
+            // Update tabs
+            document.querySelectorAll('.form-tab').forEach(tab =>
+            {
+                tab.classList.remove('active');
+            });
+
+            document.querySelectorAll('.form-content').forEach(content =>
+            {
+                content.classList.remove('active');
+            });
+
+            // Activate selected tab and form
+            if (formType === 'login')
+            {
+                document.querySelector('.form-tab:nth-child(1)').classList.add('active');
+                document.getElementById('login-form').classList.add('active');
+            }
+            else
+            {
+                document.querySelector('.form-tab:nth-child(2)').classList.add('active');
+                document.getElementById('register-form').classList.add('active');
+            }
+        }
+
+        // Add real-time validation for registration form
+        document.querySelector('form[asp-action="Register"]').addEventListener('submit', function(e)
+        {
+            let isValid = true;
+            const inputs = this.querySelectorAll('input[required], select[required]');
+
+            inputs.forEach(input =>
+            {
+                if (!input.value.trim())
+                {
+                    isValid = false;
+                    input.style.borderColor = '#ff3b30';
+                }
+                else
+                {
+                    input.style.borderColor = '#e1e5e9';
+                }
+            });
+
+            // Validate password confirmation
+            const password = this.querySelector('input[name="Password"]');
+            const confirmPassword = this.querySelector('input[name="ConfirmPassword"]');
+
+            if (password.value !== confirmPassword.value)
+            {
+                isValid = false;
+                confirmPassword.style.borderColor = '#ff3b30';
+                alert('Passwords do not match');
+            }
+
+            if (!isValid)
+            {
+                e.preventDefault();
+            }
+        });
+
+        // Clear validation on input
+        document.querySelectorAll('.form-input-custom').forEach(input =>
+        {
+            input.addEventListener('input', function()
+            {
+                this.style.borderColor = '#e1e5e9';
+            });
+        });
+    </script>
 </body>
 </html>
