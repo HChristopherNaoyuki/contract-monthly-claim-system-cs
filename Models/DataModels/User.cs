@@ -62,7 +62,7 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
         [EmailAddress(ErrorMessage = "Invalid email address")]
         [StringLength(255, ErrorMessage = "Email cannot exceed 255 characters")]
         [Column("Email")]
-        public string? Email { get; set; }
+        public string Email { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets the user's phone number
@@ -70,7 +70,7 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
         [Phone(ErrorMessage = "Invalid phone number")]
         [StringLength(20, ErrorMessage = "Phone number cannot exceed 20 characters")]
         [Column("PhoneNumber")]
-        public string? PhoneNumber { get; set; }
+        public string PhoneNumber { get; set; } = string.Empty;
 
         /// <summary>
         /// Gets or sets whether the user account is active

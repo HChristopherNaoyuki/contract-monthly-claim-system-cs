@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,32 +7,50 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
 {
     /// <summary>
     /// Database context for the Contract Monthly Claim System
-    /// Manages database connections and entity configurations
+    /// Uses Entity Framework Core for database operations
     /// </summary>
     public class CMCSDbContext : DbContext
     {
         /// <summary>
-        /// Initializes a new instance of the CMCSDbContext class
+        /// Initializes a new instance of the database context
         /// </summary>
-        /// <param name="options">The options to be used by the DbContext</param>
+        /// <param name="options">Database context options</param>
         public CMCSDbContext(DbContextOptions<CMCSDbContext> options) : base(options)
         {
         }
 
-        // DbSet properties for each entity
+        /// <summary>
+        /// Gets or sets the Users table for system users
+        /// </summary>
         public DbSet<User> Users { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Lecturers table for lecturer-specific information
+        /// </summary>
         public DbSet<Lecturer> Lecturers { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Claims table for monthly claim submissions
+        /// </summary>
         public DbSet<Claim> Claims { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Documents table for supporting documents
+        /// </summary>
         public DbSet<Document> Documents { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Approvals table for claim approval workflow
+        /// </summary>
         public DbSet<Approval> Approvals { get; set; }
 
         /// <summary>
-        /// Configures the model that was discovered by convention from the entity types
+        /// Configures the database model and relationships
         /// </summary>
-        /// <param name="modelBuilder">The builder being used to construct the model for this context</param>
+        /// <param name="modelBuilder">Model builder instance</param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // User entity configuration
+            // Configure User entity
             modelBuilder.Entity<User>(entity =>
             {
                 entity.HasKey(e => e.UserId);
@@ -49,25 +66,11 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
                 entity.Property(e => e.Password)
                     .IsRequired()
                     .HasMaxLength(255);
-                entity.Property(e => e.Role)
-                    .IsRequired();
-                entity.Property(e => e.Email)
-                    .HasMaxLength(255);
-                entity.Property(e => e.PhoneNumber)
-                    .HasMaxLength(20);
-                entity.Property(e => e.IsActive)
-                    .HasDefaultValue(true);
-                entity.Property(e => e.CreatedDate)
-                    .HasDefaultValueSql("GETUTCDATE()");
-
-                // Index for performance
                 entity.HasIndex(e => e.Username)
                     .IsUnique();
-                entity.HasIndex(e => e.Role);
-                entity.HasIndex(e => e.IsActive);
             });
 
-            // Lecturer entity configuration
+            // Configure Lecturer entity
             modelBuilder.Entity<Lecturer>(entity =>
             {
                 entity.HasKey(e => e.LecturerId);
@@ -83,19 +86,14 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
                     .HasMaxLength(100);
                 entity.Property(e => e.TaxNumber)
                     .HasMaxLength(50);
-
-                // One-to-one relationship with User
                 entity.HasOne(e => e.User)
                       .WithOne()
-                      .HasForeignKey<Lecturer>(e => e.LecturerId)
-                      .OnDelete(DeleteBehavior.Cascade);
-
-                // Index for performance
+                      .HasForeignKey<Lecturer>(e => e.LecturerId);
                 entity.HasIndex(e => e.EmployeeNumber)
                     .IsUnique();
             });
 
-            // Claim entity configuration
+            // Configure Claim entity
             modelBuilder.Entity<Claim>(entity =>
             {
                 entity.HasKey(e => e.ClaimId);
@@ -108,29 +106,21 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
                     .HasColumnType("decimal(10,2)");
                 entity.Property(e => e.Amount)
                     .HasColumnType("decimal(12,2)");
-                entity.Property(e => e.Status)
-                    .HasDefaultValue(ClaimStatus.Submitted);
-                entity.Property(e => e.SubmissionComments)
-                    .HasMaxLength(500);
+                entity.Property(e => e.ClaimDate)
+                    .HasDefaultValueSql("GETDATE()");
                 entity.Property(e => e.CreatedDate)
-                    .HasDefaultValueSql("GETUTCDATE()");
+                    .HasDefaultValueSql("GETDATE()");
                 entity.Property(e => e.ModifiedDate)
-                    .HasDefaultValueSql("GETUTCDATE()");
-
-                // Many-to-one relationship with Lecturer
+                    .HasDefaultValueSql("GETDATE()");
                 entity.HasOne(e => e.Lecturer)
                       .WithMany(l => l.Claims)
-                      .HasForeignKey(e => e.LecturerId)
-                      .OnDelete(DeleteBehavior.Restrict);
-
-                // Indexes for performance
+                      .HasForeignKey(e => e.LecturerId);
                 entity.HasIndex(e => e.LecturerId);
                 entity.HasIndex(e => e.Status);
                 entity.HasIndex(e => e.MonthYear);
-                entity.HasIndex(e => e.CreatedDate);
             });
 
-            // Document entity configuration
+            // Configure Document entity
             modelBuilder.Entity<Document>(entity =>
             {
                 entity.HasKey(e => e.DocumentId);
@@ -144,42 +134,30 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
                     .IsRequired()
                     .HasMaxLength(50);
                 entity.Property(e => e.UploadDate)
-                    .HasDefaultValueSql("GETUTCDATE()");
-                entity.Property(e => e.IsActive)
-                    .HasDefaultValue(true);
-
-                // Many-to-one relationship with Claim
+                    .HasDefaultValueSql("GETDATE()");
                 entity.HasOne(e => e.Claim)
                       .WithMany(c => c.Documents)
-                      .HasForeignKey(e => e.ClaimId)
-                      .OnDelete(DeleteBehavior.Cascade);
-
-                // Index for performance
+                      .HasForeignKey(e => e.ClaimId);
                 entity.HasIndex(e => e.ClaimId);
             });
 
-            // Approval entity configuration
+            // Configure Approval entity
             modelBuilder.Entity<Approval>(entity =>
             {
                 entity.HasKey(e => e.ApprovalId);
+                entity.Property(e => e.ApproverRole)
+                    .IsRequired()
+                    .HasMaxLength(50);
                 entity.Property(e => e.Comments)
                     .HasMaxLength(500);
                 entity.Property(e => e.ApprovalDate)
-                    .HasDefaultValueSql("GETUTCDATE()");
-
-                // Many-to-one relationship with Claim
+                    .HasDefaultValueSql("GETDATE()");
                 entity.HasOne(e => e.Claim)
                       .WithMany(c => c.Approvals)
-                      .HasForeignKey(e => e.ClaimId)
-                      .OnDelete(DeleteBehavior.Cascade);
-
-                // Many-to-one relationship with User (Approver)
+                      .HasForeignKey(e => e.ClaimId);
                 entity.HasOne(e => e.ApproverUser)
                       .WithMany()
-                      .HasForeignKey(e => e.ApproverUserId)
-                      .OnDelete(DeleteBehavior.Restrict);
-
-                // Indexes for performance
+                      .HasForeignKey(e => e.ApproverUserId);
                 entity.HasIndex(e => e.ClaimId);
                 entity.HasIndex(e => e.ApproverUserId);
             });
@@ -214,7 +192,7 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
         private void UpdateTimestamps()
         {
             var entries = ChangeTracker.Entries();
-            var currentTime = DateTime.UtcNow;
+            var currentTime = DateTime.Now;
 
             foreach (var entry in entries)
             {
