@@ -3,250 +3,39 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] — Contract Claims</title>
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <style>
-        /* Basic reset and layout */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f5f5f7;
-            color: #1d1d1f;
-            line-height: 1.47059;
-        }
-
-        .app-container {
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .app-header {
-            background-color: #ffffff;
-            border-bottom: 1px solid #d2d2d7;
-            padding: 16px 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .app-main {
-            flex: 1;
-            padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-
-        /* Navigation styles */
-        .nav-center {
-            display: flex;
-            gap: 8px;
-        }
-
-        .nav-button {
-            padding: 10px 20px;
-            background: none;
-            border: 1px solid #d2d2d7;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 14px;
-            color: #1d1d1f;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-            .nav-button:hover {
-                background-color: #007AFF;
-                color: white;
-                border-color: #007AFF;
-            }
-
-        /* User profile styles */
-        .user-profile {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .user-avatar {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background-color: #007AFF;
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 600;
-            font-size: 16px;
-        }
-
-        .user-info {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .username {
-            font-weight: 600;
-            font-size: 14px;
-        }
-
-        .user-role {
-            font-size: 12px;
-            color: #86868b;
-        }
-
-        .logout-btn {
-            background: none;
-            border: 1px solid #ff3b30;
-            color: #ff3b30;
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.2s ease;
-        }
-
-            .logout-btn:hover {
-                background-color: #ff3b30;
-                color: white;
-            }
-
-        /* Container styles */
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        /* Card styles */
-        .card {
-            background: white;
-            border-radius: 12px;
-            padding: 24px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            margin-bottom: 20px;
-        }
-
-        /* Button styles */
-        .btn {
-            display: inline-block;
-            padding: 12px 24px;
-            background-color: #007AFF;
-            color: white;
-            text-decoration: none;
-            border-radius: 8px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background-color 0.2s ease;
-        }
-
-            .btn:hover {
-                background-color: #0066CC;
-            }
-
-        .btn-secondary {
-            background-color: #8E8E93;
-        }
-
-            .btn-secondary:hover {
-                background-color: #7D7D82;
-            }
-
-        /* Form styles */
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #d2d2d7;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-
-            .form-input:focus {
-                outline: none;
-                border-color: #007AFF;
-            }
-
-        /* Footer styles */
-        .footer {
-            text-align: center;
-            padding: 20px;
-            margin-top: 40px;
-            border-top: 1px solid #d2d2d7;
-        }
-
-        .copyright {
-            color: #86868b;
-            font-size: 14px;
-            margin-top: 10px;
-        }
-    </style>
+    <title>@ViewData["Title"] - Contract Claims</title>
+    <link rel="stylesheet" href="~/css/site.css" />
 </head>
 <body>
-    <div class="app-container">
-        <header class="app-header">
-            <div class="header-content">
-                <!-- Navigation -->
-                @if (Context.Session.GetString("UserId") != null)
-                {
-                <div class="nav-center">
-                    <a href="@Url.Action("Index", "Home")" class="nav-button">Home</a>
-                    <a href="@Url.Action("Submit", "Claims")" class="nav-button">Submit Claim</a>
-                    <a href="@Url.Action("Approve", "Claims")" class="nav-button">Review Claims</a>
-                    <a href="@Url.Action("Track", "Claims")" class="nav-button">Track Claims</a>
-                    <a href="@Url.Action("Privacy", "Home")" class="nav-button">Privacy</a>
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="@Url.Action("Index", "Home")" class="navbar-brand">Contract Claims</a>
+                <div class="navbar-nav">
+                    @if (Context.Session.GetInt32("UserId") != null)
+                    {
+                        <a href="@Url.Action("Index", "Home")" class="nav-link">Home</a>
+                        <a href="@Url.Action("Submit", "Claims")" class="nav-link">Submit Claim</a>
+                        <a href="@Url.Action("Approve", "Claims")" class="nav-link">Review Claims</a>
+                        <a href="@Url.Action("Track", "Claims")" class="nav-link">Track Claims</a>
+                        <a href="@Url.Action("Privacy", "Home")" class="nav-link">Privacy</a>
+                        <form asp-controller="Auth" asp-action="Logout" method="post" style="display: inline;">
+                            <button type="submit" class="nav-link btn-link">Logout</button>
+                        </form>
+                    }
                 </div>
-                }
-
-                <!-- User profile section -->
-                @if (Context.Session.GetString("UserId") != null)
-                {
-                <div class="user-profile">
-                    <div class="user-avatar">
-                        @{
-                                var name = Context.Session.GetString("Name");
-                                var firstLetter = !string.IsNullOrEmpty(name) ? name[0].ToString().ToUpper() : "U";
-                        }
-                        @firstLetter
-                    </div>
-                    <div class="user-info">
-                        <span class="username">@Context.Session.GetString("Username")</span>
-                        <span class="user-role">@Context.Session.GetString("Role")</span>
-                    </div>
-                    <form asp-controller="Auth" asp-action="Logout" method="post">
-                        <button type="submit" class="logout-btn">Logout</button>
-                    </form>
-                </div>
-                }
             </div>
-        </header>
+        </nav>
+    </header>
 
-        <main class="app-main">
-            <!-- This is where the page content will be rendered -->
-            @RenderBody()
-        </main>
-    </div>
+    <main class="container">
+        @RenderBody()
+    </main>
 
-    @await RenderSectionAsync("Scripts", required: false)
+    <footer class="footer">
+        <div class="container">
+            &copy; 2024 - Contract Monthly Claim System
+        </div>
+    </footer>
 </body>
 </html>

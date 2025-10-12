@@ -86,3 +86,202 @@ body {
     .table th {
         background: #f8f9fa;
     }
+
+/* Basic reset and layout */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+/* Navigation */
+.navbar {
+    background: #fff;
+    border-bottom: 1px solid #dee2e6;
+    padding: 1rem 0;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #007bff;
+    text-decoration: none;
+}
+
+.navbar-nav {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.nav-link {
+    color: #495057;
+    text-decoration: none;
+    padding: 0.5rem 1rem;
+    border-radius: 0.25rem;
+}
+
+    .nav-link:hover {
+        background-color: #e9ecef;
+    }
+
+.btn-link {
+    background: none;
+    border: none;
+    color: #495057;
+    cursor: pointer;
+}
+
+/* Auth styles */
+.auth-body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.auth-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.auth-card {
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+}
+
+.auth-form {
+    margin-bottom: 2rem;
+}
+
+/* Form styles */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+}
+
+    .form-control:focus {
+        border-color: #007bff;
+        outline: 0;
+        box-shadow: 0 0 0 0.2rem rgba(0,123,255,0.25);
+    }
+
+/* Button styles */
+.btn {
+    display: inline-block;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.25rem;
+    font-size: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out;
+}
+
+.btn-block {
+    width: 100%;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+.btn-success {
+    background-color: #28a745;
+    color: white;
+}
+
+    .btn-success:hover {
+        background-color: #1e7e34;
+    }
+
+/* Text styles */
+.text-danger {
+    color: #dc3545;
+    font-size: 0.875rem;
+}
+
+/* Footer */
+.footer {
+    background: #fff;
+    border-top: 1px solid #dee2e6;
+    padding: 2rem 0;
+    margin-top: 2rem;
+    text-align: center;
+    color: #6c757d;
+}
+
+/* Home page styles */
+.hero {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+    .hero h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        color: #333;
+    }
+
+    .hero p {
+        font-size: 1.25rem;
+        color: #666;
+        margin-bottom: 2rem;
+    }
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.action-btn {
+    padding: 1rem 2rem;
+    background: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 0.5rem;
+    transition: transform 0.2s ease;
+}
+
+    .action-btn:hover {
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    .action-btn.success {
+        background: #28a745;
+    }
+
+    .action-btn.secondary {
+        background: #6c757d;
+    }

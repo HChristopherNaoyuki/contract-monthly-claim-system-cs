@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.FileProviders;
 using System.IO;
 
 namespace contract_monthly_claim_system_cs
@@ -18,9 +17,8 @@ namespace contract_monthly_claim_system_cs
                 ContentRootPath = Directory.GetCurrentDirectory()
             });
 
-            // Add services to the container with proper MVC configuration
-            builder.Services.AddControllersWithViews()
-                .AddRazorRuntimeCompilation();
+            // Add services to the container
+            builder.Services.AddControllersWithViews();
 
             // Add session services
             builder.Services.AddDistributedMemoryCache();
@@ -51,6 +49,8 @@ namespace contract_monthly_claim_system_cs
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
+
+            // Use session middleware - must be after UseRouting and before MapControllerRoute
             app.UseSession();
 
             app.MapControllerRoute(

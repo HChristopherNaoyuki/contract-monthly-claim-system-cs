@@ -57,6 +57,7 @@ namespace contract_monthly_claim_system_cs.Controllers
 
                 if (user != null)
                 {
+                    // Store user information in session using extension methods
                     HttpContext.Session.SetInt32("UserId", user.UserId);
                     HttpContext.Session.SetString("Username", user.Username);
                     HttpContext.Session.SetString("Name", $"{user.Name} {user.Surname}");
@@ -95,6 +96,7 @@ namespace contract_monthly_claim_system_cs.Controllers
 
                 _users.Add(user);
 
+                // Auto-login after registration
                 HttpContext.Session.SetInt32("UserId", user.UserId);
                 HttpContext.Session.SetString("Username", user.Username);
                 HttpContext.Session.SetString("Name", $"{user.Name} {user.Surname}");
