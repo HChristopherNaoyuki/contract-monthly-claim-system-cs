@@ -255,6 +255,24 @@
             display: block;
         }
 
+        .validation-summary {
+            background-color: rgba(255, 59, 48, 0.1);
+            border: 1px solid #ff3b30;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 20px;
+        }
+
+            .validation-summary ul {
+                margin: 0;
+                padding-left: 20px;
+            }
+
+            .validation-summary li {
+                color: #ff3b30;
+                font-size: 14px;
+            }
+
         @@keyframes pulse {
             from {
                 transform: scale(0.9);
@@ -301,6 +319,25 @@
                 font-size: 2rem;
             }
         }
+
+        @@media (max-width: 480px) {
+            .auth-container {
+                padding: 10px;
+            }
+
+            .auth-left,
+            .auth-right {
+                padding: 20px 15px;
+            }
+
+            .form-tabs {
+                flex-direction: column;
+            }
+
+            .form-tab {
+                padding: 12px;
+            }
+        }
     </style>
 </head>
 <body>
@@ -324,7 +361,22 @@
 
                 <!-- Login Form -->
                 <div id="login-form" class="form-content active">
+                    <!-- Validation Summary for Login -->
+                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ContainsKey(""))
+                    {
+                        <div class="validation-summary">
+                            <ul>
+                                @foreach (var error in ViewData.ModelState[""].Errors)
+                                {
+                                    <li>@error.ErrorMessage</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
                     <form asp-action="Login" method="post" class="form-container">
+                        @Html.AntiForgeryToken()
+
                         <p class="form-title">Welcome Back</p>
                         <p class="form-message">Sign in to access your account and manage claims.</p>
 
@@ -340,17 +392,41 @@
                             <span asp-validation-for="Password" class="validation-error"></span>
                         </div>
 
+                        <div class="form-group-custom" style="display: flex; align-items: center; gap: 8px;">
+                            <input asp-for="RememberMe" type="checkbox" style="width: auto;" />
+                            <label asp-for="RememberMe" style="font-size: 14px; color: #666;">Remember me</label>
+                        </div>
+
                         <button type="submit" class="form-submit">Sign In</button>
 
                         <p class="form-switch">
-                            Don't have an account? <a href="#" onclick="showForm('register')">Sign up</a>
+                            Don't have an account? <a href="#" onclick="showForm('register'); return false;">Sign up</a>
+                        </p>
+
+                        <p class="form-switch" style="margin-top: 10px;">
+                            <a href="@Url.Action("ForgotPassword", "Auth")" style="font-size: 13px;">Forgot your password?</a>
                         </p>
                     </form>
                 </div>
 
                 <!-- Register Form -->
                 <div id="register-form" class="form-content">
+                    <!-- Validation Summary for Register -->
+                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState.ContainsKey(""))
+                    {
+                        <div class="validation-summary">
+                            <ul>
+                                @foreach (var error in ViewData.ModelState[""].Errors)
+                                {
+                                    <li>@error.ErrorMessage</li>
+                                }
+                            </ul>
+                        </div>
+                    }
+
                     <form asp-action="Register" method="post" class="form-container">
+                        @Html.AntiForgeryToken()
+
                         <p class="form-title">Create Account</p>
                         <p class="form-message">Sign up now and get full access to our platform.</p>
 
@@ -358,43 +434,67 @@
                             <div class="form-group-custom">
                                 <input type="text" name="Name" class="form-input-custom" placeholder=" " required />
                                 <span class="form-label-custom">First Name</span>
+                                @if (ViewData.ModelState.ContainsKey("Name"))
+                                {
+                                    <span class="validation-error">@ViewData.ModelState["Name"].Errors.First().ErrorMessage</span>
+                                }
                             </div>
 
                             <div class="form-group-custom">
                                 <input type="text" name="Surname" class="form-input-custom" placeholder=" " required />
                                 <span class="form-label-custom">Last Name</span>
+                                @if (ViewData.ModelState.ContainsKey("Surname"))
+                                {
+                                    <span class="validation-error">@ViewData.ModelState["Surname"].Errors.First().ErrorMessage</span>
+                                }
                             </div>
                         </div>
 
                         <div class="form-group-custom">
                             <input type="text" name="Username" class="form-input-custom" placeholder=" " required />
                             <span class="form-label-custom">Username</span>
+                            @if (ViewData.ModelState.ContainsKey("Username"))
+                            {
+                                <span class="validation-error">@ViewData.ModelState["Username"].Errors.First().ErrorMessage</span>
+                            }
                         </div>
 
                         <div class="form-group-custom">
                             <input type="password" name="Password" class="form-input-custom" placeholder=" " required />
                             <span class="form-label-custom">Password</span>
+                            @if (ViewData.ModelState.ContainsKey("Password"))
+                            {
+                                <span class="validation-error">@ViewData.ModelState["Password"].Errors.First().ErrorMessage</span>
+                            }
                         </div>
 
                         <div class="form-group-custom">
                             <input type="password" name="ConfirmPassword" class="form-input-custom" placeholder=" " required />
                             <span class="form-label-custom">Confirm Password</span>
+                            @if (ViewData.ModelState.ContainsKey("ConfirmPassword"))
+                            {
+                                <span class="validation-error">@ViewData.ModelState["ConfirmPassword"].Errors.First().ErrorMessage</span>
+                            }
                         </div>
 
                         <div class="form-group-custom">
-                            <select name="Role" class="form-input-custom" required style="padding-top: 15px; padding-bottom: 15px;">
+                            <select name="Role" class="form-input-custom" required style="padding-top: 15px; padding-bottom: 15px; background-color: #f8f9fa;">
                                 <option value="">Select Role</option>
                                 <option value="0">Lecturer</option>
                                 <option value="1">Programme Coordinator</option>
                                 <option value="2">Academic Manager</option>
                             </select>
                             <span class="form-label-custom" style="top: -10px; font-size: 0.7em;">Role</span>
+                            @if (ViewData.ModelState.ContainsKey("Role"))
+                            {
+                                <span class="validation-error">@ViewData.ModelState["Role"].Errors.First().ErrorMessage</span>
+                            }
                         </div>
 
                         <button type="submit" class="form-submit">Create Account</button>
 
                         <p class="form-switch">
-                            Already have an account? <a href="#" onclick="showForm('login')">Sign in</a>
+                            Already have an account? <a href="#" onclick="showForm('login'); return false;">Sign in</a>
                         </p>
                     </form>
                 </div>
@@ -403,6 +503,7 @@
     </div>
 
     <script>
+        // Show the specified form and hide others
         function showForm(formType) {
             // Update tabs
             document.querySelectorAll('.form-tab').forEach(tab => {
@@ -424,39 +525,122 @@
         }
 
         // Add real-time validation for registration form
-        document.querySelector('form[asp-action="Register"]').addEventListener('submit', function(e) {
-            let isValid = true;
-            const inputs = this.querySelectorAll('input[required], select[required]');
+        document.addEventListener('DOMContentLoaded', function() {
+            const registerForm = document.querySelector('form[asp-action="Register"]');
+            if (registerForm) {
+                registerForm.addEventListener('submit', function(e) {
+                    let isValid = true;
+                    const inputs = this.querySelectorAll('input[required], select[required]');
 
-            inputs.forEach(input => {
-                if (!input.value.trim()) {
-                    isValid = false;
-                    input.style.borderColor = '#ff3b30';
-                } else {
-                    input.style.borderColor = '#e1e5e9';
-                }
+                    inputs.forEach(input => {
+                        if (!input.value.trim()) {
+                            isValid = false;
+                            input.style.borderColor = '#ff3b30';
+
+                            // Ensure error message is shown
+                            let errorSpan = input.parentElement.querySelector('.validation-error');
+                            if (!errorSpan) {
+                                errorSpan = document.createElement('span');
+                                errorSpan.className = 'validation-error';
+                                errorSpan.textContent = 'This field is required';
+                                input.parentElement.appendChild(errorSpan);
+                            }
+                        } else {
+                            input.style.borderColor = '#e1e5e9';
+
+                            // Remove custom error message if exists
+                            let errorSpan = input.parentElement.querySelector('.validation-error:not([data-modelstate])');
+                            if (errorSpan) {
+                                errorSpan.remove();
+                            }
+                        }
+                    });
+
+                    // Validate password confirmation
+                    const password = this.querySelector('input[name="Password"]');
+                    const confirmPassword = this.querySelector('input[name="ConfirmPassword"]');
+
+                    if (password && confirmPassword && password.value !== confirmPassword.value) {
+                        isValid = false;
+                        confirmPassword.style.borderColor = '#ff3b30';
+
+                        let errorSpan = confirmPassword.parentElement.querySelector('.validation-error:not([data-modelstate])');
+                        if (!errorSpan) {
+                            errorSpan = document.createElement('span');
+                            errorSpan.className = 'validation-error';
+                            errorSpan.textContent = 'Passwords do not match';
+                            confirmPassword.parentElement.appendChild(errorSpan);
+                        }
+                    }
+
+                    if (!isValid) {
+                        e.preventDefault();
+                    }
+                });
+            }
+
+            // Clear validation on input
+            document.querySelectorAll('.form-input-custom').forEach(input => {
+                input.addEventListener('input', function() {
+                    this.style.borderColor = '#e1e5e9';
+
+                    // Remove custom error message if exists
+                    let errorSpan = this.parentElement.querySelector('.validation-error:not([data-modelstate])');
+                    if (errorSpan) {
+                        errorSpan.remove();
+                    }
+                });
             });
 
-            // Validate password confirmation
-            const password = this.querySelector('input[name="Password"]');
-            const confirmPassword = this.querySelector('input[name="ConfirmPassword"]');
+            // Auto-calculate form field interactions
+            const passwordInputs = document.querySelectorAll('input[type="password"]');
+            passwordInputs.forEach(input => {
+                input.addEventListener('input', function() {
+                    // Clear any password mismatch errors when user starts typing
+                    const confirmPassword = document.querySelector('input[name="ConfirmPassword"]');
+                    if (confirmPassword && this.name === 'Password') {
+                        confirmPassword.style.borderColor = '#e1e5e9';
+                        let errorSpan = confirmPassword.parentElement.querySelector('.validation-error:not([data-modelstate])');
+                        if (errorSpan && errorSpan.textContent.includes('match')) {
+                            errorSpan.remove();
+                        }
+                    }
+                });
+            });
 
-            if (password.value !== confirmPassword.value) {
-                isValid = false;
-                confirmPassword.style.borderColor = '#ff3b30';
-                alert('Passwords do not match');
-            }
-
-            if (!isValid) {
-                e.preventDefault();
-            }
+            // Enhance accessibility
+            document.querySelectorAll('.form-input-custom').forEach(input => {
+                input.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        const form = this.closest('form');
+                        if (form) {
+                            const submitButton = form.querySelector('button[type="submit"]');
+                            if (submitButton) {
+                                submitButton.click();
+                            }
+                        }
+                    }
+                });
+            });
         });
 
-        // Clear validation on input
-        document.querySelectorAll('.form-input-custom').forEach(input => {
-            input.addEventListener('input', function() {
-                this.style.borderColor = '#e1e5e9';
-            });
+        // Show appropriate form based on model state errors
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if there are model state errors for registration to show that form
+            const hasRegisterErrors = document.querySelector('#register-form .validation-error') ||
+                                     document.querySelector('#register-form .validation-summary');
+
+            if (hasRegisterErrors) {
+                showForm('register');
+            }
+
+            // Focus on first invalid field if any
+            const firstInvalidField = document.querySelector('.form-input-custom:invalid') ||
+                                     document.querySelector('.validation-error')?.closest('.form-group-custom')?.querySelector('.form-input-custom');
+
+            if (firstInvalidField) {
+                firstInvalidField.focus();
+            }
         });
     </script>
 </body>
