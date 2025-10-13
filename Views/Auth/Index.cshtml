@@ -403,47 +403,36 @@
     </div>
 
     <script>
-        function showForm(formType)
-        {
+        function showForm(formType) {
             // Update tabs
-            document.querySelectorAll('.form-tab').forEach(tab =>
-            {
+            document.querySelectorAll('.form-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
 
-            document.querySelectorAll('.form-content').forEach(content =>
-            {
+            document.querySelectorAll('.form-content').forEach(content => {
                 content.classList.remove('active');
             });
 
             // Activate selected tab and form
-            if (formType === 'login')
-            {
+            if (formType === 'login') {
                 document.querySelector('.form-tab:nth-child(1)').classList.add('active');
                 document.getElementById('login-form').classList.add('active');
-            }
-            else
-            {
+            } else {
                 document.querySelector('.form-tab:nth-child(2)').classList.add('active');
                 document.getElementById('register-form').classList.add('active');
             }
         }
 
         // Add real-time validation for registration form
-        document.querySelector('form[asp-action="Register"]').addEventListener('submit', function(e)
-        {
+        document.querySelector('form[asp-action="Register"]').addEventListener('submit', function(e) {
             let isValid = true;
             const inputs = this.querySelectorAll('input[required], select[required]');
 
-            inputs.forEach(input =>
-            {
-                if (!input.value.trim())
-                {
+            inputs.forEach(input => {
+                if (!input.value.trim()) {
                     isValid = false;
                     input.style.borderColor = '#ff3b30';
-                }
-                else
-                {
+                } else {
                     input.style.borderColor = '#e1e5e9';
                 }
             });
@@ -452,24 +441,20 @@
             const password = this.querySelector('input[name="Password"]');
             const confirmPassword = this.querySelector('input[name="ConfirmPassword"]');
 
-            if (password.value !== confirmPassword.value)
-            {
+            if (password.value !== confirmPassword.value) {
                 isValid = false;
                 confirmPassword.style.borderColor = '#ff3b30';
                 alert('Passwords do not match');
             }
 
-            if (!isValid)
-            {
+            if (!isValid) {
                 e.preventDefault();
             }
         });
 
         // Clear validation on input
-        document.querySelectorAll('.form-input-custom').forEach(input =>
-        {
-            input.addEventListener('input', function()
-            {
+        document.querySelectorAll('.form-input-custom').forEach(input => {
+            input.addEventListener('input', function() {
                 this.style.borderColor = '#e1e5e9';
             });
         });

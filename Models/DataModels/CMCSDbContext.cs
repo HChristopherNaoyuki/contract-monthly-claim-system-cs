@@ -7,7 +7,7 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
 {
     /// <summary>
     /// Database context for the Contract Monthly Claim System
-    /// Uses Entity Framework Core for database operations
+    /// Uses Entity Framework Core with SQLite for cross-platform compatibility
     /// </summary>
     public class CMCSDbContext : DbContext
     {
@@ -22,27 +22,27 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
         /// <summary>
         /// Gets or sets the Users table for system users
         /// </summary>
-        public DbSet<User> Users { get; set; }
+        public DbSet<User> Users { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the Lecturers table for lecturer-specific information
         /// </summary>
-        public DbSet<Lecturer> Lecturers { get; set; }
+        public DbSet<Lecturer> Lecturers { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the Claims table for monthly claim submissions
         /// </summary>
-        public DbSet<Claim> Claims { get; set; }
+        public DbSet<Claim> Claims { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the Documents table for supporting documents
         /// </summary>
-        public DbSet<Document> Documents { get; set; }
+        public DbSet<Document> Documents { get; set; } = null!;
 
         /// <summary>
         /// Gets or sets the Approvals table for claim approval workflow
         /// </summary>
-        public DbSet<Approval> Approvals { get; set; }
+        public DbSet<Approval> Approvals { get; set; } = null!;
 
         /// <summary>
         /// Configures the database model and relationships
@@ -107,11 +107,11 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
                 entity.Property(e => e.Amount)
                     .HasColumnType("decimal(12,2)");
                 entity.Property(e => e.ClaimDate)
-                    .HasDefaultValueSql("GETDATE()");
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
                 entity.Property(e => e.CreatedDate)
-                    .HasDefaultValueSql("GETDATE()");
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
                 entity.Property(e => e.ModifiedDate)
-                    .HasDefaultValueSql("GETDATE()");
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
                 entity.HasOne(e => e.Lecturer)
                       .WithMany(l => l.Claims)
                       .HasForeignKey(e => e.LecturerId);
@@ -134,7 +134,7 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
                     .IsRequired()
                     .HasMaxLength(50);
                 entity.Property(e => e.UploadDate)
-                    .HasDefaultValueSql("GETDATE()");
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
                 entity.HasOne(e => e.Claim)
                       .WithMany(c => c.Documents)
                       .HasForeignKey(e => e.ClaimId);
@@ -151,7 +151,7 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
                 entity.Property(e => e.Comments)
                     .HasMaxLength(500);
                 entity.Property(e => e.ApprovalDate)
-                    .HasDefaultValueSql("GETDATE()");
+                    .HasDefaultValueSql("CURRENT_TIMESTAMP");
                 entity.HasOne(e => e.Claim)
                       .WithMany(c => c.Approvals)
                       .HasForeignKey(e => e.ClaimId);

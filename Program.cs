@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using contract_monthly_claim_system_cs.Models.DataModels;
@@ -28,13 +27,10 @@ namespace contract_monthly_claim_system_cs
             // Add services to the container
             builder.Services.AddControllersWithViews();
 
-            // Add Entity Framework Core with SQL Server
+            // Add Entity Framework Core with SQLite (compatible with all Windows systems)
             var connectionString = builder.Configuration.GetConnectionString("CMCSDatabase");
-            if (!string.IsNullOrEmpty(connectionString))
-            {
-                builder.Services.AddDbContext<CMCSDbContext>(options =>
-                    options.UseSqlServer(connectionString));
-            }
+            builder.Services.AddDbContext<CMCSDbContext>(options =>
+                options.UseSqlite(connectionString));
 
             // Add session services
             builder.Services.AddDistributedMemoryCache();
@@ -58,6 +54,14 @@ namespace contract_monthly_claim_system_cs
                 Directory.CreateDirectory(webRootPath);
             }
 
+            // Initialize database
+            using (var scope = app.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<CMCSDbContext>();
+                context.Database.EnsureCreated();
+                DatabaseInitializer.Initialize(context);
+            }
+
             // Configure the HTTP request pipeline
             if (!app.Environment.IsDevelopment())
             {
@@ -76,6 +80,75 @@ namespace contract_monthly_claim_system_cs
                 pattern: "{controller=Auth}/{action=Index}/{id?}");
 
             app.Run();
+        }
+    }
+
+    /// <summary>
+    /// Database initializer for seeding initial data
+    /// </summary>
+    public static class DatabaseInitializer
+    {
+        /// <summary>
+        /// Initializes the database with default data
+        /// </summary>
+        /// <param name="context">Database context</param>
+        public static void Initialize(CMCSDbContext context)
+        {
+            if (!context.Users.Any())
+            {
+                // Add default users
+                var users = new List<User>
+                {
+                    new User
+                    {
+                        Name = "System",
+                        Surname = "Administrator",
+                        Username = "admin",
+                        Password = "admin123",
+                        Role = UserRole.AcademicManager,
+                        Email = "admin@cmcs.com",
+                        IsActive = true
+                    },
+                    new User
+                    {
+                        Name = "John",
+                        Surname = "Smith",
+                        Username = "lecturer",
+                        Password = "lecturer123",
+                        Role = UserRole.Lecturer,
+                        Email = "john.smith@university.com",
+                        IsActive = true
+                    },
+                    new User
+                    {
+                        Name = "Sarah",
+                        Surname = "Johnson",
+                        Username = "coordinator",
+                        Password = "coordinator123",
+                        Role = UserRole.ProgrammeCoordinator,
+                        Email = "sarah.johnson@university.com",
+                        IsActive = true
+                    }
+                };
+
+                context.Users.AddRange(users);
+                context.SaveChanges();
+
+                // Add lecturer details
+                var lecturer = context.Users.First(u => u.Username == "lecturer");
+                var lecturerDetail = new Lecturer
+                {
+                    LecturerId = lecturer.UserId,
+                    EmployeeNumber = "EMP001",
+                    Department = "Computer Science",
+                    HourlyRate = 150.00m,
+                    ContractStartDate = DateTime.Now.AddYears(-1),
+                    ContractEndDate = DateTime.Now.AddYears(1)
+                };
+
+                context.Lecturers.Add(lecturerDetail);
+                context.SaveChanges();
+            }
         }
     }
 }
