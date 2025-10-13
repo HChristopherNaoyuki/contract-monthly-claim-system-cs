@@ -10,7 +10,8 @@ using System.IO;
 using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using System.Net;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 
 namespace contract_monthly_claim_system_cs
 {
@@ -68,7 +69,7 @@ namespace contract_monthly_claim_system_cs
 
             // Configure application services in sequence
             ConfigureLogging(builder);
-            ConfigureConfiguration(builder);
+            ConfigureConfiguration(builder, args);
             ConfigureWebServer(builder);
             ConfigureApplicationServices(builder);
             ConfigureDatabaseServices(builder);
@@ -85,10 +86,12 @@ namespace contract_monthly_claim_system_cs
             // Clear default logging providers
             builder.Logging.ClearProviders();
 
-            // Add console logging with enhanced configuration
-            builder.Logging.AddConsole(options =>
+            // Add console logging with updated configuration
+            builder.Logging.AddSimpleConsole(options =>
             {
                 options.IncludeScopes = true;
+                options.SingleLine = true;
+                options.TimestampFormat = "HH:mm:ss ";
             });
 
             // Add debug logging for development
@@ -107,15 +110,21 @@ namespace contract_monthly_claim_system_cs
         /// Configures application configuration sources
         /// </summary>
         /// <param name="builder">WebApplication builder</param>
-        private static void ConfigureConfiguration(WebApplicationBuilder builder)
+        /// <param name="args">Command line arguments</param>
+        private static void ConfigureConfiguration(WebApplicationBuilder builder, string[] args)
         {
             // Add configuration sources in order of precedence
             builder.Configuration
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .AddCommandLine(builder.Configuration.GetCommandLineArgs());
+                .AddEnvironmentVariables();
+
+            // Add command line arguments if any are provided
+            if (args.Length > 0)
+            {
+                builder.Configuration.AddCommandLine(args);
+            }
         }
 
         /// <summary>
@@ -185,8 +194,8 @@ namespace contract_monthly_claim_system_cs
                 options.Cookie.IsEssential = true;
                 options.Cookie.Name = "CMCS.Session";
                 options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
-                    ? Microsoft.AspNetCore.Http.CookieSecurePolicy.None
-                    : Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+                    ? CookieSecurePolicy.None
+                    : CookieSecurePolicy.Always;
             });
 
             // Add custom services
@@ -248,7 +257,6 @@ namespace contract_monthly_claim_system_cs
                 {
                     options.EnableSensitiveDataLogging();
                     options.EnableDetailedErrors();
-                    options.LogTo(Console.WriteLine, LogLevel.Information);
                 }
             });
         }
@@ -294,7 +302,9 @@ namespace contract_monthly_claim_system_cs
             {
                 // Detailed error pages in development
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+
+                // Custom database error page for development
+                app.UseExceptionHandler("/Home/Error");
             }
             else
             {
@@ -331,8 +341,25 @@ namespace contract_monthly_claim_system_cs
             app.UseAuthorization();
 
             // Health check endpoint
-            app.MapHealthChecks("/health");
-            app.MapHealthChecks("/ready");
+            app.MapHealthChecks("/health", new HealthCheckOptions
+            {
+                ResponseWriter = async (context, report) =>
+                {
+                    var result = System.Text.Json.JsonSerializer.Serialize(new
+                    {
+                        status = report.Status.ToString(),
+                        checks = report.Entries.Select(entry => new
+                        {
+                            name = entry.Key,
+                            status = entry.Value.Status.ToString(),
+                            description = entry.Value.Description,
+                            duration = entry.Value.Duration.ToString()
+                        })
+                    });
+                    context.Response.ContentType = "application/json";
+                    await context.Response.WriteAsync(result);
+                }
+            });
 
             // Configure endpoints
             app.MapControllerRoute(
@@ -562,38 +589,46 @@ namespace contract_monthly_claim_system_cs
         }
     }
 
-    // Database Health Check and Service implementations remain the same as previous
-    // but ensure they are included in the same file
-
     /// <summary>
     /// Database health check for ASP.NET Core Health Checks
     /// </summary>
-    public class DatabaseHealthCheck : Microsoft.Extensions.Diagnostics.HealthChecks.IHealthCheck
+    public class DatabaseHealthCheck : IHealthCheck
     {
         private readonly CMCSDbContext _context;
         private readonly ILogger<DatabaseHealthCheck> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of DatabaseHealthCheck
+        /// </summary>
+        /// <param name="context">Database context</param>
+        /// <param name="logger">Logger instance</param>
         public DatabaseHealthCheck(CMCSDbContext context, ILogger<DatabaseHealthCheck> logger)
         {
             _context = context;
             _logger = logger;
         }
 
-        public async Task<Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult> CheckHealthAsync(
-            Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckContext context,
+        /// <summary>
+        /// Performs health check by testing database connectivity
+        /// </summary>
+        /// <param name="context">Health check context</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns>Health check result</returns>
+        public async Task<HealthCheckResult> CheckHealthAsync(
+            HealthCheckContext context,
             CancellationToken cancellationToken = default)
         {
             try
             {
                 var canConnect = await _context.Database.CanConnectAsync(cancellationToken);
                 return canConnect
-                    ? Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Healthy("Database is connected")
-                    : Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Unhealthy("Cannot connect to database");
+                    ? HealthCheckResult.Healthy("Database is connected")
+                    : HealthCheckResult.Unhealthy("Cannot connect to database");
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Database health check failed");
-                return Microsoft.Extensions.Diagnostics.HealthChecks.HealthCheckResult.Unhealthy("Database health check failed", ex);
+                return HealthCheckResult.Unhealthy("Database health check failed", ex);
             }
         }
     }
@@ -603,6 +638,10 @@ namespace contract_monthly_claim_system_cs
     /// </summary>
     public interface IDatabaseHealthService
     {
+        /// <summary>
+        /// Checks database health and connectivity
+        /// </summary>
+        /// <returns>Database health result</returns>
         Task<DatabaseHealthResult> CheckDatabaseHealthAsync();
     }
 
@@ -614,12 +653,21 @@ namespace contract_monthly_claim_system_cs
         private readonly CMCSDbContext _context;
         private readonly ILogger<DatabaseHealthService> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of DatabaseHealthService
+        /// </summary>
+        /// <param name="context">Database context</param>
+        /// <param name="logger">Logger instance</param>
         public DatabaseHealthService(CMCSDbContext context, ILogger<DatabaseHealthService> logger)
         {
             _context = context;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Checks database health and connectivity
+        /// </summary>
+        /// <returns>Database health result</returns>
         public async Task<DatabaseHealthResult> CheckDatabaseHealthAsync()
         {
             try
@@ -663,28 +711,121 @@ namespace contract_monthly_claim_system_cs
     }
 
     /// <summary>
-    /// Database health result
+    /// Represents the result of a database health check
     /// </summary>
     public class DatabaseHealthResult
     {
+        /// <summary>
+        /// Gets or sets whether the database is healthy
+        /// </summary>
         public bool IsHealthy { get; set; }
+
+        /// <summary>
+        /// Gets or sets whether the database can be connected to
+        /// </summary>
         public bool CanConnect { get; set; }
+
+        /// <summary>
+        /// Gets or sets the health check message
+        /// </summary>
         public string Message { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets or sets the number of users in the database
+        /// </summary>
         public int UserCount { get; set; }
+
+        /// <summary>
+        /// Gets or sets the exception if any occurred
+        /// </summary>
         public Exception? Exception { get; set; }
     }
 
     /// <summary>
-    /// Database initializer
+    /// Database initializer for seeding initial data
     /// </summary>
     public static class DatabaseInitializer
     {
+        /// <summary>
+        /// Initializes the database with default data
+        /// </summary>
+        /// <param name="context">Database context</param>
         public static void Initialize(CMCSDbContext context)
         {
             if (!context.Users.Any())
             {
-                // Add default users and data
-                // ... (same implementation as before)
+                // Add default users
+                var users = new List<User>
+                {
+                    new User
+                    {
+                        Name = "System",
+                        Surname = "Administrator",
+                        Username = "admin",
+                        Password = "admin123",
+                        Role = UserRole.AcademicManager,
+                        Email = "admin@cmcs.com",
+                        IsActive = true,
+                        CreatedDate = DateTime.UtcNow
+                    },
+                    new User
+                    {
+                        Name = "John",
+                        Surname = "Smith",
+                        Username = "lecturer",
+                        Password = "lecturer123",
+                        Role = UserRole.Lecturer,
+                        Email = "john.smith@university.com",
+                        IsActive = true,
+                        CreatedDate = DateTime.UtcNow
+                    },
+                    new User
+                    {
+                        Name = "Sarah",
+                        Surname = "Johnson",
+                        Username = "coordinator",
+                        Password = "coordinator123",
+                        Role = UserRole.ProgrammeCoordinator,
+                        Email = "sarah.johnson@university.com",
+                        IsActive = true,
+                        CreatedDate = DateTime.UtcNow
+                    }
+                };
+
+                context.Users.AddRange(users);
+                context.SaveChanges();
+
+                // Add lecturer details
+                var lecturer = context.Users.First(u => u.Username == "lecturer");
+                var lecturerDetail = new Lecturer
+                {
+                    LecturerId = lecturer.UserId,
+                    EmployeeNumber = "EMP001",
+                    Department = "Computer Science",
+                    HourlyRate = 150.00m,
+                    ContractStartDate = DateTime.Now.AddYears(-1),
+                    ContractEndDate = DateTime.Now.AddYears(1)
+                };
+
+                context.Lecturers.Add(lecturerDetail);
+                context.SaveChanges();
+
+                // Add sample claims for testing
+                var sampleClaim = new Claim
+                {
+                    LecturerId = lecturer.UserId,
+                    MonthYear = DateTime.Now.ToString("yyyy-MM"),
+                    HoursWorked = 40,
+                    HourlyRate = 150.00m,
+                    Amount = 6000.00m,
+                    Status = ClaimStatus.Submitted,
+                    SubmissionComments = "Sample claim for testing",
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                };
+
+                context.Claims.Add(sampleClaim);
+                context.SaveChanges();
             }
         }
     }
