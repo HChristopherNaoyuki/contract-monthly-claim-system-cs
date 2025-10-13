@@ -1,0 +1,100 @@
+﻿@{
+    ViewData["Title"] = "Database Setup Instructions";
+}
+
+<div class="container">
+    <div class="hero">
+        <h1 class="hero-title">Database Setup Instructions</h1>
+        <p class="hero-subtitle">Follow these steps to configure your database connection</p>
+    </div>
+
+    <div class="card">
+        <div class="card-content">
+            <h3>SQL Server Connection Issues</h3>
+            <p>If you're experiencing database connection issues, here are the solutions:</p>
+
+            <div class="solution-section">
+                <h4>Option 1: Use LocalDB (Recommended for Development)</h4>
+                <p>LocalDB is a lightweight version of SQL Server that's perfect for development:</p>
+                <ol>
+                    <li>Open Visual Studio Installer</li>
+                    <li>Modify your Visual Studio installation</li>
+                    <li>Ensure "SQL Server Express LocalDB" is selected under "Individual Components"</li>
+                    <li>Update your connection string in <code>appsettings.json</code> to use LocalDB</li>
+                </ol>
+                <pre><code>"ConnectionStrings": {
+    "CMCSDatabase": "Server=(localdb)\\mssqllocaldb;Database=CMCS_Database;Trusted_Connection=true;TrustServerCertificate=true;"
+}</code></pre>
+            </div>
+
+            <div class="solution-section">
+                <h4>Option 2: Install SQL Server Express</h4>
+                <p>Download and install SQL Server Express:</p>
+                <ol>
+                    <li>Download SQL Server Express from <a href="https://www.microsoft.com/en-us/sql-server/sql-server-downloads" target="_blank">Microsoft</a></li>
+                    <li>Install with default settings</li>
+                    <li>Use SQL Server Management Studio (SSMS) to verify the installation</li>
+                </ol>
+            </div>
+
+            <div class="solution-section">
+                <h4>Option 3: Enable SQL Server Browser Service</h4>
+                <p>If SQL Server is installed but not accessible:</p>
+                <ol>
+                    <li>Open Services (services.msc)</li>
+                    <li>Find "SQL Server Browser" service</li>
+                    <li>Set startup type to "Automatic" and start the service</li>
+                </ol>
+            </div>
+
+            <div class="solution-section">
+                <h4>Option 4: Check Connection String</h4>
+                <p>Verify your connection string in <code>appsettings.json</code>:</p>
+                <ul>
+                    <li>Ensure the server name is correct</li>
+                    <li>Verify the database name</li>
+                    <li>Check authentication method (Windows vs SQL Server)</li>
+                    <li>Ensure <code>TrustServerCertificate=true</code> is included</li>
+                </ul>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Note:</strong> After making changes, restart your application for the changes to take effect.
+            </div>
+
+            <div class="d-flex gap-md justify-content-between mt-lg">
+                <a class="btn btn-outline" asp-controller="Test" asp-action="DatabaseInfo">Check Database Info</a>
+                <a class="btn btn-primary" asp-controller="Test" asp-action="TestConnection">Test Connection</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .solution-section {
+        margin-bottom: var(--spacing-xl);
+        padding: var(--spacing-lg);
+        background-color: var(--system-gray-6);
+        border-radius: var(--border-radius-md);
+    }
+
+        .solution-section h4 {
+            color: var(--system-blue);
+            margin-bottom: var(--spacing-md);
+        }
+
+    pre {
+        background-color: var(--system-background-primary);
+        padding: var(--spacing-md);
+        border-radius: var(--border-radius-md);
+        overflow-x: auto;
+        margin: var(--spacing-md) 0;
+    }
+
+    code {
+        background-color: var(--system-gray-6);
+        padding: 2px 6px;
+        border-radius: var(--border-radius-sm);
+        font-family: 'Courier New', monospace;
+    }
+</style>
