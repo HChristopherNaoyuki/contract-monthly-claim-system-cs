@@ -887,10 +887,7 @@ p {
     font-size: var(--font-size-large-title);
     font-weight: 700;
     margin-bottom: var(--spacing-md);
-    background: linear-gradient(135deg, var(--system-text-primary) 0%, var(--system-text-secondary) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--system-text-primary);
 }
 
 .hero-subtitle {
@@ -903,25 +900,16 @@ p {
     line-height: 1.4;
 }
 
-.section {
-    padding: var(--spacing-xl) 0;
-}
+/* ==========================================================================
+   Modal & Overlay Components
+   ========================================================================== */
 
-.section-title {
-    font-size: var(--font-size-title-1);
-    font-weight: 700;
-    margin-bottom: var(--spacing-lg);
-    text-align: center;
-}
-
-.section-subtitle {
-    font-size: var(--font-size-title-3);
-    color: var(--system-text-secondary);
-    margin-bottom: var(--spacing-xl);
-    text-align: center;
-    max-width: 600px;
-    margin-left: auto;
-    margin-right: auto;
+.modal-header {
+    padding: var(--spacing-lg);
+    border-bottom: 1px solid var(--system-gray-5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 /* ==========================================================================

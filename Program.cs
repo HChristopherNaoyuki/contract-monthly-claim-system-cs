@@ -27,10 +27,10 @@ namespace contract_monthly_claim_system_cs
             // Add services to the container
             builder.Services.AddControllersWithViews();
 
-            // Add Entity Framework Core with SQLite (compatible with all Windows systems)
+            // Add Entity Framework Core with SQL Server
             var connectionString = builder.Configuration.GetConnectionString("CMCSDatabase");
             builder.Services.AddDbContext<CMCSDbContext>(options =>
-                options.UseSqlite(connectionString));
+                options.UseSqlServer(connectionString));
 
             // Add session services
             builder.Services.AddDistributedMemoryCache();

@@ -72,7 +72,7 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
         /// <summary>
         /// Gets or sets the associated claim
         /// </summary>
-        public virtual Claim Claim { get; set; }
+        public virtual Claim? Claim { get; set; }
 
         /// <summary>
         /// Gets the formatted file size for display

@@ -94,7 +94,7 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
         /// <summary>
         /// Gets or sets the associated lecturer
         /// </summary>
-        public virtual Lecturer Lecturer { get; set; }
+        public virtual Lecturer? Lecturer { get; set; }
 
         /// <summary>
         /// Gets or sets the supporting documents
