@@ -1,0 +1,165 @@
+﻿@{
+    ViewData["Title"] = "Web Server Troubleshooting";
+}
+
+<div class="container">
+    <div class="hero">
+        <h1 class="hero-title">Web Server Troubleshooting</h1>
+        <p class="hero-subtitle">Solutions for common web server connection issues</p>
+    </div>
+
+    <div class="card">
+        <div class="card-content">
+            <h3>Common Web Server Issues and Solutions</h3>
+
+            <div class="solution-section">
+                <h4>Issue: "Unable to connect to web server ‘https’"</h4>
+                <p><strong>Solution:</strong> This usually indicates a port conflict or SSL certificate issue.</p>
+                <ol>
+                    <li>
+                        <strong>Check Port Availability:</strong>
+                        <ul>
+                            <li>Open Command Prompt as Administrator</li>
+                            <li>Run: <code>netstat -ano | findstr :5000</code> (check for port 5000)</li>
+                            <li>Run: <code>netstat -ano | findstr :7000</code> (check for port 7000)</li>
+                            <li>If ports are in use, kill the process or use different ports</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Change Ports:</strong>
+                        <ul>
+                            <li>Update <code>Properties/launchSettings.json</code></li>
+                            <li>Use ports like 5002, 7002, 5003, 7003</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>SSL Certificate Issues:</strong>
+                        <ul>
+                            <li>Run: <code>dotnet dev-certs https --trust</code></li>
+                            <li>Run: <code>dotnet dev-certs https --clean</code> then <code>dotnet dev-certs https --trust</code></li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="solution-section">
+                <h4>Issue: "The web server is no longer running"</h4>
+                <p><strong>Solution:</strong> The application process may have terminated unexpectedly.</p>
+                <ol>
+                    <li><strong>Restart Visual Studio:</strong> Completely close and reopen Visual Studio</li>
+                    <li>
+                        <strong>Clean and Rebuild:</strong>
+                        <ul>
+                            <li>Build → Clean Solution</li>
+                            <li>Build → Rebuild Solution</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Delete Temporary Files:</strong>
+                        <ul>
+                            <li>Delete <code>bin</code> and <code>obj</code> folders</li>
+                            <li>Delete <code>.vs</code> folder (hidden)</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Run from Command Line:</strong>
+                        <ul>
+                            <li>Open Command Prompt in project directory</li>
+                            <li>Run: <code>dotnet run</code></li>
+                            <li>Access via <code>http://localhost:5000</code></li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="solution-section">
+                <h4>Issue: IIS Express Configuration Problems</h4>
+                <p><strong>Solution:</strong> Reset or reconfigure IIS Express.</p>
+                <ol>
+                    <li>
+                        <strong>Reset IIS Express:</strong>
+                        <ul>
+                            <li>Close all Visual Studio instances</li>
+                            <li>Open Task Manager → End all "iisexpress.exe" processes</li>
+                            <li>Delete <code>%userprofile%\Documents\IISExpress\config</code> folder</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <strong>Use Project Profile Instead of IIS Express:</strong>
+                        <ul>
+                            <li>In Visual Studio debug dropdown</li>
+                            <li>Select project name instead of "IIS Express"</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+
+            <div class="solution-section">
+                <h4>Quick Fix Commands</h4>
+                <p>Run these commands in Command Prompt (as Administrator if needed):</p>
+                <pre><code># Clean and rebuild
+dotnet clean
+dotnet build
+
+# Trust development certificates
+dotnet dev-certs https --clean
+dotnet dev-certs https --trust
+
+# Run application directly
+dotnet run</code></pre>
+            </div>
+
+            <div class="alert alert-info">
+                <strong>Pro Tip:</strong> Always try running the application from command line first using <code>dotnet run</code>.
+                This bypasses Visual Studio's debugging infrastructure and can help isolate the issue.
+            </div>
+
+            <div class="d-flex gap-md justify-content-between mt-lg">
+                <a class="btn btn-outline" asp-controller="Server" asp-action="Status">Check Server Status</a>
+                <a class="btn btn-primary" href="/health">Health Check</a>
+                <a class="btn btn-secondary" href="http://localhost:5000" target="_blank">Test HTTP</a>
+                <a class="btn btn-secondary" href="https://localhost:7000" target="_blank">Test HTTPS</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .solution-section {
+        margin-bottom: var(--spacing-xl);
+        padding: var(--spacing-lg);
+        background-color: var(--system-gray-6);
+        border-radius: var(--border-radius-md);
+        border-left: 4px solid var(--system-blue);
+    }
+
+        .solution-section h4 {
+            color: var(--system-blue);
+            margin-bottom: var(--spacing-md);
+        }
+
+    pre {
+        background-color: var(--system-background-primary);
+        padding: var(--spacing-md);
+        border-radius: var(--border-radius-md);
+        overflow-x: auto;
+        margin: var(--spacing-md) 0;
+        border: 1px solid var(--system-gray-4);
+    }
+
+    code {
+        background-color: var(--system-gray-6);
+        padding: 2px 6px;
+        border-radius: var(--border-radius-sm);
+        font-family: 'Courier New', monospace;
+        color: var(--system-red);
+    }
+
+    .alert {
+        padding: var(--spacing-md);
+        border-radius: var(--border-radius-md);
+        background-color: rgba(0, 122, 255, 0.1);
+        border-left: 4px solid var(--system-blue);
+        margin: var(--spacing-lg) 0;
+    }
+</style>
