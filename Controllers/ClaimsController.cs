@@ -27,7 +27,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                 return RedirectToAction("Index", "Auth");
             }
 
-            var userId = HttpContext.Session.GetInt32("UserId").Value;
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
             var lecturer = _dataService.GetLecturerById(userId);
 
             var viewModel = new ClaimSubmissionViewModel
@@ -48,7 +48,7 @@ namespace contract_monthly_claim_system_cs.Controllers
 
             if (ModelState.IsValid)
             {
-                var userId = HttpContext.Session.GetInt32("UserId").Value;
+                var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
                 model.Amount = model.HoursWorked * model.HourlyRate;
 
                 var claim = new Claim
@@ -144,12 +144,15 @@ namespace contract_monthly_claim_system_cs.Controllers
                 claim.ModifiedDate = DateTime.Now;
                 _dataService.SaveClaim(claim);
 
+                var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+                var userRole = HttpContext.Session.GetString("Role") ?? "Unknown";
+
                 var approval = new Approval
                 {
                     ApprovalId = _dataService.GetNextId("approvals"),
                     ClaimId = claimId,
-                    ApproverUserId = HttpContext.Session.GetInt32("UserId").Value,
-                    ApproverRole = HttpContext.Session.GetString("Role"),
+                    ApproverUserId = userId,
+                    ApproverRole = userRole,
                     ApprovalDate = DateTime.Now,
                     IsApproved = isApproved,
                     Comments = comments,
@@ -221,7 +224,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                 return RedirectToAction("Index", "Auth");
             }
 
-            var userId = HttpContext.Session.GetInt32("UserId").Value;
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
             var userRole = HttpContext.Session.GetString("Role");
 
             List<Claim> claims;

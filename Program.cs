@@ -31,7 +31,7 @@ namespace contract_monthly_claim_system_cs
             // Enhanced main method with comprehensive error handling
             try
             {
-                Console.WriteLine("🚀 Starting Contract Monthly Claim System...");
+                Console.WriteLine("Starting Contract Monthly Claim System...");
 
                 // Create and configure the web host builder
                 var builder = CreateWebHostBuilder(args);
@@ -342,7 +342,7 @@ namespace contract_monthly_claim_system_cs
                 if (!Directory.Exists(dataDirectory))
                 {
                     Directory.CreateDirectory(dataDirectory);
-                    Console.WriteLine("📁 Created Data directory for text file storage");
+                    Console.WriteLine("Created Data directory for text file storage");
                 }
 
                 // Define required data files
@@ -362,15 +362,15 @@ namespace contract_monthly_claim_system_cs
                     if (!File.Exists(filePath))
                     {
                         File.WriteAllText(filePath, "[]"); // Initialize with empty JSON array
-                        Console.WriteLine($"📄 Created {file} data file");
+                        Console.WriteLine($"Created {file} data file");
                     }
                 }
 
-                Console.WriteLine("✅ Text file storage initialized successfully");
+                Console.WriteLine("Text file storage initialized successfully");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error initializing text file storage: {ex.Message}");
+                Console.WriteLine($"Error initializing text file storage: {ex.Message}");
             }
         }
 
@@ -383,7 +383,7 @@ namespace contract_monthly_claim_system_cs
             if (!Directory.Exists(webRootPath))
             {
                 Directory.CreateDirectory(webRootPath);
-                Console.WriteLine("📁 Created wwwroot directory");
+                Console.WriteLine("Created wwwroot directory");
             }
 
             // Create necessary subdirectories
@@ -394,7 +394,7 @@ namespace contract_monthly_claim_system_cs
                 if (!Directory.Exists(subdirPath))
                 {
                     Directory.CreateDirectory(subdirPath);
-                    Console.WriteLine($"📁 Created wwwroot/{subdir} directory");
+                    Console.WriteLine($"Created wwwroot/{subdir} directory");
                 }
             }
         }
@@ -518,18 +518,18 @@ namespace contract_monthly_claim_system_cs
         /// <param name="logger">Logger instance</param>
         private static void LogStartupInformation(WebApplication app, ILogger<Program> logger)
         {
-            logger.LogInformation("🚀 Contract Monthly Claim System Starting Up");
-            logger.LogInformation("🌍 Environment: {Environment}", app.Environment.EnvironmentName);
-            logger.LogInformation("📁 Content Root: {ContentRoot}", app.Environment.ContentRootPath);
-            logger.LogInformation("📁 Web Root: {WebRoot}", app.Environment.WebRootPath);
-            logger.LogInformation("⚙️ Framework: {Framework}", Environment.Version);
-            logger.LogInformation("💻 OS: {OS}", Environment.OSVersion);
+            logger.LogInformation("Contract Monthly Claim System Starting Up");
+            logger.LogInformation("Environment: {Environment}", app.Environment.EnvironmentName);
+            logger.LogInformation("Content Root: {ContentRoot}", app.Environment.ContentRootPath);
+            logger.LogInformation("Web Root: {WebRoot}", app.Environment.WebRootPath);
+            logger.LogInformation("Framework: {Framework}", Environment.Version);
+            logger.LogInformation("OS: {OS}", Environment.OSVersion);
 
             // Log available URLs
             var urls = app.Urls;
             foreach (var url in urls)
             {
-                logger.LogInformation("🌐 Server listening on: {Url}", url);
+                logger.LogInformation("Server listening on: {Url}", url);
             }
         }
 
@@ -540,20 +540,20 @@ namespace contract_monthly_claim_system_cs
         private static void DisplayStartupMessage(WebApplication app)
         {
             Console.WriteLine();
-            Console.WriteLine("🎉 Contract Monthly Claim System Started Successfully!");
+            Console.WriteLine("Contract Monthly Claim System Started Successfully!");
             Console.WriteLine("======================================================");
-            Console.WriteLine($"🌍 Environment: {app.Environment.EnvironmentName}");
-            Console.WriteLine($"⚙️ Framework: {Environment.Version}");
-            Console.WriteLine($"💻 OS: {Environment.OSVersion}");
-            Console.WriteLine($"💾 Storage: Text Files");
+            Console.WriteLine($"Environment: {app.Environment.EnvironmentName}");
+            Console.WriteLine($"Framework: {Environment.Version}");
+            Console.WriteLine($"OS: {Environment.OSVersion}");
+            Console.WriteLine($"Storage: Text Files");
             Console.WriteLine();
-            Console.WriteLine("🌐 Available URLs:");
+            Console.WriteLine("Available URLs:");
             foreach (var url in app.Urls)
             {
                 Console.WriteLine($"   {url}");
             }
             Console.WriteLine();
-            Console.WriteLine("🔗 Quick Access:");
+            Console.WriteLine("Quick Access:");
             Console.WriteLine("   Main Application: https://localhost:7278");
             Console.WriteLine("   HTTP Fallback:    http://localhost:5226");
             Console.WriteLine("   Default Login:    admin / admin123");
@@ -570,7 +570,7 @@ namespace contract_monthly_claim_system_cs
         private static void HandleStartupException(Exception ex)
         {
             Console.WriteLine();
-            Console.WriteLine("❌ Application failed to start!");
+            Console.WriteLine("Application failed to start!");
             Console.WriteLine("======================================================");
             Console.WriteLine($"Error: {ex.Message}");
             Console.WriteLine($"Type: {ex.GetType().Name}");
@@ -579,7 +579,7 @@ namespace contract_monthly_claim_system_cs
             if (ex is System.Net.Sockets.SocketException socketEx)
             {
                 Console.WriteLine();
-                Console.WriteLine("🔌 Port Conflict Detected!");
+                Console.WriteLine("Port Conflict Detected!");
                 Console.WriteLine("Possible solutions:");
                 Console.WriteLine("1. Change ports in launchSettings.json");
                 Console.WriteLine("2. Run: netstat -ano | findstr :7278 (check port usage)");
@@ -589,7 +589,7 @@ namespace contract_monthly_claim_system_cs
             else if (ex.InnerException is System.Security.Cryptography.CryptographicException)
             {
                 Console.WriteLine();
-                Console.WriteLine("🔐 SSL Certificate Issue!");
+                Console.WriteLine("SSL Certificate Issue!");
                 Console.WriteLine("Run these commands in Command Prompt:");
                 Console.WriteLine("   dotnet dev-certs https --clean");
                 Console.WriteLine("   dotnet dev-certs https --trust");
@@ -597,7 +597,7 @@ namespace contract_monthly_claim_system_cs
             }
 
             Console.WriteLine();
-            Console.WriteLine("📋 Full error details:");
+            Console.WriteLine("Full error details:");
             Console.WriteLine(ex.ToString());
             Console.WriteLine();
             Console.WriteLine("Press any key to exit...");
@@ -696,13 +696,13 @@ namespace contract_monthly_claim_system_cs
             return ReadData<User>("users");
         }
 
-        public User GetUserById(int userId)
+        public User? GetUserById(int userId)
         {
             var users = GetAllUsers();
             return users.FirstOrDefault(u => u.UserId == userId);
         }
 
-        public User GetUserByUsername(string username)
+        public User? GetUserByUsername(string username)
         {
             var users = GetAllUsers();
             return users.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
@@ -728,7 +728,7 @@ namespace contract_monthly_claim_system_cs
             return ReadData<Lecturer>("lecturers");
         }
 
-        public Lecturer GetLecturerById(int lecturerId)
+        public Lecturer? GetLecturerById(int lecturerId)
         {
             var lecturers = GetAllLecturers();
             return lecturers.FirstOrDefault(l => l.LecturerId == lecturerId);
@@ -754,7 +754,7 @@ namespace contract_monthly_claim_system_cs
             return ReadData<Claim>("claims");
         }
 
-        public Claim GetClaimById(int claimId)
+        public Claim? GetClaimById(int claimId)
         {
             var claims = GetAllClaims();
             return claims.FirstOrDefault(c => c.ClaimId == claimId);
