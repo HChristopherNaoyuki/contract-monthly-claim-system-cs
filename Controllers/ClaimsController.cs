@@ -9,17 +9,30 @@ using Microsoft.Extensions.Logging;
 
 namespace contract_monthly_claim_system_cs.Controllers
 {
+    /// <summary>
+    /// Claims controller for claim submission, approval, and tracking
+    /// </summary>
     public class ClaimsController : Controller
     {
         private readonly TextFileDataService _dataService;
         private readonly ILogger<ClaimsController> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of ClaimsController
+        /// </summary>
+        /// <param name="dataService">Data service for claim operations</param>
+        /// <param name="logger">Logger instance</param>
         public ClaimsController(TextFileDataService dataService, ILogger<ClaimsController> logger)
         {
             _dataService = dataService;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Displays claim submission form
+        /// Requires user authentication
+        /// </summary>
+        /// <returns>Claim submission view or redirect to auth</returns>
         public IActionResult Submit()
         {
             if (HttpContext.Session.GetInt32("UserId") == null)
@@ -37,6 +50,11 @@ namespace contract_monthly_claim_system_cs.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Handles claim submission with validation
+        /// </summary>
+        /// <param name="model">Claim submission view model</param>
+        /// <returns>Redirect to status page or error view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Submit(ClaimSubmissionViewModel model)
@@ -100,6 +118,10 @@ namespace contract_monthly_claim_system_cs.Controllers
             return View(model);
         }
 
+        /// <summary>
+        /// Disclaims pending approval for coordinators and managers
+        /// </summary>
+        /// <returns>Claims approval view or redirect to auth</returns>
         public IActionResult Approve()
         {
             if (HttpContext.Session.GetInt32("UserId") == null)
@@ -128,6 +150,13 @@ namespace contract_monthly_claim_system_cs.Controllers
             return View(submittedClaims);
         }
 
+        /// <summary>
+        /// Handles claim approval or rejection
+        /// </summary>
+        /// <param name="claimId">ID of the claim to process</param>
+        /// <param name="isApproved">True for approval, false for rejection</param>
+        /// <param name="comments">Approval comments</param>
+        /// <returns>Redirect to approval page</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ApproveClaim(int claimId, bool isApproved, string comments)
@@ -168,6 +197,11 @@ namespace contract_monthly_claim_system_cs.Controllers
             return RedirectToAction("Approve");
         }
 
+        /// <summary>
+        /// Displays claim status details
+        /// </summary>
+        /// <param name="claimId">ID of the claim to display</param>
+        /// <returns>Claim status view</returns>
         public IActionResult Status(int claimId)
         {
             if (HttpContext.Session.GetInt32("UserId") == null)
@@ -217,6 +251,10 @@ namespace contract_monthly_claim_system_cs.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Displays claim tracking for users
+        /// </summary>
+        /// <returns>Claim tracking view</returns>
         public IActionResult Track()
         {
             if (HttpContext.Session.GetInt32("UserId") == null)
@@ -253,12 +291,22 @@ namespace contract_monthly_claim_system_cs.Controllers
             return View(viewModels);
         }
 
+        /// <summary>
+        /// Gets lecturer name by ID
+        /// </summary>
+        /// <param name="lecturerId">Lecturer ID</param>
+        /// <returns>Lecturer full name</returns>
         private string GetLecturerName(int lecturerId)
         {
             var user = _dataService.GetUserById(lecturerId);
             return user != null ? $"{user.Name} {user.Surname}" : "Unknown Lecturer";
         }
 
+        /// <summary>
+        /// Gets approval comments for a claim
+        /// </summary>
+        /// <param name="claimId">Claim ID</param>
+        /// <returns>Concatenated approval comments</returns>
         private string GetApprovalComments(int claimId)
         {
             var approvals = _dataService.GetApprovalsByClaimId(claimId);

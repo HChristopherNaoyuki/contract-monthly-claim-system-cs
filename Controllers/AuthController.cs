@@ -8,24 +8,42 @@ using Microsoft.Extensions.Logging;
 
 namespace contract_monthly_claim_system_cs.Controllers
 {
+    /// <summary>
+    /// Authentication controller for user login, registration, and session management
+    /// </summary>
     public class AuthController : Controller
     {
         private readonly TextFileDataService _dataService;
         private readonly ILogger<AuthController> _logger;
 
+        /// <summary>
+        /// Initializes a new instance of AuthController
+        /// </summary>
+        /// <param name="dataService">Data service for user operations</param>
+        /// <param name="logger">Logger instance</param>
         public AuthController(TextFileDataService dataService, ILogger<AuthController> logger)
         {
             _dataService = dataService;
             _logger = logger;
         }
 
+        /// <summary>
+        /// Displays the login/registration page
+        /// </summary>
+        /// <returns>Authentication view</returns>
         [HttpGet]
         public IActionResult Index()
         {
+            // Clear session on auth page access
             HttpContext.Session.Clear();
             return View();
         }
 
+        /// <summary>
+        /// Handles user login with credentials validation
+        /// </summary>
+        /// <param name="model">Login view model with credentials</param>
+        /// <returns>Redirect to home or error view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Login(LoginViewModel model)
@@ -54,6 +72,11 @@ namespace contract_monthly_claim_system_cs.Controllers
             return View("Index", model);
         }
 
+        /// <summary>
+        /// Handles new user registration
+        /// </summary>
+        /// <param name="model">Registration view model with user details</param>
+        /// <returns>Redirect to home or error view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Register(RegisterViewModel model)
@@ -95,6 +118,10 @@ namespace contract_monthly_claim_system_cs.Controllers
             return View("Index", model);
         }
 
+        /// <summary>
+        /// Handles user logout and session cleanup
+        /// </summary>
+        /// <returns>Redirect to authentication page</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Logout()
@@ -110,12 +137,21 @@ namespace contract_monthly_claim_system_cs.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Displays forgot password page
+        /// </summary>
+        /// <returns>Forgot password view</returns>
         [HttpGet]
         public IActionResult ForgotPassword()
         {
             return View();
         }
 
+        /// <summary>
+        /// Handles password reset request
+        /// </summary>
+        /// <param name="username">Username for password reset</param>
+        /// <returns>Confirmation view</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult ForgotPassword(string username)
