@@ -1,0 +1,44 @@
+[
+  {
+    "UserId": 1,
+    "Name": "System",
+    "Surname": "Administrator",
+    "Username": "admin",
+    "Password": "admin123",
+    "Role": 2,
+    "Email": "admin@cmcs.com",
+    "PhoneNumber": "",
+    "IsActive": true,
+    "CreatedDate": "2025-10-15T13:25:05.0241133Z",
+    "LastLoginDate": null,
+    "FullName": "System Administrator"
+  },
+  {
+    "UserId": 2,
+    "Name": "John",
+    "Surname": "Smith",
+    "Username": "lecturer",
+    "Password": "lecturer123",
+    "Role": 0,
+    "Email": "john.smith@university.com",
+    "PhoneNumber": "",
+    "IsActive": true,
+    "CreatedDate": "2025-10-15T13:25:05.0243004Z",
+    "LastLoginDate": null,
+    "FullName": "John Smith"
+  },
+  {
+    "UserId": 3,
+    "Name": "Sarah",
+    "Surname": "Johnson",
+    "Username": "coordinator",
+    "Password": "coordinator123",
+    "Role": 1,
+    "Email": "sarah.johnson@university.com",
+    "PhoneNumber": "",
+    "IsActive": true,
+    "CreatedDate": "2025-10-15T13:25:05.0243009Z",
+    "LastLoginDate": null,
+    "FullName": "Sarah Johnson"
+  }
+]

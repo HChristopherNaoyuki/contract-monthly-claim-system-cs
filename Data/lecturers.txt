@@ -1,0 +1,15 @@
+[
+  {
+    "LecturerId": 2,
+    "EmployeeNumber": "EMP001",
+    "Department": "Computer Science",
+    "HourlyRate": 150.00,
+    "ContractStartDate": "2024-10-15T15:25:05.2080648+02:00",
+    "ContractEndDate": "2026-10-15T15:25:05.2091942+02:00",
+    "BankAccountNumber": "",
+    "BankName": "",
+    "TaxNumber": "",
+    "User": null,
+    "Claims": []
+  }
+]

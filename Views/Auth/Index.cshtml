@@ -285,14 +285,13 @@
             }
         }
 
-        @@keyframes float {
-            0% {
-                transform: translate(0, 0) rotate(0deg);
-            }
-
-            100% {
-                transform: translate(50px, 50px) rotate(360deg);
-            }
+        .form-input-custom:focus + .form-label-custom,
+        .form-input-custom:not(:placeholder-shown) + .form-label-custom {
+            color: #d30073;
+            top: 0px;
+            font-size: 0.7em;
+            font-weight: 600;
+            transform: translateY(-5px);
         }
 
         /* Responsive Design */

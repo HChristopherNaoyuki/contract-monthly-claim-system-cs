@@ -1,0 +1,18 @@
+[
+  {
+    "ClaimId": 1,
+    "LecturerId": 2,
+    "ClaimDate": "2025-10-15T15:25:05.2653833+02:00",
+    "MonthYear": "2025-10",
+    "HoursWorked": 40,
+    "HourlyRate": 150.00,
+    "Amount": 6000.00,
+    "Status": 0,
+    "SubmissionComments": "Sample claim for testing purposes",
+    "CreatedDate": "2025-10-15T15:25:05.2669413+02:00",
+    "ModifiedDate": "2025-10-15T15:25:05.2670628+02:00",
+    "Lecturer": null,
+    "Documents": [],
+    "Approvals": []
+  }
+]

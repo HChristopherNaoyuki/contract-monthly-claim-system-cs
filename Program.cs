@@ -696,13 +696,13 @@ namespace contract_monthly_claim_system_cs
             return ReadData<User>("users");
         }
 
-        public User? GetUserById(int userId)
+        public User GetUserById(int userId)
         {
             var users = GetAllUsers();
             return users.FirstOrDefault(u => u.UserId == userId);
         }
 
-        public User? GetUserByUsername(string username)
+        public User GetUserByUsername(string username)
         {
             var users = GetAllUsers();
             return users.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
@@ -728,7 +728,7 @@ namespace contract_monthly_claim_system_cs
             return ReadData<Lecturer>("lecturers");
         }
 
-        public Lecturer? GetLecturerById(int lecturerId)
+        public Lecturer GetLecturerById(int lecturerId)
         {
             var lecturers = GetAllLecturers();
             return lecturers.FirstOrDefault(l => l.LecturerId == lecturerId);
@@ -754,7 +754,7 @@ namespace contract_monthly_claim_system_cs
             return ReadData<Claim>("claims");
         }
 
-        public Claim? GetClaimById(int claimId)
+        public Claim GetClaimById(int claimId)
         {
             var claims = GetAllClaims();
             return claims.FirstOrDefault(c => c.ClaimId == claimId);
