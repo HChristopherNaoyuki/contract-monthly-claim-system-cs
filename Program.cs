@@ -3,22 +3,20 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore;
-using contract_monthly_claim_system_cs.Models.DataModels;
-using contract_monthly_claim_system_cs.Services;
+using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Http;
 using System.IO;
 using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Diagnostics.HealthChecks;
+using System.Collections.Generic;
+using System.Text.Json;
 
 namespace contract_monthly_claim_system_cs
 {
     /// <summary>
     /// Main program class for the Contract Monthly Claim System
     /// Handles application startup, configuration, and web server setup
-    /// Enhanced with robust error handling and multiple hosting options
+    /// Enhanced with robust error handling and text file data storage
     /// </summary>
     public class Program
     {
@@ -41,6 +39,9 @@ namespace contract_monthly_claim_system_cs
 
                 // Configure middleware pipeline
                 ConfigureMiddlewarePipeline(app);
+
+                // Initialize text file storage
+                InitializeTextFileStorage();
 
                 // Start the application
                 StartApplication(app);
@@ -72,7 +73,7 @@ namespace contract_monthly_claim_system_cs
             ConfigureConfiguration(builder, args);
             ConfigureWebServer(builder);
             ConfigureApplicationServices(builder);
-            ConfigureDatabaseServices(builder);
+            ConfigureTextFileServices(builder);
 
             return builder;
         }
@@ -136,9 +137,6 @@ namespace contract_monthly_claim_system_cs
             // Configure Kestrel server options for better performance and reliability
             builder.WebHost.ConfigureKestrel((context, serverOptions) =>
             {
-                // Get configuration
-                var kestrelSection = context.Configuration.GetSection("Kestrel");
-
                 // Configure limits
                 serverOptions.Limits.MaxRequestBodySize = 10 * 1024 * 1024; // 10MB
                 serverOptions.Limits.MaxConcurrentConnections = 100;
@@ -198,15 +196,8 @@ namespace contract_monthly_claim_system_cs
                     : CookieSecurePolicy.Always;
             });
 
-            // Add custom services
-            builder.Services.AddScoped<DatabaseService>();
-
-            // Add health checks
-            builder.Services.AddHealthChecks()
-                .AddCheck<DatabaseHealthCheck>("database");
-
-            // Register database health check service
-            builder.Services.AddSingleton<IDatabaseHealthService, DatabaseHealthService>();
+            // Add text file data service
+            builder.Services.AddSingleton<TextFileDataService>();
 
             // Add HTTP client factory for external services
             builder.Services.AddHttpClient("DefaultClient", client =>
@@ -229,62 +220,13 @@ namespace contract_monthly_claim_system_cs
         }
 
         /// <summary>
-        /// Configures database services with connection resilience
+        /// Configures text file services for data storage
         /// </summary>
         /// <param name="builder">WebApplication builder</param>
-        private static void ConfigureDatabaseServices(WebApplicationBuilder builder)
+        private static void ConfigureTextFileServices(WebApplicationBuilder builder)
         {
-            // Get connection string with fallback options
-            var connectionString = GetConnectionString(builder.Configuration, builder.Environment);
-
-            // Configure Entity Framework context
-            builder.Services.AddDbContext<CMCSDbContext>(options =>
-            {
-                options.UseSqlServer(connectionString, sqlOptions =>
-                {
-                    // Configure connection resilience
-                    sqlOptions.EnableRetryOnFailure(
-                        maxRetryCount: 5,
-                        maxRetryDelay: TimeSpan.FromSeconds(10),
-                        errorNumbersToAdd: null);
-
-                    // Configure command timeout
-                    sqlOptions.CommandTimeout(30);
-                });
-
-                // Enable sensitive data logging only in development
-                if (builder.Environment.IsDevelopment())
-                {
-                    options.EnableSensitiveDataLogging();
-                    options.EnableDetailedErrors();
-                }
-            });
-        }
-
-        /// <summary>
-        /// Gets the appropriate connection string based on environment and configuration
-        /// </summary>
-        /// <param name="configuration">Configuration instance</param>
-        /// <param name="environment">Hosting environment</param>
-        /// <returns>Connection string</returns>
-        private static string GetConnectionString(IConfiguration configuration, IWebHostEnvironment environment)
-        {
-            // Try primary connection string first
-            var connectionString = configuration.GetConnectionString("CMCSDatabase");
-
-            if (!string.IsNullOrEmpty(connectionString))
-            {
-                return connectionString;
-            }
-
-            // Fallback to LocalDB for development
-            if (environment.IsDevelopment())
-            {
-                return @"Server=(localdb)\mssqllocaldb;Database=CMCS_Database;Trusted_Connection=true;TrustServerCertificate=true;MultipleActiveResultSets=true;Connection Timeout=30;";
-            }
-
-            // Final fallback
-            return @"Server=localhost;Database=CMCS_Database;Trusted_Connection=true;TrustServerCertificate=true;MultipleActiveResultSets=true;Connection Timeout=30;";
+            // No database configuration needed - using text files
+            // This method is kept for consistency with the original structure
         }
 
         /// <summary>
@@ -302,8 +244,6 @@ namespace contract_monthly_claim_system_cs
             {
                 // Detailed error pages in development
                 app.UseDeveloperExceptionPage();
-
-                // Custom database error page for development
                 app.UseExceptionHandler("/Home/Error");
             }
             else
@@ -340,27 +280,6 @@ namespace contract_monthly_claim_system_cs
             app.UseAuthentication();
             app.UseAuthorization();
 
-            // Health check endpoint
-            app.MapHealthChecks("/health", new HealthCheckOptions
-            {
-                ResponseWriter = async (context, report) =>
-                {
-                    var result = System.Text.Json.JsonSerializer.Serialize(new
-                    {
-                        status = report.Status.ToString(),
-                        checks = report.Entries.Select(entry => new
-                        {
-                            name = entry.Key,
-                            status = entry.Value.Status.ToString(),
-                            description = entry.Value.Description,
-                            duration = entry.Value.Duration.ToString()
-                        })
-                    });
-                    context.Response.ContentType = "application/json";
-                    await context.Response.WriteAsync(result);
-                }
-            });
-
             // Configure endpoints
             app.MapControllerRoute(
                 name: "default",
@@ -390,8 +309,8 @@ namespace contract_monthly_claim_system_cs
                 // Ensure wwwroot directory exists
                 EnsureWwwRootDirectory();
 
-                // Initialize database
-                InitializeDatabase(app);
+                // Initialize sample data
+                InitializeSampleData(app);
 
                 // Log startup information
                 LogStartupInformation(app, logger);
@@ -406,6 +325,49 @@ namespace contract_monthly_claim_system_cs
             {
                 logger.LogCritical(ex, "Application failed to start");
                 throw;
+            }
+        }
+
+        /// <summary>
+        /// Initializes text file storage system
+        /// </summary>
+        private static void InitializeTextFileStorage()
+        {
+            try
+            {
+                // Ensure data directory exists
+                var dataDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Data");
+                if (!Directory.Exists(dataDirectory))
+                {
+                    Directory.CreateDirectory(dataDirectory);
+                    Console.WriteLine("?? Created Data directory for text file storage");
+                }
+
+                // Define required data files
+                var dataFiles = new[]
+                {
+                    "users.txt",
+                    "claims.txt",
+                    "documents.txt",
+                    "approvals.txt"
+                };
+
+                // Create empty data files if they don't exist
+                foreach (var file in dataFiles)
+                {
+                    var filePath = Path.Combine(dataDirectory, file);
+                    if (!File.Exists(filePath))
+                    {
+                        File.WriteAllText(filePath, "[]"); // Initialize with empty JSON array
+                        Console.WriteLine($"?? Created {file} data file");
+                    }
+                }
+
+                Console.WriteLine("? Text file storage initialized successfully");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"? Error initializing text file storage: {ex.Message}");
             }
         }
 
@@ -435,54 +397,113 @@ namespace contract_monthly_claim_system_cs
         }
 
         /// <summary>
-        /// Initializes database with proper error handling
+        /// Initializes sample data for the application
         /// </summary>
         /// <param name="app">Web application instance</param>
-        private static void InitializeDatabase(WebApplication app)
+        private static void InitializeSampleData(WebApplication app)
         {
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 var logger = services.GetRequiredService<ILogger<Program>>();
+                var dataService = services.GetRequiredService<TextFileDataService>();
 
                 try
                 {
-                    var context = services.GetRequiredService<CMCSDbContext>();
-                    var healthService = services.GetRequiredService<IDatabaseHealthService>();
-
-                    // Test database connection first
-                    logger.LogInformation("Testing database connection...");
-                    var healthResult = healthService.CheckDatabaseHealthAsync().GetAwaiter().GetResult();
-
-                    if (healthResult.IsHealthy)
+                    // Check if we need to create sample data
+                    var existingUsers = dataService.GetAllUsers();
+                    if (!existingUsers.Any())
                     {
-                        logger.LogInformation("Database connection successful");
+                        logger.LogInformation("Creating sample data...");
 
-                        // Ensure database is created
-                        var created = context.Database.EnsureCreated();
-                        if (created)
+                        // Create sample users
+                        var sampleUsers = new List<User>
                         {
-                            logger.LogInformation("Database created successfully");
-                        }
-                        else
+                            new User
+                            {
+                                UserId = 1,
+                                Name = "System",
+                                Surname = "Administrator",
+                                Username = "admin",
+                                Password = "admin123",
+                                Role = UserRole.AcademicManager,
+                                Email = "admin@cmcs.com",
+                                IsActive = true,
+                                CreatedDate = DateTime.UtcNow
+                            },
+                            new User
+                            {
+                                UserId = 2,
+                                Name = "John",
+                                Surname = "Smith",
+                                Username = "lecturer",
+                                Password = "lecturer123",
+                                Role = UserRole.Lecturer,
+                                Email = "john.smith@university.com",
+                                IsActive = true,
+                                CreatedDate = DateTime.UtcNow
+                            },
+                            new User
+                            {
+                                UserId = 3,
+                                Name = "Sarah",
+                                Surname = "Johnson",
+                                Username = "coordinator",
+                                Password = "coordinator123",
+                                Role = UserRole.ProgrammeCoordinator,
+                                Email = "sarah.johnson@university.com",
+                                IsActive = true,
+                                CreatedDate = DateTime.UtcNow
+                            }
+                        };
+
+                        // Save sample users
+                        foreach (var user in sampleUsers)
                         {
-                            logger.LogInformation("Database already exists");
+                            dataService.SaveUser(user);
                         }
 
-                        // Seed initial data
-                        DatabaseInitializer.Initialize(context);
-                        logger.LogInformation("Database initialization completed");
+                        // Create sample lecturer details
+                        var lecturer = new Lecturer
+                        {
+                            LecturerId = 2, // Matches John Smith's UserId
+                            EmployeeNumber = "EMP001",
+                            Department = "Computer Science",
+                            HourlyRate = 150.00m,
+                            ContractStartDate = DateTime.Now.AddYears(-1),
+                            ContractEndDate = DateTime.Now.AddYears(1)
+                        };
+
+                        dataService.SaveLecturer(lecturer);
+
+                        // Create sample claim
+                        var sampleClaim = new Claim
+                        {
+                            ClaimId = 1,
+                            LecturerId = 2,
+                            MonthYear = DateTime.Now.ToString("yyyy-MM"),
+                            HoursWorked = 40,
+                            HourlyRate = 150.00m,
+                            Amount = 6000.00m,
+                            Status = ClaimStatus.Submitted,
+                            SubmissionComments = "Sample claim for testing purposes",
+                            CreatedDate = DateTime.Now,
+                            ModifiedDate = DateTime.Now
+                        };
+
+                        dataService.SaveClaim(sampleClaim);
+
+                        logger.LogInformation("Sample data created successfully");
                     }
                     else
                     {
-                        logger.LogWarning("Database connection issues: {Message}", healthResult.Message);
-                        logger.LogWarning("Application will run in limited mode without database access");
+                        logger.LogInformation("Sample data already exists");
                     }
                 }
                 catch (Exception ex)
                 {
-                    logger.LogError(ex, "An error occurred while initializing the database");
-                    logger.LogWarning("Application will run in limited mode without database access");
+                    logger.LogError(ex, "An error occurred while initializing sample data");
+                    logger.LogWarning("Application will run with existing data only");
                 }
             }
         }
@@ -516,11 +537,12 @@ namespace contract_monthly_claim_system_cs
         private static void DisplayStartupMessage(WebApplication app)
         {
             Console.WriteLine();
-            Console.WriteLine("? Contract Monthly Claim System Started Successfully!");
+            Console.WriteLine("?? Contract Monthly Claim System Started Successfully!");
             Console.WriteLine("======================================================");
-            Console.WriteLine($"Environment: {app.Environment.EnvironmentName}");
-            Console.WriteLine($"Framework: {Environment.Version}");
-            Console.WriteLine($"OS: {Environment.OSVersion}");
+            Console.WriteLine($"?? Environment: {app.Environment.EnvironmentName}");
+            Console.WriteLine($"?? Framework: {Environment.Version}");
+            Console.WriteLine($"?? OS: {Environment.OSVersion}");
+            Console.WriteLine($"?? Storage: Text Files");
             Console.WriteLine();
             Console.WriteLine("?? Available URLs:");
             foreach (var url in app.Urls)
@@ -531,7 +553,7 @@ namespace contract_monthly_claim_system_cs
             Console.WriteLine("?? Quick Access:");
             Console.WriteLine("   Main Application: https://localhost:7278");
             Console.WriteLine("   HTTP Fallback:    http://localhost:5226");
-            Console.WriteLine("   Health Check:     https://localhost:7278/health");
+            Console.WriteLine("   Default Login:    admin / admin123");
             Console.WriteLine();
             Console.WriteLine("Press Ctrl+C to stop the application");
             Console.WriteLine("======================================================");
@@ -570,14 +592,6 @@ namespace contract_monthly_claim_system_cs
                 Console.WriteLine("   dotnet dev-certs https --trust");
                 Console.WriteLine("Then restart Visual Studio");
             }
-            else if (ex is Microsoft.Data.SqlClient.SqlException)
-            {
-                Console.WriteLine();
-                Console.WriteLine("??? Database Connection Issue!");
-                Console.WriteLine("1. Verify SQL Server is running");
-                Console.WriteLine("2. Check connection string in appsettings.json");
-                Console.WriteLine("3. Try using LocalDB for development");
-            }
 
             Console.WriteLine();
             Console.WriteLine("?? Full error details:");
@@ -590,243 +604,247 @@ namespace contract_monthly_claim_system_cs
     }
 
     /// <summary>
-    /// Database health check for ASP.NET Core Health Checks
+    /// Service for managing data storage using text files
+    /// Replaces database functionality for prototype phase
     /// </summary>
-    public class DatabaseHealthCheck : IHealthCheck
+    public class TextFileDataService
     {
-        private readonly CMCSDbContext _context;
-        private readonly ILogger<DatabaseHealthCheck> _logger;
+        private readonly string _dataDirectory;
+        private readonly ILogger<TextFileDataService> _logger;
 
         /// <summary>
-        /// Initializes a new instance of DatabaseHealthCheck
+        /// Initializes a new instance of TextFileDataService
         /// </summary>
-        /// <param name="context">Database context</param>
         /// <param name="logger">Logger instance</param>
-        public DatabaseHealthCheck(CMCSDbContext context, ILogger<DatabaseHealthCheck> logger)
+        public TextFileDataService(ILogger<TextFileDataService> logger)
         {
-            _context = context;
+            _dataDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Data");
             _logger = logger;
+
+            // Ensure data directory exists
+            if (!Directory.Exists(_dataDirectory))
+            {
+                Directory.CreateDirectory(_dataDirectory);
+            }
         }
 
         /// <summary>
-        /// Performs health check by testing database connectivity
+        /// Gets the file path for a specific data type
         /// </summary>
-        /// <param name="context">Health check context</param>
-        /// <param name="cancellationToken">Cancellation token</param>
-        /// <returns>Health check result</returns>
-        public async Task<HealthCheckResult> CheckHealthAsync(
-            HealthCheckContext context,
-            CancellationToken cancellationToken = default)
+        /// <param name="dataType">Type of data (users, claims, etc.)</param>
+        /// <returns>Full file path</returns>
+        private string GetFilePath(string dataType)
         {
+            return Path.Combine(_dataDirectory, $"{dataType}.txt");
+        }
+
+        /// <summary>
+        /// Reads all data from a file
+        /// </summary>
+        /// <typeparam name="T">Type of data to read</typeparam>
+        /// <param name="dataType">Type of data file</param>
+        /// <returns>List of data objects</returns>
+        private List<T> ReadData<T>(string dataType)
+        {
+            var filePath = GetFilePath(dataType);
             try
             {
-                var canConnect = await _context.Database.CanConnectAsync(cancellationToken);
-                return canConnect
-                    ? HealthCheckResult.Healthy("Database is connected")
-                    : HealthCheckResult.Unhealthy("Cannot connect to database");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Database health check failed");
-                return HealthCheckResult.Unhealthy("Database health check failed", ex);
-            }
-        }
-    }
-
-    /// <summary>
-    /// Database health service interface
-    /// </summary>
-    public interface IDatabaseHealthService
-    {
-        /// <summary>
-        /// Checks database health and connectivity
-        /// </summary>
-        /// <returns>Database health result</returns>
-        Task<DatabaseHealthResult> CheckDatabaseHealthAsync();
-    }
-
-    /// <summary>
-    /// Database health service implementation
-    /// </summary>
-    public class DatabaseHealthService : IDatabaseHealthService
-    {
-        private readonly CMCSDbContext _context;
-        private readonly ILogger<DatabaseHealthService> _logger;
-
-        /// <summary>
-        /// Initializes a new instance of DatabaseHealthService
-        /// </summary>
-        /// <param name="context">Database context</param>
-        /// <param name="logger">Logger instance</param>
-        public DatabaseHealthService(CMCSDbContext context, ILogger<DatabaseHealthService> logger)
-        {
-            _context = context;
-            _logger = logger;
-        }
-
-        /// <summary>
-        /// Checks database health and connectivity
-        /// </summary>
-        /// <returns>Database health result</returns>
-        public async Task<DatabaseHealthResult> CheckDatabaseHealthAsync()
-        {
-            try
-            {
-                var canConnect = await _context.Database.CanConnectAsync();
-                if (canConnect)
+                if (File.Exists(filePath))
                 {
-                    var userCount = await _context.Users.CountAsync();
-                    return new DatabaseHealthResult
+                    var json = File.ReadAllText(filePath);
+                    if (!string.IsNullOrEmpty(json))
                     {
-                        IsHealthy = true,
-                        Message = "Database connection is healthy",
-                        UserCount = userCount,
-                        CanConnect = true
-                    };
-                }
-                else
-                {
-                    return new DatabaseHealthResult
-                    {
-                        IsHealthy = false,
-                        Message = "Cannot connect to database",
-                        UserCount = 0,
-                        CanConnect = false
-                    };
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Database health check failed");
-                return new DatabaseHealthResult
-                {
-                    IsHealthy = false,
-                    Message = $"Database health check failed: {ex.Message}",
-                    UserCount = 0,
-                    CanConnect = false,
-                    Exception = ex
-                };
-            }
-        }
-    }
-
-    /// <summary>
-    /// Represents the result of a database health check
-    /// </summary>
-    public class DatabaseHealthResult
-    {
-        /// <summary>
-        /// Gets or sets whether the database is healthy
-        /// </summary>
-        public bool IsHealthy { get; set; }
-
-        /// <summary>
-        /// Gets or sets whether the database can be connected to
-        /// </summary>
-        public bool CanConnect { get; set; }
-
-        /// <summary>
-        /// Gets or sets the health check message
-        /// </summary>
-        public string Message { get; set; } = string.Empty;
-
-        /// <summary>
-        /// Gets or sets the number of users in the database
-        /// </summary>
-        public int UserCount { get; set; }
-
-        /// <summary>
-        /// Gets or sets the exception if any occurred
-        /// </summary>
-        public Exception? Exception { get; set; }
-    }
-
-    /// <summary>
-    /// Database initializer for seeding initial data
-    /// </summary>
-    public static class DatabaseInitializer
-    {
-        /// <summary>
-        /// Initializes the database with default data
-        /// </summary>
-        /// <param name="context">Database context</param>
-        public static void Initialize(CMCSDbContext context)
-        {
-            if (!context.Users.Any())
-            {
-                // Add default users
-                var users = new List<User>
-                {
-                    new User
-                    {
-                        Name = "System",
-                        Surname = "Administrator",
-                        Username = "admin",
-                        Password = "admin123",
-                        Role = UserRole.AcademicManager,
-                        Email = "admin@cmcs.com",
-                        IsActive = true,
-                        CreatedDate = DateTime.UtcNow
-                    },
-                    new User
-                    {
-                        Name = "John",
-                        Surname = "Smith",
-                        Username = "lecturer",
-                        Password = "lecturer123",
-                        Role = UserRole.Lecturer,
-                        Email = "john.smith@university.com",
-                        IsActive = true,
-                        CreatedDate = DateTime.UtcNow
-                    },
-                    new User
-                    {
-                        Name = "Sarah",
-                        Surname = "Johnson",
-                        Username = "coordinator",
-                        Password = "coordinator123",
-                        Role = UserRole.ProgrammeCoordinator,
-                        Email = "sarah.johnson@university.com",
-                        IsActive = true,
-                        CreatedDate = DateTime.UtcNow
+                        return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
                     }
-                };
-
-                context.Users.AddRange(users);
-                context.SaveChanges();
-
-                // Add lecturer details
-                var lecturer = context.Users.First(u => u.Username == "lecturer");
-                var lecturerDetail = new Lecturer
-                {
-                    LecturerId = lecturer.UserId,
-                    EmployeeNumber = "EMP001",
-                    Department = "Computer Science",
-                    HourlyRate = 150.00m,
-                    ContractStartDate = DateTime.Now.AddYears(-1),
-                    ContractEndDate = DateTime.Now.AddYears(1)
-                };
-
-                context.Lecturers.Add(lecturerDetail);
-                context.SaveChanges();
-
-                // Add sample claims for testing
-                var sampleClaim = new Claim
-                {
-                    LecturerId = lecturer.UserId,
-                    MonthYear = DateTime.Now.ToString("yyyy-MM"),
-                    HoursWorked = 40,
-                    HourlyRate = 150.00m,
-                    Amount = 6000.00m,
-                    Status = ClaimStatus.Submitted,
-                    SubmissionComments = "Sample claim for testing",
-                    CreatedDate = DateTime.Now,
-                    ModifiedDate = DateTime.Now
-                };
-
-                context.Claims.Add(sampleClaim);
-                context.SaveChanges();
+                }
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error reading data from {FilePath}", filePath);
+            }
+
+            return new List<T>();
+        }
+
+        /// <summary>
+        /// Writes data to a file
+        /// </summary>
+        /// <typeparam name="T">Type of data to write</typeparam>
+        /// <param name="dataType">Type of data file</param>
+        /// <param name="data">Data to write</param>
+        private void WriteData<T>(string dataType, List<T> data)
+        {
+            var filePath = GetFilePath(dataType);
+            try
+            {
+                var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(filePath, json);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error writing data to {FilePath}", filePath);
+                throw;
+            }
+        }
+
+        // User operations
+        public List<User> GetAllUsers()
+        {
+            return ReadData<User>("users");
+        }
+
+        public User GetUserById(int userId)
+        {
+            var users = GetAllUsers();
+            return users.FirstOrDefault(u => u.UserId == userId);
+        }
+
+        public User GetUserByUsername(string username)
+        {
+            var users = GetAllUsers();
+            return users.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public void SaveUser(User user)
+        {
+            var users = GetAllUsers();
+            var existingUser = users.FirstOrDefault(u => u.UserId == user.UserId);
+
+            if (existingUser != null)
+            {
+                users.Remove(existingUser);
+            }
+
+            users.Add(user);
+            WriteData("users", users);
+        }
+
+        // Lecturer operations
+        public List<Lecturer> GetAllLecturers()
+        {
+            return ReadData<Lecturer>("lecturers");
+        }
+
+        public Lecturer GetLecturerById(int lecturerId)
+        {
+            var lecturers = GetAllLecturers();
+            return lecturers.FirstOrDefault(l => l.LecturerId == lecturerId);
+        }
+
+        public void SaveLecturer(Lecturer lecturer)
+        {
+            var lecturers = GetAllLecturers();
+            var existingLecturer = lecturers.FirstOrDefault(l => l.LecturerId == lecturer.LecturerId);
+
+            if (existingLecturer != null)
+            {
+                lecturers.Remove(existingLecturer);
+            }
+
+            lecturers.Add(lecturer);
+            WriteData("lecturers", lecturers);
+        }
+
+        // Claim operations
+        public List<Claim> GetAllClaims()
+        {
+            return ReadData<Claim>("claims");
+        }
+
+        public Claim GetClaimById(int claimId)
+        {
+            var claims = GetAllClaims();
+            return claims.FirstOrDefault(c => c.ClaimId == claimId);
+        }
+
+        public List<Claim> GetClaimsByLecturerId(int lecturerId)
+        {
+            var claims = GetAllClaims();
+            return claims.Where(c => c.LecturerId == lecturerId).ToList();
+        }
+
+        public void SaveClaim(Claim claim)
+        {
+            var claims = GetAllClaims();
+            var existingClaim = claims.FirstOrDefault(c => c.ClaimId == claim.ClaimId);
+
+            if (existingClaim != null)
+            {
+                claims.Remove(existingClaim);
+            }
+
+            claims.Add(claim);
+            WriteData("claims", claims);
+        }
+
+        // Document operations
+        public List<Document> GetAllDocuments()
+        {
+            return ReadData<Document>("documents");
+        }
+
+        public List<Document> GetDocumentsByClaimId(int claimId)
+        {
+            var documents = GetAllDocuments();
+            return documents.Where(d => d.ClaimId == claimId).ToList();
+        }
+
+        public void SaveDocument(Document document)
+        {
+            var documents = GetAllDocuments();
+            var existingDocument = documents.FirstOrDefault(d => d.DocumentId == document.DocumentId);
+
+            if (existingDocument != null)
+            {
+                documents.Remove(existingDocument);
+            }
+
+            documents.Add(document);
+            WriteData("documents", documents);
+        }
+
+        // Approval operations
+        public List<Approval> GetAllApprovals()
+        {
+            return ReadData<Approval>("approvals");
+        }
+
+        public List<Approval> GetApprovalsByClaimId(int claimId)
+        {
+            var approvals = GetAllApprovals();
+            return approvals.Where(a => a.ClaimId == claimId).ToList();
+        }
+
+        public void SaveApproval(Approval approval)
+        {
+            var approvals = GetAllApprovals();
+            var existingApproval = approvals.FirstOrDefault(a => a.ApprovalId == approval.ApprovalId);
+
+            if (existingApproval != null)
+            {
+                approvals.Remove(existingApproval);
+            }
+
+            approvals.Add(approval);
+            WriteData("approvals", approvals);
+        }
+
+        /// <summary>
+        /// Gets the next available ID for a data type
+        /// </summary>
+        /// <param name="dataType">Type of data</param>
+        /// <returns>Next available ID</returns>
+        public int GetNextId(string dataType)
+        {
+            return dataType.ToLower() switch
+            {
+                "users" => GetAllUsers().Count > 0 ? GetAllUsers().Max(u => u.UserId) + 1 : 1,
+                "claims" => GetAllClaims().Count > 0 ? GetAllClaims().Max(c => c.ClaimId) + 1 : 1,
+                "documents" => GetAllDocuments().Count > 0 ? GetAllDocuments().Max(d => d.DocumentId) + 1 : 1,
+                "approvals" => GetAllApprovals().Count > 0 ? GetAllApprovals().Max(a => a.ApprovalId) + 1 : 1,
+                "lecturers" => GetAllLecturers().Count > 0 ? GetAllLecturers().Max(l => l.LecturerId) + 1 : 1,
+                _ => 1
+            };
         }
     }
 }
