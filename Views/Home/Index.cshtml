@@ -1,20 +1,119 @@
 ﻿@{
-    ViewData["Title"] = "Home";
+    ViewData["Title"] = "Home - Contract Monthly Claim System";
 }
 
 <div class="container">
-    <h1>Contract Monthly Claim System</h1>
-    <p>Welcome to the claim management system</p>
+    <div class="hero">
+        <h1 class="hero-title">Contract Monthly Claim System</h1>
+        <p class="hero-subtitle">Streamlined claim submission and approval for independent contractor lecturers</p>
 
-    <div style="display: flex; gap: 20px; margin-top: 30px;">
-        <a href="@Url.Action("Submit", "Claims")" style="padding: 15px 25px; background: #007bff; color: white; text-decoration: none; border-radius: 5px;">
-            Submit Claim
-        </a>
-        <a href="@Url.Action("Approve", "Claims")" style="padding: 15px 25px; background: #28a745; color: white; text-decoration: none; border-radius: 5px;">
-            Review Claims
-        </a>
-        <a href="@Url.Action("Track", "Claims")" style="padding: 15px 25px; background: #6c757d; color: white; text-decoration: none; border-radius: 5px;">
-            Track Claims
-        </a>
+        @if (ViewData["IsLoggedIn"] as bool? == true)
+        {
+            <div class="welcome-message">
+                <p>Welcome back, <strong>@ViewData["UserName"]</strong>! You are logged in as <strong>@ViewData["UserRole"]</strong>.</p>
+            </div>
+        }
+        else
+        {
+            <div class="auth-buttons">
+                <a href="@Url.Action("Index", "Auth")" class="btn btn-primary btn-lg">Login / Register</a>
+            </div>
+        }
+    </div>
+
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-content">
+                <h3 class="card-title">Submit Claims</h3>
+                <p class="card-desc">Easily submit monthly claims with supporting documents. Track your submission status in real-time.</p>
+                <a href="@Url.Action("Submit", "Claims")" class="card-action">
+                    Submit Claim
+                    <span class="card-action-arrow">→</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content">
+                <h3 class="card-title">Review Claims</h3>
+                <p class="card-desc">Programme coordinators and academic managers can review and approve claims efficiently.</p>
+                <a href="@Url.Action("Approve", "Claims")" class="card-action">
+                    Review Claims
+                    <span class="card-action-arrow">→</span>
+                </a>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content">
+                <h3 class="card-title">Track Status</h3>
+                <p class="card-desc">Monitor the status of your claims from submission to approval with transparent tracking.</p>
+                <a href="@Url.Action("Track", "Claims")" class="card-action">
+                    Track Claims
+                    <span class="card-action-arrow">→</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="system-info">
+        <h2>System Features</h2>
+        <div class="features-grid">
+            <div class="feature">
+                <h4>Role-Based Access</h4>
+                <p>Different access levels for lecturers, coordinators, and academic managers</p>
+            </div>
+            <div class="feature">
+                <h4>Document Upload</h4>
+                <p>Support for multiple file types with secure document storage</p>
+            </div>
+            <div class="feature">
+                <h4>Real-Time Tracking</h4>
+                <p>Transparent claim status tracking throughout the approval process</p>
+            </div>
+            <div class="feature">
+                <h4>Automated Calculations</h4>
+                <p>Automatic calculation of claim amounts based on hours and rates</p>
+            </div>
+        </div>
     </div>
 </div>
+
+<style>
+    .welcome-message {
+        background: rgba(255, 255, 255, 0.1);
+        padding: var(--spacing-md);
+        border-radius: var(--border-radius-md);
+        margin-top: var(--spacing-md);
+        text-align: center;
+    }
+
+    .auth-buttons {
+        margin-top: var(--spacing-lg);
+    }
+
+    .system-info {
+        margin-top: var(--spacing-xxl);
+        padding: var(--spacing-xl);
+        background-color: var(--system-background-primary);
+        border-radius: var(--border-radius-lg);
+    }
+
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--spacing-lg);
+        margin-top: var(--spacing-lg);
+    }
+
+    .feature {
+        padding: var(--spacing-md);
+        background-color: var(--system-gray-6);
+        border-radius: var(--border-radius-md);
+    }
+
+        .feature h4 {
+            color: var(--system-blue);
+            margin-bottom: var(--spacing-sm);
+        }
+</style>

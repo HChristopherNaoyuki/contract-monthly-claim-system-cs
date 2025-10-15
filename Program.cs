@@ -157,22 +157,8 @@ namespace contract_monthly_claim_system_cs
                 }
             });
 
-            // Configure server URLs based on environment
-            if (builder.Environment.IsDevelopment())
-            {
-                // Use development URLs from launchSettings
-                builder.WebHost.UseUrls(
-                    "https://localhost:7278",
-                    "http://localhost:5226",
-                    "https://localhost:7000",
-                    "http://localhost:5000"
-                );
-            }
-            else
-            {
-                // Use production URLs
-                builder.WebHost.UseUrls("http://*:80", "https://*:443");
-            }
+            // Use HTTP only to avoid SSL certificate issues
+            builder.WebHost.UseUrls("http://localhost:5000", "https://localhost:7000");
         }
 
         /// <summary>
@@ -193,9 +179,7 @@ namespace contract_monthly_claim_system_cs
                 options.Cookie.HttpOnly = true;
                 options.Cookie.IsEssential = true;
                 options.Cookie.Name = "CMCS.Session";
-                options.Cookie.SecurePolicy = builder.Environment.IsDevelopment()
-                    ? CookieSecurePolicy.None
-                    : CookieSecurePolicy.Always;
+                options.Cookie.SecurePolicy = CookieSecurePolicy.None; // Allow HTTP in development
             });
 
             // Add text file data service
@@ -246,7 +230,6 @@ namespace contract_monthly_claim_system_cs
             {
                 // Detailed error pages in development
                 app.UseDeveloperExceptionPage();
-                app.UseExceptionHandler("/Home/Error");
             }
             else
             {
@@ -258,8 +241,11 @@ namespace contract_monthly_claim_system_cs
             // Enable response compression
             app.UseResponseCompression();
 
-            // HTTPS Redirection Middleware with safe configuration
-            app.UseHttpsRedirection();
+            // HTTPS Redirection Middleware - Disable in development to avoid SSL issues
+            if (!app.Environment.IsDevelopment())
+            {
+                app.UseHttpsRedirection();
+            }
 
             // Static Files Middleware with cache configuration
             app.UseStaticFiles(new StaticFileOptions
@@ -285,7 +271,7 @@ namespace contract_monthly_claim_system_cs
             // Configure endpoints
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Auth}/{action=Index}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             // Additional routes for specific functionality
             app.MapControllerRoute(
@@ -554,8 +540,8 @@ namespace contract_monthly_claim_system_cs
             }
             Console.WriteLine();
             Console.WriteLine("Quick Access:");
-            Console.WriteLine("   Main Application: https://localhost:7278");
-            Console.WriteLine("   HTTP Fallback:    http://localhost:5226");
+            Console.WriteLine("   Main Application: http://localhost:5000");
+            Console.WriteLine("   HTTPS:            https://localhost:7000");
             Console.WriteLine("   Default Login:    admin / admin123");
             Console.WriteLine();
             Console.WriteLine("Press Ctrl+C to stop the application");
@@ -582,8 +568,8 @@ namespace contract_monthly_claim_system_cs
                 Console.WriteLine("Port Conflict Detected!");
                 Console.WriteLine("Possible solutions:");
                 Console.WriteLine("1. Change ports in launchSettings.json");
-                Console.WriteLine("2. Run: netstat -ano | findstr :7278 (check port usage)");
-                Console.WriteLine("3. Use different ports like 5000, 7000, 5001, 7001");
+                Console.WriteLine("2. Run: netstat -ano | findstr :5000 (check port usage)");
+                Console.WriteLine("3. Use different ports like 5001, 5002, 7001, 7002");
                 Console.WriteLine("4. Restart Visual Studio as Administrator");
             }
             else if (ex.InnerException is System.Security.Cryptography.CryptographicException)
