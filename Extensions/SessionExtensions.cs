@@ -6,6 +6,7 @@ namespace contract_monthly_claim_system_cs.Extensions
 {
     /// <summary>
     /// Extension methods for session management
+    /// Provides strongly-typed session storage methods
     /// </summary>
     public static class SessionExtensions
     {
@@ -28,7 +29,7 @@ namespace contract_monthly_claim_system_cs.Extensions
         /// <param name="session">The session instance</param>
         /// <param name="key">The session key</param>
         /// <returns>The deserialized value or default</returns>
-        public static T? Get<T>(this ISession session, string key)
+        public static T Get<T>(this ISession session, string key)
         {
             var value = session.GetString(key);
             if (value == null)

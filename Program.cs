@@ -145,20 +145,10 @@ namespace contract_monthly_claim_system_cs
                 serverOptions.Limits.MaxConcurrentUpgradedConnections = 100;
                 serverOptions.Limits.KeepAliveTimeout = TimeSpan.FromMinutes(2);
                 serverOptions.Limits.RequestHeadersTimeout = TimeSpan.FromMinutes(1);
-
-                // Configure HTTPS in development
-                if (context.HostingEnvironment.IsDevelopment())
-                {
-                    serverOptions.ConfigureHttpsDefaults(httpsOptions =>
-                    {
-                        // Allow self-signed certificates in development
-                        httpsOptions.ClientCertificateMode = Microsoft.AspNetCore.Server.Kestrel.Https.ClientCertificateMode.AllowCertificate;
-                    });
-                }
             });
 
             // Use HTTP only to avoid SSL certificate issues
-            builder.WebHost.UseUrls("http://localhost:5000", "https://localhost:7000");
+            builder.WebHost.UseUrls("http://localhost:5000");
         }
 
         /// <summary>
@@ -240,12 +230,6 @@ namespace contract_monthly_claim_system_cs
 
             // Enable response compression
             app.UseResponseCompression();
-
-            // HTTPS Redirection Middleware - Disable in development to avoid SSL issues
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseHttpsRedirection();
-            }
 
             // Static Files Middleware with cache configuration
             app.UseStaticFiles(new StaticFileOptions
@@ -541,7 +525,6 @@ namespace contract_monthly_claim_system_cs
             Console.WriteLine();
             Console.WriteLine("Quick Access:");
             Console.WriteLine("   Main Application: http://localhost:5000");
-            Console.WriteLine("   HTTPS:            https://localhost:7000");
             Console.WriteLine("   Default Login:    admin / admin123");
             Console.WriteLine();
             Console.WriteLine("Press Ctrl+C to stop the application");
@@ -569,17 +552,8 @@ namespace contract_monthly_claim_system_cs
                 Console.WriteLine("Possible solutions:");
                 Console.WriteLine("1. Change ports in launchSettings.json");
                 Console.WriteLine("2. Run: netstat -ano | findstr :5000 (check port usage)");
-                Console.WriteLine("3. Use different ports like 5001, 5002, 7001, 7002");
+                Console.WriteLine("3. Use different ports like 5001, 5002");
                 Console.WriteLine("4. Restart Visual Studio as Administrator");
-            }
-            else if (ex.InnerException is System.Security.Cryptography.CryptographicException)
-            {
-                Console.WriteLine();
-                Console.WriteLine("SSL Certificate Issue!");
-                Console.WriteLine("Run these commands in Command Prompt:");
-                Console.WriteLine("   dotnet dev-certs https --clean");
-                Console.WriteLine("   dotnet dev-certs https --trust");
-                Console.WriteLine("Then restart Visual Studio");
             }
 
             Console.WriteLine();

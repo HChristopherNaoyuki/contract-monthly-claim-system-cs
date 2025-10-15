@@ -11,7 +11,7 @@
         <header class="app-header">
             <div class="header-content">
                 <!-- Navigation -->
-                @if (Context.Session.GetString("UserId") != null)
+                @if (Context.Session.GetInt32("UserId") != null)
                 {
                     <div class="nav-center">
                         <a href="@Url.Action("Index", "Home")" class="nav-button">Home</a>
@@ -21,9 +21,17 @@
                         <a href="@Url.Action("Privacy", "Home")" class="nav-button">Privacy</a>
                     </div>
                 }
+                else
+                {
+                    <div class="nav-center">
+                        <a href="@Url.Action("Index", "Home")" class="nav-button">Home</a>
+                        <a href="@Url.Action("Privacy", "Home")" class="nav-button">Privacy</a>
+                        <a href="@Url.Action("Index", "Auth")" class="nav-button">Login</a>
+                    </div>
+                }
 
                 <!-- User profile section -->
-                @if (Context.Session.GetString("UserId") != null)
+                @if (Context.Session.GetInt32("UserId") != null)
                 {
                     <div class="user-profile">
                         <div class="user-avatar">

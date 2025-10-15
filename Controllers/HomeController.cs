@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using contract_monthly_claim_system_cs.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace contract_monthly_claim_system_cs.Controllers
 {
@@ -53,28 +54,6 @@ namespace contract_monthly_claim_system_cs.Controllers
         /// </summary>
         /// <returns>Privacy policy view</returns>
         public IActionResult Privacy()
-        {
-            // Allow access to all users without authentication
-            return View();
-        }
-
-        /// <summary>
-        /// Displays system features and capabilities
-        /// Accessible to all users without authentication
-        /// </summary>
-        /// <returns>Features view</returns>
-        public IActionResult Features()
-        {
-            // Allow access to all users without authentication
-            return View();
-        }
-
-        /// <summary>
-        /// Displays system documentation and help
-        /// Accessible to all users without authentication
-        /// </summary>
-        /// <returns>Help view</returns>
-        public IActionResult Help()
         {
             // Allow access to all users without authentication
             return View();
