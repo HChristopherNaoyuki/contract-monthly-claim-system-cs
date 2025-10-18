@@ -5,32 +5,32 @@ using System;
 namespace contract_monthly_claim_system_cs.Extensions
 {
     /// <summary>
-    /// Extension methods for session management
-    /// Provides strongly-typed session storage methods
+    /// Custom extension methods for session management
+    /// Provides strongly-typed session storage methods without conflicting with built-in extensions
     /// </summary>
     public static class SessionExtensions
     {
         /// <summary>
-        /// Sets a value in the session using JSON serialization
+        /// Sets a complex object in the session using JSON serialization
         /// </summary>
         /// <typeparam name="T">The type of the value</typeparam>
         /// <param name="session">The session instance</param>
         /// <param name="key">The session key</param>
         /// <param name="value">The value to store</param>
-        public static void Set<T>(this ISession session, string key, T value)
+        public static void SetObject<T>(this ISession session, string key, T value)
         {
             var json = JsonSerializer.Serialize(value);
             session.SetString(key, json);
         }
 
         /// <summary>
-        /// Gets a value from the session using JSON deserialization
+        /// Gets a complex object from the session using JSON deserialization
         /// </summary>
         /// <typeparam name="T">The type of the value</typeparam>
         /// <param name="session">The session instance</param>
         /// <param name="key">The session key</param>
         /// <returns>The deserialized value or default</returns>
-        public static T Get<T>(this ISession session, string key)
+        public static T GetObject<T>(this ISession session, string key)
         {
             var value = session.GetString(key);
             if (string.IsNullOrEmpty(value))
@@ -41,12 +41,15 @@ namespace contract_monthly_claim_system_cs.Extensions
         }
 
         /// <summary>
-        /// Extension method to get integer from session
+        /// Safely gets an integer from session with custom method name to avoid conflicts
         /// </summary>
-        public static int? GetInt32(this ISession session, string key)
+        /// <param name="session">The session instance</param>
+        /// <param name="key">The session key</param>
+        /// <returns>The integer value or null</returns>
+        public static int? GetSessionInt(this ISession session, string key)
         {
             var data = session.Get(key);
-            if (data == null)
+            if (data == null || data.Length == 0)
             {
                 return null;
             }
@@ -54,20 +57,26 @@ namespace contract_monthly_claim_system_cs.Extensions
         }
 
         /// <summary>
-        /// Extension method to set integer in session
+        /// Safely sets an integer in session with custom method name to avoid conflicts
         /// </summary>
-        public static void SetInt32(this ISession session, string key, int value)
+        /// <param name="session">The session instance</param>
+        /// <param name="key">The session key</param>
+        /// <param name="value">The integer value to store</param>
+        public static void SetSessionInt(this ISession session, string key, int value)
         {
             session.Set(key, BitConverter.GetBytes(value));
         }
 
         /// <summary>
-        /// Extension method to get string from session
+        /// Safely gets a string from session with custom method name to avoid conflicts
         /// </summary>
-        public static string GetString(this ISession session, string key)
+        /// <param name="session">The session instance</param>
+        /// <param name="key">The session key</param>
+        /// <returns>The string value or null</returns>
+        public static string GetSessionString(this ISession session, string key)
         {
             var data = session.Get(key);
-            if (data == null)
+            if (data == null || data.Length == 0)
             {
                 return null;
             }
@@ -75,29 +84,21 @@ namespace contract_monthly_claim_system_cs.Extensions
         }
 
         /// <summary>
-        /// Extension method to set string in session
+        /// Safely sets a string in session with custom method name to avoid conflicts
         /// </summary>
-        public static void SetString(this ISession session, string key, string value)
+        /// <param name="session">The session instance</param>
+        /// <param name="key">The session key</param>
+        /// <param name="value">The string value to store</param>
+        public static void SetSessionString(this ISession session, string key, string value)
         {
-            session.Set(key, System.Text.Encoding.UTF8.GetBytes(value));
-        }
-
-        /// <summary>
-        /// Gets session data as byte array
-        /// </summary>
-        private static byte[] Get(this ISession session, string key)
-        {
-            byte[] value = null;
-            session.TryGetValue(key, out value);
-            return value;
-        }
-
-        /// <summary>
-        /// Sets session data as byte array
-        /// </summary>
-        private static void Set(this ISession session, string key, byte[] value)
-        {
-            session.Set(key, value);
+            if (value == null)
+            {
+                session.Remove(key);
+            }
+            else
+            {
+                session.Set(key, System.Text.Encoding.UTF8.GetBytes(value));
+            }
         }
     }
 }

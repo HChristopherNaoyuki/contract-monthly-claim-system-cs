@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@using contract_monthly_claim_system_cs.Extensions
+@{
+    var userId = Context.Session.GetSessionInt("UserId");
+    var username = Context.Session.GetSessionString("Username");
+    var name = Context.Session.GetSessionString("Name");
+    var role = Context.Session.GetSessionString("Role");
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -11,7 +19,7 @@
         <header class="app-header">
             <div class="header-content">
                 <!-- Navigation -->
-                @if (Context.Session.GetInt32("UserId") != null)
+                @if (userId != null)
                 {
                     <div class="nav-center">
                         <a href="@Url.Action("Index", "Home")" class="nav-button">Home</a>
@@ -31,19 +39,18 @@
                 }
 
                 <!-- User profile section -->
-                @if (Context.Session.GetInt32("UserId") != null)
+                @if (userId != null)
                 {
                     <div class="user-profile">
                         <div class="user-avatar">
                             @{
-                                var name = Context.Session.GetString("Name");
                                 var firstLetter = !string.IsNullOrEmpty(name) ? name[0].ToString().ToUpper() : "U";
                             }
                             @firstLetter
                         </div>
                         <div class="user-info">
-                            <span class="username">@Context.Session.GetString("Username")</span>
-                            <span class="user-role">@Context.Session.GetString("Role")</span>
+                            <span class="username">@username</span>
+                            <span class="user-role">@role</span>
                         </div>
                         <form asp-controller="Auth" asp-action="Logout" method="post">
                             <button type="submit" class="logout-btn">Logout</button>

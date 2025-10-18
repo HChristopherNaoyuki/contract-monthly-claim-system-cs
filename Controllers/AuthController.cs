@@ -5,6 +5,7 @@ using contract_monthly_claim_system_cs.Models.DataModels;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using contract_monthly_claim_system_cs.Extensions;
 
 namespace contract_monthly_claim_system_cs.Controllers
 {
@@ -54,10 +55,10 @@ namespace contract_monthly_claim_system_cs.Controllers
 
                 if (user != null && user.Password == model.Password && user.IsActive)
                 {
-                    HttpContext.Session.SetInt32("UserId", user.UserId);
-                    HttpContext.Session.SetString("Username", user.Username);
-                    HttpContext.Session.SetString("Name", $"{user.Name} {user.Surname}");
-                    HttpContext.Session.SetString("Role", user.Role.ToString());
+                    HttpContext.Session.SetSessionInt("UserId", user.UserId);
+                    HttpContext.Session.SetSessionString("Username", user.Username);
+                    HttpContext.Session.SetSessionString("Name", $"{user.Name} {user.Surname}");
+                    HttpContext.Session.SetSessionString("Role", user.Role.ToString());
 
                     _logger.LogInformation("User {Username} logged in successfully", user.Username);
 
@@ -103,10 +104,10 @@ namespace contract_monthly_claim_system_cs.Controllers
 
                 _dataService.SaveUser(user);
 
-                HttpContext.Session.SetInt32("UserId", user.UserId);
-                HttpContext.Session.SetString("Username", user.Username);
-                HttpContext.Session.SetString("Name", $"{user.Name} {user.Surname}");
-                HttpContext.Session.SetString("Role", user.Role.ToString());
+                HttpContext.Session.SetSessionInt("UserId", user.UserId);
+                HttpContext.Session.SetSessionString("Username", user.Username);
+                HttpContext.Session.SetSessionString("Name", $"{user.Name} {user.Surname}");
+                HttpContext.Session.SetSessionString("Role", user.Role.ToString());
 
                 _logger.LogInformation("New user registered: {Username}", user.Username);
 
@@ -124,7 +125,7 @@ namespace contract_monthly_claim_system_cs.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Logout()
         {
-            var username = HttpContext.Session.GetString("Username");
+            var username = HttpContext.Session.GetSessionString("Username");
             HttpContext.Session.Clear();
 
             if (!string.IsNullOrEmpty(username))

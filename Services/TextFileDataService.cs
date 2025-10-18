@@ -59,7 +59,8 @@ namespace contract_monthly_claim_system_cs.Services
                     var json = File.ReadAllText(filePath);
                     if (!string.IsNullOrEmpty(json))
                     {
-                        return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
+                        var result = JsonSerializer.Deserialize<List<T>>(json);
+                        return result ?? new List<T>();
                     }
                 }
                 else
@@ -112,12 +113,22 @@ namespace contract_monthly_claim_system_cs.Services
 
         public User GetUserByUsername(string username)
         {
+            if (string.IsNullOrEmpty(username))
+            {
+                return null;
+            }
+
             var users = GetAllUsers();
             return users.FirstOrDefault(u => u.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
         }
 
         public void SaveUser(User user)
         {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
             var users = GetAllUsers();
             var existingUser = users.FirstOrDefault(u => u.UserId == user.UserId);
 
@@ -145,6 +156,11 @@ namespace contract_monthly_claim_system_cs.Services
 
         public void SaveLecturer(Lecturer lecturer)
         {
+            if (lecturer == null)
+            {
+                throw new ArgumentNullException(nameof(lecturer));
+            }
+
             var lecturers = GetAllLecturers();
             var existingLecturer = lecturers.FirstOrDefault(l => l.LecturerId == lecturer.LecturerId);
 
@@ -177,6 +193,11 @@ namespace contract_monthly_claim_system_cs.Services
 
         public void SaveClaim(Claim claim)
         {
+            if (claim == null)
+            {
+                throw new ArgumentNullException(nameof(claim));
+            }
+
             var claims = GetAllClaims();
             var existingClaim = claims.FirstOrDefault(c => c.ClaimId == claim.ClaimId);
 
@@ -204,6 +225,11 @@ namespace contract_monthly_claim_system_cs.Services
 
         public void SaveDocument(Document document)
         {
+            if (document == null)
+            {
+                throw new ArgumentNullException(nameof(document));
+            }
+
             var documents = GetAllDocuments();
             var existingDocument = documents.FirstOrDefault(d => d.DocumentId == document.DocumentId);
 
@@ -230,6 +256,11 @@ namespace contract_monthly_claim_system_cs.Services
 
         public void SaveApproval(Approval approval)
         {
+            if (approval == null)
+            {
+                throw new ArgumentNullException(nameof(approval));
+            }
+
             var approvals = GetAllApprovals();
             var existingApproval = approvals.FirstOrDefault(a => a.ApprovalId == approval.ApprovalId);
 
