@@ -42,5 +42,6 @@ namespace contract_monthly_claim_system_cs.Extensions
 
         // Note: We don't override SetInt32, GetInt32, SetString, GetString
         // to avoid recursion with the built-in session methods
+        // Use the built-in session methods directly for primitive types
     }
 }

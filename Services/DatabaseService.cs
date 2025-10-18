@@ -172,7 +172,7 @@ namespace contract_monthly_claim_system_cs.Services
         /// <summary>
         /// Gets or sets the exception if any occurred
         /// </summary>
-        public Exception Exception { get; set; }
+        public Exception? Exception { get; set; }
 
         /// <summary>
         /// Gets or sets the timestamp of the health check
