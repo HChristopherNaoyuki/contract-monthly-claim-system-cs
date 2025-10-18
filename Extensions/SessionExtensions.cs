@@ -30,7 +30,7 @@ namespace contract_monthly_claim_system_cs.Extensions
         /// <param name="session">The session instance</param>
         /// <param name="key">The session key</param>
         /// <returns>The deserialized value or default</returns>
-        public static T Get<T>(this ISession session, string key)
+        public static T? Get<T>(this ISession session, string key)
         {
             var value = session.GetString(key);
             if (string.IsNullOrEmpty(value))
@@ -48,7 +48,6 @@ namespace contract_monthly_claim_system_cs.Extensions
         /// <param name="value">The integer value to store</param>
         public static void SetInt32(this ISession session, string key, int value)
         {
-            // Use the built-in session method to avoid recursion
             session.Set(key, BitConverter.GetBytes(value));
         }
 
@@ -60,7 +59,6 @@ namespace contract_monthly_claim_system_cs.Extensions
         /// <returns>The integer value or null</returns>
         public static int? GetInt32(this ISession session, string key)
         {
-            // Use the built-in session method to avoid recursion
             var data = session.Get(key);
             if (data == null || data.Length < 4)
             {
@@ -77,7 +75,6 @@ namespace contract_monthly_claim_system_cs.Extensions
         /// <param name="value">The string value to store</param>
         public static void SetString(this ISession session, string key, string value)
         {
-            // Use the built-in session method to avoid recursion
             session.SetString(key, value);
         }
 
@@ -87,9 +84,8 @@ namespace contract_monthly_claim_system_cs.Extensions
         /// <param name="session">The session instance</param>
         /// <param name="key">The session key</param>
         /// <returns>The string value or null</returns>
-        public static string GetString(this ISession session, string key)
+        public static string? GetString(this ISession session, string key)
         {
-            // Use the built-in session method to avoid recursion
             return session.GetString(key);
         }
     }

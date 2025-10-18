@@ -34,9 +34,9 @@ namespace contract_monthly_claim_system_cs.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            // Clear session on auth page access
             HttpContext.Session.Clear();
-            return View();
+            var model = new LoginViewModel();
+            return View(model);
         }
 
         /// <summary>
@@ -54,7 +54,6 @@ namespace contract_monthly_claim_system_cs.Controllers
 
                 if (user != null && user.Password == model.Password && user.IsActive)
                 {
-                    // Store user information in session using extension methods
                     HttpContext.Session.SetInt32("UserId", user.UserId);
                     HttpContext.Session.SetString("Username", user.Username);
                     HttpContext.Session.SetString("Name", $"{user.Name} {user.Surname}");
@@ -86,7 +85,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                 if (_dataService.GetUserByUsername(model.Username) != null)
                 {
                     ModelState.AddModelError("", "Username already exists");
-                    return View("Index", model);
+                    return View("Index", new LoginViewModel());
                 }
 
                 var user = new User
@@ -104,7 +103,6 @@ namespace contract_monthly_claim_system_cs.Controllers
 
                 _dataService.SaveUser(user);
 
-                // Auto-login after registration
                 HttpContext.Session.SetInt32("UserId", user.UserId);
                 HttpContext.Session.SetString("Username", user.Username);
                 HttpContext.Session.SetString("Name", $"{user.Name} {user.Surname}");
@@ -115,7 +113,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            return View("Index", model);
+            return View("Index", new LoginViewModel());
         }
 
         /// <summary>

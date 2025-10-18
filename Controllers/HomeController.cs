@@ -29,11 +29,9 @@ namespace contract_monthly_claim_system_cs.Controllers
         /// <returns>Home page view</returns>
         public IActionResult Index()
         {
-            // Allow access to all users without authentication
             ViewData["WelcomeMessage"] = "Contract Monthly Claim System";
             ViewData["SystemDescription"] = "Streamlined claim submission and approval for independent contractor lecturers";
 
-            // Check if user is logged in to show personalized content
             if (HttpContext.Session.GetInt32("UserId") != null)
             {
                 ViewData["IsLoggedIn"] = true;
@@ -55,7 +53,6 @@ namespace contract_monthly_claim_system_cs.Controllers
         /// <returns>Privacy policy view</returns>
         public IActionResult Privacy()
         {
-            // Allow access to all users without authentication
             return View();
         }
 
