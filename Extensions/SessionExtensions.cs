@@ -6,7 +6,7 @@ namespace contract_monthly_claim_system_cs.Extensions
 {
     /// <summary>
     /// Extension methods for session management
-    /// Provides strongly-typed session storage methods without recursion
+    /// Provides strongly-typed session storage methods
     /// </summary>
     public static class SessionExtensions
     {
@@ -40,53 +40,7 @@ namespace contract_monthly_claim_system_cs.Extensions
             return JsonSerializer.Deserialize<T>(value);
         }
 
-        /// <summary>
-        /// Sets an integer value in the session using native session methods
-        /// </summary>
-        /// <param name="session">The session instance</param>
-        /// <param name="key">The session key</param>
-        /// <param name="value">The integer value to store</param>
-        public static void SetInt32(this ISession session, string key, int value)
-        {
-            session.Set(key, BitConverter.GetBytes(value));
-        }
-
-        /// <summary>
-        /// Gets an integer value from the session using native session methods
-        /// </summary>
-        /// <param name="session">The session instance</param>
-        /// <param name="key">The session key</param>
-        /// <returns>The integer value or null</returns>
-        public static int? GetInt32(this ISession session, string key)
-        {
-            var data = session.Get(key);
-            if (data == null || data.Length < 4)
-            {
-                return null;
-            }
-            return BitConverter.ToInt32(data, 0);
-        }
-
-        /// <summary>
-        /// Sets a string value in the session using native session methods
-        /// </summary>
-        /// <param name="session">The session instance</param>
-        /// <param name="key">The session key</param>
-        /// <param name="value">The string value to store</param>
-        public static void SetString(this ISession session, string key, string value)
-        {
-            session.SetString(key, value);
-        }
-
-        /// <summary>
-        /// Gets a string value from the session using native session methods
-        /// </summary>
-        /// <param name="session">The session instance</param>
-        /// <param name="key">The session key</param>
-        /// <returns>The string value or null</returns>
-        public static string GetString(this ISession session, string key)
-        {
-            return session.GetString(key);
-        }
+        // Note: We don't override SetInt32, GetInt32, SetString, GetString
+        // to avoid recursion with the built-in session methods
     }
 }

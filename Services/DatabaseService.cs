@@ -28,7 +28,7 @@ namespace contract_monthly_claim_system_cs.Services
         /// Tests the text file storage connection
         /// </summary>
         /// <returns>True if connection is successful, false otherwise</returns>
-        public async Task<bool> TestConnectionAsync()
+        public Task<bool> TestConnectionAsync()
         {
             try
             {
@@ -40,18 +40,18 @@ namespace contract_monthly_claim_system_cs.Services
                 if (canConnect)
                 {
                     _logger.LogInformation("Text file storage connection test successful.");
-                    return true;
+                    return Task.FromResult(true);
                 }
                 else
                 {
                     _logger.LogWarning("Text file storage connection test failed.");
-                    return false;
+                    return Task.FromResult(false);
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Text file storage connection test failed.");
-                return false;
+                return Task.FromResult(false);
             }
         }
 
@@ -59,7 +59,7 @@ namespace contract_monthly_claim_system_cs.Services
         /// Executes a database health check with comprehensive diagnostics
         /// </summary>
         /// <returns>Health check result with status and message</returns>
-        public async Task<DatabaseHealthResult> HealthCheckAsync()
+        public Task<DatabaseHealthResult> HealthCheckAsync()
         {
             try
             {
@@ -75,7 +75,7 @@ namespace contract_monthly_claim_system_cs.Services
 
                 if (canConnect)
                 {
-                    return new DatabaseHealthResult
+                    return Task.FromResult(new DatabaseHealthResult
                     {
                         IsHealthy = true,
                         Message = "Text file storage is healthy",
@@ -83,11 +83,11 @@ namespace contract_monthly_claim_system_cs.Services
                         ClaimCount = claimCount,
                         CanConnect = true,
                         WriteOperationTest = true
-                    };
+                    });
                 }
                 else
                 {
-                    return new DatabaseHealthResult
+                    return Task.FromResult(new DatabaseHealthResult
                     {
                         IsHealthy = false,
                         Message = "Cannot access text file storage",
@@ -95,14 +95,14 @@ namespace contract_monthly_claim_system_cs.Services
                         ClaimCount = 0,
                         CanConnect = false,
                         WriteOperationTest = false
-                    };
+                    });
                 }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Text file storage health check failed");
 
-                return new DatabaseHealthResult
+                return Task.FromResult(new DatabaseHealthResult
                 {
                     IsHealthy = false,
                     Message = $"Text file storage health check failed: {ex.Message}",
@@ -111,7 +111,7 @@ namespace contract_monthly_claim_system_cs.Services
                     CanConnect = false,
                     WriteOperationTest = false,
                     Exception = ex
-                };
+                });
             }
         }
 

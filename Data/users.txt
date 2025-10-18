@@ -54,5 +54,19 @@
     "CreatedDate": "2025-10-15T15:06:17.085739Z",
     "LastLoginDate": null,
     "FullName": "Nathan Daniels"
+  },
+  {
+    "UserId": 5,
+    "Name": "James",
+    "Surname": "Maddison",
+    "Username": "Jimmy",
+    "Password": "Password12345",
+    "Role": 0,
+    "Email": "Jimmy@cmcs.com",
+    "PhoneNumber": "",
+    "IsActive": true,
+    "CreatedDate": "2025-10-18T09:11:39.6395097Z",
+    "LastLoginDate": null,
+    "FullName": "James Maddison"
   }
 ]
