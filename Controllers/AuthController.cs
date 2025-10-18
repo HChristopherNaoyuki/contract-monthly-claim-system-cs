@@ -55,6 +55,7 @@ namespace contract_monthly_claim_system_cs.Controllers
 
                 if (user != null && user.Password == model.Password && user.IsActive)
                 {
+                    // Set session variables
                     HttpContext.Session.SetSessionInt("UserId", user.UserId);
                     HttpContext.Session.SetSessionString("Username", user.Username);
                     HttpContext.Session.SetSessionString("Name", $"{user.Name} {user.Surname}");
@@ -83,12 +84,14 @@ namespace contract_monthly_claim_system_cs.Controllers
         {
             if (ModelState.IsValid)
             {
+                // Check if username already exists
                 if (_dataService.GetUserByUsername(model.Username) != null)
                 {
                     ModelState.AddModelError("", "Username already exists");
                     return View("Index", new LoginViewModel());
                 }
 
+                // Create new user
                 var user = new User
                 {
                     UserId = _dataService.GetNextId("users"),
@@ -102,8 +105,10 @@ namespace contract_monthly_claim_system_cs.Controllers
                     CreatedDate = System.DateTime.UtcNow
                 };
 
+                // Save user to text file storage
                 _dataService.SaveUser(user);
 
+                // Automatically log in the new user
                 HttpContext.Session.SetSessionInt("UserId", user.UserId);
                 HttpContext.Session.SetSessionString("Username", user.Username);
                 HttpContext.Session.SetSessionString("Name", $"{user.Name} {user.Surname}");

@@ -7,7 +7,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using System;
-using System.Threading.Tasks;
 using contract_monthly_claim_system_cs.Services;
 
 namespace contract_monthly_claim_system_cs
@@ -124,10 +123,14 @@ namespace contract_monthly_claim_system_cs
         /// </summary>
         private static void ConfigureApplicationServices(WebApplicationBuilder builder)
         {
+            // Add MVC controllers with views and runtime compilation
             builder.Services.AddControllersWithViews()
                 .AddRazorRuntimeCompilation();
 
+            // Add distributed memory cache for session storage
             builder.Services.AddDistributedMemoryCache();
+
+            // Configure session options
             builder.Services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -137,18 +140,22 @@ namespace contract_monthly_claim_system_cs
                 options.Cookie.SecurePolicy = CookieSecurePolicy.None;
             });
 
+            // Add text file data service as singleton
             builder.Services.AddSingleton<TextFileDataService>();
 
+            // Add HTTP client for external services
             builder.Services.AddHttpClient("DefaultClient", client =>
             {
                 client.Timeout = TimeSpan.FromSeconds(30);
             });
 
+            // Add response compression for performance
             builder.Services.AddResponseCompression(options =>
             {
                 options.EnableForHttps = true;
             });
 
+            // Configure anti-forgery token options
             builder.Services.AddAntiforgery(options =>
             {
                 options.HeaderName = "X-CSRF-TOKEN";
@@ -164,6 +171,7 @@ namespace contract_monthly_claim_system_cs
             var logger = app.Services.GetRequiredService<ILogger<Program>>();
             logger.LogInformation("Configuring middleware pipeline for {Environment} environment", app.Environment.EnvironmentName);
 
+            // Configure error handling based on environment
             if (app.Environment.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -174,6 +182,10 @@ namespace contract_monthly_claim_system_cs
                 app.UseHsts();
             }
 
+            // Enable response compression
+            app.UseResponseCompression();
+
+            // Configure static file serving with caching
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -183,10 +195,12 @@ namespace contract_monthly_claim_system_cs
                 }
             });
 
+            // Configure routing and session
             app.UseRouting();
             app.UseSession();
             app.UseAuthorization();
 
+            // Configure MVC routes
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
@@ -215,7 +229,10 @@ namespace contract_monthly_claim_system_cs
                 try
                 {
                     logger.LogInformation("Initializing text file storage...");
+
+                    // Initialize sample data if no data exists
                     dataService.InitializeSampleData();
+
                     logger.LogInformation("Text file storage initialized successfully");
                 }
                 catch (Exception ex)
@@ -234,9 +251,16 @@ namespace contract_monthly_claim_system_cs
 
             try
             {
+                // Ensure required directories exist
                 EnsureWwwRootDirectory();
+
+                // Log startup information
                 LogStartupInformation(app, logger);
+
+                // Display startup message
                 DisplayStartupMessage(app);
+
+                // Start the application
                 app.Run();
             }
             catch (Exception ex)
@@ -258,6 +282,7 @@ namespace contract_monthly_claim_system_cs
                 Console.WriteLine("Created wwwroot directory");
             }
 
+            // Create necessary subdirectories
             var subdirectories = new[] { "css", "js", "lib", "images", "uploads" };
             foreach (var subdir in subdirectories)
             {
@@ -265,7 +290,7 @@ namespace contract_monthly_claim_system_cs
                 if (!Directory.Exists(subdirPath))
                 {
                     Directory.CreateDirectory(subdirPath);
-                    Console.WriteLine($"Created wwwroot/{subdir} directory");
+                    Console.WriteLine("Created wwwroot/{0} directory", subdir);
                 }
             }
         }
@@ -296,15 +321,15 @@ namespace contract_monthly_claim_system_cs
             Console.WriteLine();
             Console.WriteLine("Contract Monthly Claim System Started Successfully!");
             Console.WriteLine("======================================================");
-            Console.WriteLine($"Environment: {app.Environment.EnvironmentName}");
-            Console.WriteLine($"Framework: {Environment.Version}");
-            Console.WriteLine($"OS: {Environment.OSVersion}");
-            Console.WriteLine($"Storage: Text Files");
+            Console.WriteLine("Environment: {0}", app.Environment.EnvironmentName);
+            Console.WriteLine("Framework: {0}", Environment.Version);
+            Console.WriteLine("OS: {0}", Environment.OSVersion);
+            Console.WriteLine("Storage: Text Files");
             Console.WriteLine();
             Console.WriteLine("Available URLs:");
             foreach (var url in app.Urls)
             {
-                Console.WriteLine($"   {url}");
+                Console.WriteLine("   {0}", url);
             }
             Console.WriteLine();
             Console.WriteLine("Quick Access:");
@@ -324,9 +349,10 @@ namespace contract_monthly_claim_system_cs
             Console.WriteLine();
             Console.WriteLine("Application failed to start!");
             Console.WriteLine("======================================================");
-            Console.WriteLine($"Error: {ex.Message}");
-            Console.WriteLine($"Type: {ex.GetType().Name}");
+            Console.WriteLine("Error: {0}", ex.Message);
+            Console.WriteLine("Type: {0}", ex.GetType().Name);
 
+            // Provide specific guidance for common issues
             if (ex is System.Net.Sockets.SocketException)
             {
                 Console.WriteLine();

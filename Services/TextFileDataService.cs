@@ -293,6 +293,7 @@ namespace contract_monthly_claim_system_cs.Services
 
         /// <summary>
         /// Initializes sample data for the application
+        /// Creates default users and sample data if no data exists
         /// </summary>
         public void InitializeSampleData()
         {
@@ -303,6 +304,7 @@ namespace contract_monthly_claim_system_cs.Services
                 {
                     _logger.LogInformation("Creating sample data...");
 
+                    // Create sample users
                     var sampleUsers = new List<User>
                     {
                         new User
@@ -348,6 +350,7 @@ namespace contract_monthly_claim_system_cs.Services
                         SaveUser(user);
                     }
 
+                    // Create sample lecturer
                     var lecturer = new Lecturer
                     {
                         LecturerId = 2,
@@ -360,6 +363,7 @@ namespace contract_monthly_claim_system_cs.Services
 
                     SaveLecturer(lecturer);
 
+                    // Create sample claim
                     var sampleClaim = new Claim
                     {
                         ClaimId = 1,
@@ -380,7 +384,7 @@ namespace contract_monthly_claim_system_cs.Services
                 }
                 else
                 {
-                    _logger.LogInformation("Sample data already exists");
+                    _logger.LogInformation("Sample data already exists - {UserCount} users found", existingUsers.Count);
                 }
             }
             catch (Exception ex)
