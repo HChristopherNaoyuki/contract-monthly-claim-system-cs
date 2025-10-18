@@ -29,6 +29,7 @@ namespace contract_monthly_claim_system_cs.Services
             if (!Directory.Exists(_dataDirectory))
             {
                 Directory.CreateDirectory(_dataDirectory);
+                _logger.LogInformation("Created Data directory: {DataDirectory}", _dataDirectory);
             }
         }
 
@@ -61,6 +62,11 @@ namespace contract_monthly_claim_system_cs.Services
                         return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
                     }
                 }
+                else
+                {
+                    _logger.LogInformation("Data file not found, creating empty file: {FilePath}", filePath);
+                    File.WriteAllText(filePath, "[]");
+                }
             }
             catch (Exception ex)
             {
@@ -83,6 +89,7 @@ namespace contract_monthly_claim_system_cs.Services
             {
                 var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
                 File.WriteAllText(filePath, json);
+                _logger.LogDebug("Successfully wrote {Count} items to {FilePath}", data.Count, filePath);
             }
             catch (Exception ex)
             {
@@ -121,6 +128,7 @@ namespace contract_monthly_claim_system_cs.Services
 
             users.Add(user);
             WriteData("users", users);
+            _logger.LogInformation("User saved: {Username} (ID: {UserId})", user.Username, user.UserId);
         }
 
         // Lecturer operations
@@ -179,6 +187,7 @@ namespace contract_monthly_claim_system_cs.Services
 
             claims.Add(claim);
             WriteData("claims", claims);
+            _logger.LogInformation("Claim saved: ID {ClaimId} for Lecturer {LecturerId}", claim.ClaimId, claim.LecturerId);
         }
 
         // Document operations
@@ -249,6 +258,104 @@ namespace contract_monthly_claim_system_cs.Services
                 "lecturers" => GetAllLecturers().Count > 0 ? GetAllLecturers().Max(l => l.LecturerId) + 1 : 1,
                 _ => 1
             };
+        }
+
+        /// <summary>
+        /// Initializes sample data for the application
+        /// </summary>
+        public void InitializeSampleData()
+        {
+            try
+            {
+                var existingUsers = GetAllUsers();
+                if (!existingUsers.Any())
+                {
+                    _logger.LogInformation("Creating sample data...");
+
+                    var sampleUsers = new List<User>
+                    {
+                        new User
+                        {
+                            UserId = 1,
+                            Name = "System",
+                            Surname = "Administrator",
+                            Username = "admin",
+                            Password = "admin123",
+                            Role = UserRole.AcademicManager,
+                            Email = "admin@cmcs.com",
+                            IsActive = true,
+                            CreatedDate = DateTime.UtcNow
+                        },
+                        new User
+                        {
+                            UserId = 2,
+                            Name = "John",
+                            Surname = "Smith",
+                            Username = "lecturer",
+                            Password = "lecturer123",
+                            Role = UserRole.Lecturer,
+                            Email = "john.smith@university.com",
+                            IsActive = true,
+                            CreatedDate = DateTime.UtcNow
+                        },
+                        new User
+                        {
+                            UserId = 3,
+                            Name = "Sarah",
+                            Surname = "Johnson",
+                            Username = "coordinator",
+                            Password = "coordinator123",
+                            Role = UserRole.ProgrammeCoordinator,
+                            Email = "sarah.johnson@university.com",
+                            IsActive = true,
+                            CreatedDate = DateTime.UtcNow
+                        }
+                    };
+
+                    foreach (var user in sampleUsers)
+                    {
+                        SaveUser(user);
+                    }
+
+                    var lecturer = new Lecturer
+                    {
+                        LecturerId = 2,
+                        EmployeeNumber = "EMP001",
+                        Department = "Computer Science",
+                        HourlyRate = 150.00m,
+                        ContractStartDate = DateTime.Now.AddYears(-1),
+                        ContractEndDate = DateTime.Now.AddYears(1)
+                    };
+
+                    SaveLecturer(lecturer);
+
+                    var sampleClaim = new Claim
+                    {
+                        ClaimId = 1,
+                        LecturerId = 2,
+                        MonthYear = DateTime.Now.ToString("yyyy-MM"),
+                        HoursWorked = 40,
+                        HourlyRate = 150.00m,
+                        Amount = 6000.00m,
+                        Status = ClaimStatus.Submitted,
+                        SubmissionComments = "Sample claim for testing purposes",
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now
+                    };
+
+                    SaveClaim(sampleClaim);
+
+                    _logger.LogInformation("Sample data created successfully");
+                }
+                else
+                {
+                    _logger.LogInformation("Sample data already exists");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while initializing sample data");
+            }
         }
     }
 }

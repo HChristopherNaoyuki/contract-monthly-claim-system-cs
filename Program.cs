@@ -8,10 +8,6 @@ using Microsoft.AspNetCore.Http;
 using System.IO;
 using System;
 using System.Threading.Tasks;
-using System.Collections.Generic;
-using System.Text.Json;
-using System.Linq;
-using contract_monthly_claim_system_cs.Models.DataModels;
 using contract_monthly_claim_system_cs.Services;
 
 namespace contract_monthly_claim_system_cs
@@ -37,7 +33,7 @@ namespace contract_monthly_claim_system_cs
                 var app = builder.Build();
 
                 ConfigureMiddlewarePipeline(app);
-                InitializeTextFileStorage();
+                InitializeApplication(app);
                 StartApplication(app);
             }
             catch (Exception ex)
@@ -178,8 +174,6 @@ namespace contract_monthly_claim_system_cs
                 app.UseHsts();
             }
 
-            app.UseResponseCompression();
-
             app.UseStaticFiles(new StaticFileOptions
             {
                 OnPrepareResponse = ctx =>
@@ -191,7 +185,6 @@ namespace contract_monthly_claim_system_cs
 
             app.UseRouting();
             app.UseSession();
-            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
@@ -209,43 +202,26 @@ namespace contract_monthly_claim_system_cs
         }
 
         /// <summary>
-        /// Initializes text file storage system
+        /// Initializes the application data and services
         /// </summary>
-        private static void InitializeTextFileStorage()
+        private static void InitializeApplication(WebApplication app)
         {
-            try
+            using (var scope = app.Services.CreateScope())
             {
-                var dataDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Data");
-                if (!Directory.Exists(dataDirectory))
+                var services = scope.ServiceProvider;
+                var logger = services.GetRequiredService<ILogger<Program>>();
+                var dataService = services.GetRequiredService<TextFileDataService>();
+
+                try
                 {
-                    Directory.CreateDirectory(dataDirectory);
-                    Console.WriteLine("Created Data directory for text file storage");
+                    logger.LogInformation("Initializing text file storage...");
+                    dataService.InitializeSampleData();
+                    logger.LogInformation("Text file storage initialized successfully");
                 }
-
-                var dataFiles = new[]
+                catch (Exception ex)
                 {
-                    "users.txt",
-                    "claims.txt",
-                    "documents.txt",
-                    "approvals.txt",
-                    "lecturers.txt"
-                };
-
-                foreach (var file in dataFiles)
-                {
-                    var filePath = Path.Combine(dataDirectory, file);
-                    if (!File.Exists(filePath))
-                    {
-                        File.WriteAllText(filePath, "[]");
-                        Console.WriteLine($"Created {file} data file");
-                    }
+                    logger.LogError(ex, "An error occurred while initializing text file storage");
                 }
-
-                Console.WriteLine("Text file storage initialized successfully");
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error initializing text file storage: {ex.Message}");
             }
         }
 
@@ -259,7 +235,6 @@ namespace contract_monthly_claim_system_cs
             try
             {
                 EnsureWwwRootDirectory();
-                InitializeSampleData(app);
                 LogStartupInformation(app, logger);
                 DisplayStartupMessage(app);
                 app.Run();
@@ -291,112 +266,6 @@ namespace contract_monthly_claim_system_cs
                 {
                     Directory.CreateDirectory(subdirPath);
                     Console.WriteLine($"Created wwwroot/{subdir} directory");
-                }
-            }
-        }
-
-        /// <summary>
-        /// Initializes sample data for the application
-        /// </summary>
-        private static void InitializeSampleData(WebApplication app)
-        {
-            using (var scope = app.Services.CreateScope())
-            {
-                var services = scope.ServiceProvider;
-                var logger = services.GetRequiredService<ILogger<Program>>();
-                var dataService = services.GetRequiredService<TextFileDataService>();
-
-                try
-                {
-                    var existingUsers = dataService.GetAllUsers();
-                    if (!existingUsers.Any())
-                    {
-                        logger.LogInformation("Creating sample data...");
-
-                        var sampleUsers = new List<User>
-                        {
-                            new User
-                            {
-                                UserId = 1,
-                                Name = "System",
-                                Surname = "Administrator",
-                                Username = "admin",
-                                Password = "admin123",
-                                Role = UserRole.AcademicManager,
-                                Email = "admin@cmcs.com",
-                                IsActive = true,
-                                CreatedDate = DateTime.UtcNow
-                            },
-                            new User
-                            {
-                                UserId = 2,
-                                Name = "John",
-                                Surname = "Smith",
-                                Username = "lecturer",
-                                Password = "lecturer123",
-                                Role = UserRole.Lecturer,
-                                Email = "john.smith@university.com",
-                                IsActive = true,
-                                CreatedDate = DateTime.UtcNow
-                            },
-                            new User
-                            {
-                                UserId = 3,
-                                Name = "Sarah",
-                                Surname = "Johnson",
-                                Username = "coordinator",
-                                Password = "coordinator123",
-                                Role = UserRole.ProgrammeCoordinator,
-                                Email = "sarah.johnson@university.com",
-                                IsActive = true,
-                                CreatedDate = DateTime.UtcNow
-                            }
-                        };
-
-                        foreach (var user in sampleUsers)
-                        {
-                            dataService.SaveUser(user);
-                        }
-
-                        var lecturer = new Lecturer
-                        {
-                            LecturerId = 2,
-                            EmployeeNumber = "EMP001",
-                            Department = "Computer Science",
-                            HourlyRate = 150.00m,
-                            ContractStartDate = DateTime.Now.AddYears(-1),
-                            ContractEndDate = DateTime.Now.AddYears(1)
-                        };
-
-                        dataService.SaveLecturer(lecturer);
-
-                        var sampleClaim = new Claim
-                        {
-                            ClaimId = 1,
-                            LecturerId = 2,
-                            MonthYear = DateTime.Now.ToString("yyyy-MM"),
-                            HoursWorked = 40,
-                            HourlyRate = 150.00m,
-                            Amount = 6000.00m,
-                            Status = ClaimStatus.Submitted,
-                            SubmissionComments = "Sample claim for testing purposes",
-                            CreatedDate = DateTime.Now,
-                            ModifiedDate = DateTime.Now
-                        };
-
-                        dataService.SaveClaim(sampleClaim);
-
-                        logger.LogInformation("Sample data created successfully");
-                    }
-                    else
-                    {
-                        logger.LogInformation("Sample data already exists");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "An error occurred while initializing sample data");
-                    logger.LogWarning("Application will run with existing data only");
                 }
             }
         }
