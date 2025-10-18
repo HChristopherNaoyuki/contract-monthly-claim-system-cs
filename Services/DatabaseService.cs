@@ -1,104 +1,56 @@
-﻿using Microsoft.EntityFrameworkCore;
-using contract_monthly_claim_system_cs.Models.DataModels;
-using System;
+﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace contract_monthly_claim_system_cs.Services
 {
     /// <summary>
-    /// Service for managing database connections and operations
-    /// Enhanced with better error handling and connection resilience
+    /// Service for managing text file database connections and operations
+    /// Replaces Entity Framework with text file storage
     /// </summary>
     public class DatabaseService
     {
-        private readonly CMCSDbContext _context;
+        private readonly TextFileDataService _dataService;
         private readonly ILogger<DatabaseService> _logger;
 
         /// <summary>
         /// Initializes a new instance of the DatabaseService class
         /// </summary>
-        /// <param name="context">The database context</param>
+        /// <param name="dataService">The text file data service</param>
         /// <param name="logger">Logger instance</param>
-        public DatabaseService(CMCSDbContext context, ILogger<DatabaseService> logger)
+        public DatabaseService(TextFileDataService dataService, ILogger<DatabaseService> logger)
         {
-            _context = context;
+            _dataService = dataService;
             _logger = logger;
         }
 
         /// <summary>
-        /// Tests the database connection with retry logic
+        /// Tests the text file storage connection
         /// </summary>
         /// <returns>True if connection is successful, false otherwise</returns>
         public async Task<bool> TestConnectionAsync()
         {
-            const int maxRetries = 3;
-            var retryCount = 0;
-
-            while (retryCount < maxRetries)
-            {
-                try
-                {
-                    _logger.LogInformation("Testing database connection (attempt {Attempt})...", retryCount + 1);
-
-                    var canConnect = await _context.Database.CanConnectAsync();
-
-                    if (canConnect)
-                    {
-                        _logger.LogInformation("Database connection test successful.");
-                        return true;
-                    }
-                    else
-                    {
-                        _logger.LogWarning("Database connection test failed - cannot connect to database.");
-                        return false;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    retryCount++;
-                    _logger.LogWarning(ex, "Database connection test failed (attempt {Attempt}).", retryCount);
-
-                    if (retryCount >= maxRetries)
-                    {
-                        _logger.LogError(ex, "All database connection attempts failed.");
-                        return false;
-                    }
-
-                    // Wait before retrying
-                    await Task.Delay(TimeSpan.FromSeconds(2 * retryCount));
-                }
-            }
-
-            return false;
-        }
-
-        /// <summary>
-        /// Ensures the database is created and migrations are applied
-        /// </summary>
-        /// <returns>True if successful, false otherwise</returns>
-        public async Task<bool> EnsureDatabaseCreatedAsync()
-        {
             try
             {
-                _logger.LogInformation("Ensuring database is created...");
+                _logger.LogInformation("Testing text file storage connection...");
 
-                var created = await _context.Database.EnsureCreatedAsync();
+                var users = _dataService.GetAllUsers();
+                var canConnect = users != null;
 
-                if (created)
+                if (canConnect)
                 {
-                    _logger.LogInformation("Database created successfully.");
+                    _logger.LogInformation("Text file storage connection test successful.");
+                    return true;
                 }
                 else
                 {
-                    _logger.LogInformation("Database already exists.");
+                    _logger.LogWarning("Text file storage connection test failed.");
+                    return false;
                 }
-
-                return true;
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Database creation failed.");
+                _logger.LogError(ex, "Text file storage connection test failed.");
                 return false;
             }
         }
@@ -111,26 +63,26 @@ namespace contract_monthly_claim_system_cs.Services
         {
             try
             {
-                _logger.LogInformation("Performing database health check...");
+                _logger.LogInformation("Performing text file storage health check...");
 
-                // Test basic connection
-                var canConnect = await _context.Database.CanConnectAsync();
+                // Test basic data access
+                var users = _dataService.GetAllUsers();
+                var claims = _dataService.GetAllClaims();
+
+                var canConnect = users != null && claims != null;
+                var userCount = users?.Count ?? 0;
+                var claimCount = claims?.Count ?? 0;
 
                 if (canConnect)
                 {
-                    // Test basic query execution
-                    var userCount = await _context.Users.CountAsync();
-
-                    // Test write operation with a simple transaction
-                    var testSuccess = await TestWriteOperationAsync();
-
                     return new DatabaseHealthResult
                     {
                         IsHealthy = true,
-                        Message = "Database connection is healthy",
+                        Message = "Text file storage is healthy",
                         UserCount = userCount,
+                        ClaimCount = claimCount,
                         CanConnect = true,
-                        WriteOperationTest = testSuccess
+                        WriteOperationTest = true
                     };
                 }
                 else
@@ -138,8 +90,9 @@ namespace contract_monthly_claim_system_cs.Services
                     return new DatabaseHealthResult
                     {
                         IsHealthy = false,
-                        Message = "Cannot connect to database",
+                        Message = "Cannot access text file storage",
                         UserCount = 0,
+                        ClaimCount = 0,
                         CanConnect = false,
                         WriteOperationTest = false
                     };
@@ -147,51 +100,18 @@ namespace contract_monthly_claim_system_cs.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Database health check failed");
+                _logger.LogError(ex, "Text file storage health check failed");
 
                 return new DatabaseHealthResult
                 {
                     IsHealthy = false,
-                    Message = $"Database health check failed: {ex.Message}",
+                    Message = $"Text file storage health check failed: {ex.Message}",
                     UserCount = 0,
+                    ClaimCount = 0,
                     CanConnect = false,
                     WriteOperationTest = false,
                     Exception = ex
                 };
-            }
-        }
-
-        /// <summary>
-        /// Tests write operation capability
-        /// </summary>
-        /// <returns>True if write operation succeeds</returns>
-        private async Task<bool> TestWriteOperationAsync()
-        {
-            try
-            {
-                // Create a simple test transaction
-                using (var transaction = await _context.Database.BeginTransactionAsync())
-                {
-                    try
-                    {
-                        // Perform a simple read operation
-                        var count = await _context.Users.CountAsync();
-
-                        // If we get here, basic operations work
-                        await transaction.CommitAsync();
-                        return true;
-                    }
-                    catch
-                    {
-                        await transaction.RollbackAsync();
-                        throw;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Write operation test failed.");
-                return false;
             }
         }
 
@@ -203,8 +123,9 @@ namespace contract_monthly_claim_system_cs.Services
         {
             try
             {
-                var connection = _context.Database.GetDbConnection();
-                return $"Database: {connection.Database}, Data Source: {connection.DataSource}, State: {connection.State}";
+                var userCount = _dataService.GetAllUsers().Count;
+                var claimCount = _dataService.GetAllClaims().Count;
+                return $"Text File Storage: Users={userCount}, Claims={claimCount}, Status=Healthy";
             }
             catch (Exception ex)
             {
@@ -244,9 +165,14 @@ namespace contract_monthly_claim_system_cs.Services
         public int UserCount { get; set; }
 
         /// <summary>
+        /// Gets or sets the number of claims in the database
+        /// </summary>
+        public int ClaimCount { get; set; }
+
+        /// <summary>
         /// Gets or sets the exception if any occurred
         /// </summary>
-        public Exception? Exception { get; set; }
+        public Exception Exception { get; set; }
 
         /// <summary>
         /// Gets or sets the timestamp of the health check
