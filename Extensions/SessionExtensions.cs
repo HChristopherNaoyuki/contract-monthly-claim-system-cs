@@ -72,13 +72,13 @@ namespace contract_monthly_claim_system_cs.Extensions
         /// </summary>
         /// <param name="session">The session instance</param>
         /// <param name="key">The session key</param>
-        /// <returns>The string value or null</returns>
+        /// <returns>The string value or empty string if not found</returns>
         public static string GetSessionString(this ISession session, string key)
         {
             var data = session.Get(key);
             if (data == null || data.Length == 0)
             {
-                return null;
+                return string.Empty;
             }
             return System.Text.Encoding.UTF8.GetString(data);
         }
@@ -91,7 +91,7 @@ namespace contract_monthly_claim_system_cs.Extensions
         /// <param name="value">The string value to store</param>
         public static void SetSessionString(this ISession session, string key, string value)
         {
-            if (value == null)
+            if (string.IsNullOrEmpty(value))
             {
                 session.Remove(key);
             }
