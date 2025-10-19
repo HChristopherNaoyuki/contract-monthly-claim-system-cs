@@ -15,88 +15,76 @@
 
 ## Overview
 
-The **Contract Monthly Claim System (CMCS)** is a comprehensive 
-web-based application designed to streamline the monthly claim 
-submission and approval process for independent contractor 
-lecturers. This system provides an intuitive platform for 
-lecturers to submit claims, for programme coordinators to review 
-them, and for academic managers to provide final approvals.
+The **Contract Monthly Claim System (CMCS)** is a comprehensive web-based application designed 
+to streamline the monthly claim submission and approval process for independent contractor 
+lecturers. This system addresses complex administrative challenges through an intuitive interface 
+that serves three distinct user roles: lecturers, program coordinators, and academic managers.
 
-**Key Objectives:**
-- Simplify the claim submission process for lecturers
-- Provide transparent tracking of claim status
-- Enable efficient review and approval workflows
-- Maintain secure data storage without database dependencies
+**GitHub Repository:** [https://github.com/HChristopherNaoyuki/contract-monthly-claim-system-cs.git](https://github.com/HChristopherNaoyuki/contract-monthly-claim-system-cs.git)
 
 ## System Architecture
 
-### Core Components
+The prototype is built on **ASP.NET Core MVC framework** using **C# 7.0**, following industry-standard 
+development practices. The architecture employs the **Model-View-Controller pattern**, ensuring clear 
+separation of concerns and maintainable code structure.
 
-**Frontend Layer:**
-- ASP.NET Core MVC with Razor Views
-- Responsive CSS design with modern UI components
-- Client-side validation with JavaScript
-- Session-based authentication
+### Key Technical Components:
+- **Session-based authentication** with role-based access control
+- **Text file storage system** replacing traditional database dependencies
+- **Client-side validation** with jQuery and data annotations
+- **In-memory data storage** for the prototype phase
+- **Modern CSS features** including Grid and Flexbox for responsive design
 
-**Business Logic Layer:**
-- Controllers for authentication, claims, and system management
-- ViewModels for data validation and presentation
-- Service layer for business operations
-- Text file-based data persistence
-
-**Data Storage Layer:**
-- JSON-based text file storage system
-- Automatic file creation and management
-- Data serialization/deserialization
-- File-based transaction management
-
-### Architecture Patterns
-- **MVC Pattern**: Separation of concerns between Models, Views, and Controllers
-- **Repository Pattern**: Abstracted data access through service classes
-- **Session Management**: Secure user authentication and state management
-- **Extension Methods**: Enhanced functionality for built-in types
+### Data Model:
+The system uses a comprehensive UML class diagram featuring key entities:
+- **User Class**: Manages authentication with attributes for user identification and role assignment
+- **Lecturer Class**: Extends user functionality with specific attributes for contract details
+- **Claim Class**: Core entity handling claims submissions with properties for hours worked and status tracking
+- **Document Class**: Manages supporting file uploads and associations with specific claims
+- **Approval Class**: Tracks review processes with timestamps, decisions, and approver comments
 
 ## Project Structure
 
 ```
 contract-monthly-claim-system-cs/
 ├── Controllers/
-│   ├── AuthController.cs          # Authentication and user management
-│   ├── ClaimsController.cs        # Claim submission and approval
-│   ├── HomeController.cs          # Public pages and navigation
-│   ├── ServerController.cs        # System diagnostics
-│   └── TestController.cs          # Database connectivity tests
+│   ├── AuthController.cs          # Authentication & user management
+│   ├── ClaimsController.cs        # Claim submission & approval
+│   ├── HomeController.cs          # Public pages & navigation
+│   ├── ServerController.cs        # Server diagnostics
+│   └── TestController.cs          # Database testing
 ├── Models/
-│   ├── DataModels/                # Entity models
-│   │   ├── User.cs                # System users
-│   │   ├── Lecturer.cs            # Lecturer-specific data
-│   │   ├── Claim.cs               # Claim submissions
-│   │   ├── Document.cs            # Supporting documents
-│   │   └── Approval.cs            # Approval records
-│   ├── ViewModels/                # View-specific models
-│   │   ├── LoginViewModel.cs      # Authentication data
-│   │   ├── RegisterViewModel.cs   # User registration
-│   │   └── ClaimViewModels/       # Claim-related views
-├── Views/                         # Razor view templates
-├── Extensions/
-│   └── SessionExtensions.cs       # Session management utilities
+│   ├── DataModels/                # Core business entities
+│   │   ├── User.cs
+│   │   ├── Lecturer.cs
+│   │   ├── Claim.cs
+│   │   ├── Document.cs
+│   │   └── Approval.cs
+│   ├── ViewModels/                # UI-specific models
+│   │   ├── LoginViewModel.cs
+│   │   └── RegisterViewModel.cs
+│   └── ClaimViewModels/           # Claim-related view models
 ├── Services/
-│   └── TextFileDataService.cs     # Text file data operations
-├── Data/                          # Text file storage directory
-├── wwwroot/                       # Static assets
-└── Program.cs                     # Application entry point
+│   └── TextFileDataService.cs     # Text file database implementation
+├── Views/                         # Razor views
+├── wwwroot/
+│   ├── css/site.css              # Apple-inspired design system
+│   └── js/site.js                # Client-side functionality
+├── Data/                         # Text file storage directory
+├── Documentation/                # Project documentation
+└── Program.cs                    # Application entry point
 ```
 
 ## Installation Guide
 
 ### Prerequisites
-- **.NET 8.0 SDK** or later
-- **Visual Studio 2022** or **Visual Studio Code**
-- **Web browser** (Chrome, Firefox, Edge, or Safari)
+- .NET 8.0 SDK or later
+- Visual Studio 2022 or VS Code
+- Web browser (Chrome, Firefox, Safari, or Edge)
 
-### Step-by-Step Installation
+### Setup Instructions
 
-1. **Clone or Download the Project**
+1. **Clone the Repository**
    ```bash
    git clone https://github.com/HChristopherNaoyuki/contract-monthly-claim-system-cs.git
    cd contract-monthly-claim-system-cs
@@ -107,7 +95,7 @@ contract-monthly-claim-system-cs/
    dotnet restore
    ```
 
-3. **Build the Solution**
+3. **Build the Application**
    ```bash
    dotnet build
    ```
@@ -116,270 +104,172 @@ contract-monthly-claim-system-cs/
    ```bash
    dotnet run
    ```
-   Or use Visual Studio:
-   - Open the solution file (.sln)
-   - Press F5 or click "Start Debugging"
 
 5. **Access the Application**
    - Open your web browser
    - Navigate to: `http://localhost:5000`
+   - Use default credentials
 
-### Default Login Credentials
-- **Username**: `admin`
-- **Password**: `admin123`
-- **Role**: Academic Manager
+### Default User Accounts
+- **Academic Manager**: `admin` / `admin123`
+- **Lecturer**: `lecturer` / `lecturer123`
+- **Program Coordinator**: `coordinator` / `coordinator123`
 
 ## Usage Manual
 
 ### For Lecturers
 
-**1. Login/Registration**
-- Navigate to the login page
-- Register as a new lecturer or use existing credentials
-- Complete the registration form with personal details
+1. **Login & Navigation**
+   - Access the system at `http://localhost:5000`
+   - Login with lecturer credentials
+   - Navigate to "Submit Claim" from the main menu
 
-**2. Submit a Claim**
-- Click "Submit Claim" in navigation
-- Fill in hours worked and hourly rate
-- Add optional comments
-- Upload supporting documents (PDF, DOC, images)
-- Submit the claim for review
+2. **Submit a Claim**
+   - Enter hours worked and hourly rate
+   - Add optional comments (max 500 characters)
+   - Upload supporting documents (PDF, DOC, DOCX, JPG, PNG)
+   - Review calculated amount and submit
 
-**3. Track Claim Status**
-- Use "Track Claims" to view submission history
-- Monitor approval progress
-- View coordinator comments
+3. **Track Claim Status**
+   - Use "Track Claims" to view submission history
+   - Monitor approval progress in real-time
+   - View approval comments and status updates
 
-### For Programme Coordinators
+### For Program Coordinators & Academic Managers
 
-**1. Review Claims**
-- Access "Review Claims" page
-- View all pending submissions
-- Examine claim details and documents
+1. **Review Claims**
+   - Login with coordinator or manager credentials
+   - Navigate to "Review Claims"
+   - View all pending claims requiring approval
 
-**2. Approve/Reject Claims**
-- Click "Approve" or "Reject" for each claim
-- Provide comments for decisions
-- Track decision history
+2. **Approve/Reject Claims**
+   - Review claim details and supporting documents
+   - Click "Approve" or "Reject" with optional comments
+   - Monitor approval workflow progress
 
-### For Academic Managers
-
-**1. System Oversight**
-- Access all system features
-- Monitor overall claim workflow
-- Manage user accounts (if implemented)
+### File Upload Guidelines
+- **Supported Formats**: PDF, DOC, DOCX, JPG, PNG
+- **Maximum File Size**: 5MB per file
+- **Multiple Files**: Upload multiple documents per claim
+- **Security**: Files are stored securely with unique names
 
 ## Features
 
-### Core Functionality
-- ✅ **User Authentication** - Secure login/registration system
-- ✅ **Role-Based Access** - Different interfaces for lecturers, coordinators, and managers
-- ✅ **Claim Submission** - Easy-to-use claim form with automatic calculations
-- ✅ **Document Upload** - Support for multiple file types with validation
-- ✅ **Approval Workflow** - Streamlined review and approval process
-- ✅ **Status Tracking** - Real-time claim status monitoring
-- ✅ **Session Management** - Secure user session handling
+### ✅ Core Functionality
+- **Role-based Authentication**: Secure login for lecturers, coordinators, and managers
+- **Claim Submission**: Intuitive form with real-time amount calculation
+- **Document Upload**: Support for multiple file types with validation
+- **Approval Workflow**: Streamlined review and approval process
+- **Status Tracking**: Real-time claim status monitoring
+- **Text File Storage**: Database-free data persistence
 
-### Technical Features
-- ✅ **Text File Database** - No external database dependencies
-- ✅ **Responsive Design** - Works on desktop and mobile devices
-- ✅ **Form Validation** - Client-side and server-side validation
-- ✅ **Error Handling** - Comprehensive error management
-- ✅ **Logging** - Application activity tracking
-- ✅ **Unit Testing** - xUnit test coverage
+### ✅ User Experience
+- **Apple-inspired Design**: Minimalist, clean interface
+- **Responsive Layout**: Optimized for desktop and mobile devices
+- **Real-time Validation**: Immediate feedback on form inputs
+- **Interactive Elements**: Smooth animations and transitions
+- **Accessibility**: Keyboard navigation and screen reader support
 
-### Security Features
-- ✅ **Session Security** - Protected user sessions
-- ✅ **Input Validation** - Sanitized user inputs
-- ✅ **File Type Validation** - Secure document uploads
-- ✅ **Anti-Forgery Tokens** - CSRF protection
+### ✅ Technical Features
+- **Session Management**: Secure user state persistence
+- **Error Handling**: Comprehensive validation and error messages
+- **File Management**: Secure document storage and retrieval
+- **Data Integrity**: JSON-based serialization with validation
+- **Unit Testing**: xUnit test coverage for critical components
 
 ## Technology Stack
 
-### Backend Technologies
-- **Framework**: ASP.NET Core 8.0 MVC
+### Backend
+- **Framework**: ASP.NET Core MVC 8.0
 - **Language**: C# 7.0
-- **Session Management**: Distributed Memory Cache
-- **Data Storage**: JSON Text Files
-- **Testing**: xUnit 2.5.3
+- **Storage**: Text files with JSON serialization
+- **Session**: Distributed memory cache
+- **Validation**: Data annotations and model state
 
-### Frontend Technologies
-- **UI Framework**: ASP.NET Core Razor Views
-- **Styling**: Custom CSS with CSS Variables
-- **JavaScript**: Vanilla ES6+
-- **Icons**: SVG Icons
+### Frontend
+- **UI Framework**: Razor Pages with Bootstrap-inspired CSS
+- **Styling**: Custom CSS with Apple design principles
+- **JavaScript**: Vanilla JS for interactive features
+- **Icons**: SVG icons for crisp rendering
 
 ### Development Tools
-- **IDE**: Visual Studio 2022 / Visual Studio Code
-- **Version Control**: Git
+- **Testing**: xUnit 2.5.3
+- **Logging**: Microsoft.Extensions.Logging
 - **Package Management**: NuGet
-- **Build Tool**: .NET CLI
+- **IDE**: Visual Studio 2022/VS Code compatible
 
 ## Development Notes
 
 ### Text File Database Implementation
-
-The system uses JSON-based text files for data persistence:
-
-```json
-// Example: Data/users.txt
-[
-  {
-    "UserId": 1,
-    "Name": "System",
-    "Surname": "Administrator",
-    "Username": "admin",
-    "Password": "admin123",
-    "Role": 2,
-    "Email": "admin@cmcs.com",
-    "IsActive": true,
-    "CreatedDate": "2024-01-01T00:00:00"
-  }
-]
-```
-
-### Session Management
-
-Custom extension methods provide strongly-typed session access:
+The system uses a custom `TextFileDataService` that replaces traditional database dependencies:
 
 ```csharp
-// Setting session values
-HttpContext.Session.SetInt32("UserId", user.UserId);
-HttpContext.Session.SetString("Username", user.Username);
-
-// Retrieving session values
-var userId = HttpContext.Session.GetInt32("UserId");
-var username = HttpContext.Session.GetString("Username");
+// Example data operations
+var users = _dataService.GetAllUsers();
+var claim = _dataService.GetClaimById(claimId);
+_dataService.SaveUser(newUser);
 ```
 
-### Error Handling
+### Key Design Decisions
+1. **No Database Dependencies**: Uses text files for complete portability
+2. **JSON Serialization**: Human-readable data storage format
+3. **Automatic File Creation**: Data files created on first run
+4. **Sample Data**: Pre-populated with demo users and claims
 
-Comprehensive error handling throughout the application:
+### Session Management
+Custom session extensions provide strongly-typed session storage:
 
-- Global exception middleware
-- Development vs production error pages
-- User-friendly error messages
-- Detailed logging
+```csharp
+// Session usage examples
+HttpContext.Session.SetSessionInt("UserId", user.UserId);
+var userId = HttpContext.Session.GetSessionInt("UserId");
+```
 
 ## Documentation
 
-### API Documentation
+### Project Documentation
+- **UML Diagrams**: Complete class diagrams in Mermaid format
+- **API Documentation**: Inline XML comments throughout codebase
+- **User Guides**: Step-by-step usage instructions
+- **Technical Specifications**: Architecture and implementation details
 
-While this is primarily an MVC application, the controllers follow RESTful principles:
-
-**Authentication Endpoints:**
-- `GET /Auth` - Login/registration page
-- `POST /Auth/Login` - User authentication
-- `POST /Auth/Register` - User registration
-- `POST /Auth/Logout` - Session termination
-
-**Claims Endpoints:**
-- `GET /Claims/Submit` - Claim submission form
-- `POST /Claims/Submit` - Submit new claim
-- `GET /Claims/Approve` - Approval dashboard
-- `POST /Claims/ApproveClaim` - Process claim approval
-- `GET /Claims/Track` - Claim status tracking
-
-### Data Models
-
-**User Model:**
-```csharp
-public class User
-{
-    public int UserId { get; set; }
-    public string Name { get; set; }
-    public string Surname { get; set; }
-    public string Username { get; set; }
-    public string Password { get; set; }
-    public UserRole Role { get; set; }
-    public string Email { get; set; }
-    public bool IsActive { get; set; }
-    public DateTime CreatedDate { get; set; }
-}
-```
-
-**Claim Model:**
-```csharp
-public class Claim
-{
-    public int ClaimId { get; set; }
-    public int LecturerId { get; set; }
-    public DateTime ClaimDate { get; set; }
-    public string MonthYear { get; set; }
-    public decimal HoursWorked { get; set; }
-    public decimal HourlyRate { get; set; }
-    public decimal Amount { get; set; }
-    public ClaimStatus Status { get; set; }
-    public string SubmissionComments { get; set; }
-}
-```
-
-### Testing
-
-The project includes comprehensive unit tests:
-
-```csharp
-// Example test for authentication
-public class AuthControllerTests
-{
-    [Fact]
-    public void Login_ValidCredentials_RedirectsToHome()
-    {
-        // Test implementation
-    }
-}
-```
-
-Run tests using:
-```bash
-dotnet test
-```
+### Development Documentation
+- **Code Standards**: Allman style formatting with comprehensive comments
+- **Testing Strategy**: Unit and integration test coverage
+- **Deployment Guide**: Setup and configuration instructions
 
 ## Notes
 
+### Part 1 vs Part 2 Implementation
+- **Part 1**: Focused on prototype design, UML diagrams, and non-functional UI
+- **Part 2**: Enhanced with full functionality, text file storage, and document upload
+
+### Key Improvements in Part 2
+1. **Functional Document Upload**: Complete file handling system
+2. **Text File Database**: Eliminated database dependencies
+3. **Enhanced UI/UX**: Apple-inspired design implementation
+4. **Comprehensive Testing**: xUnit test coverage
+5. **Error Handling**: Robust validation and user feedback
+
 ### Performance Considerations
-- Text file storage is suitable for small to medium datasets
-- For larger deployments, consider migrating to a proper database
-- Session data is stored in memory - consider distributed cache for scaling
-
-### Security Considerations
-- Passwords are stored in plain text (for demonstration only)
-- In production, implement proper password hashing
-- Consider HTTPS enforcement in production
-- Implement additional security headers
-
-### Scalability
-- Current architecture supports small to medium organizations
-- For larger deployments:
-  - Implement proper database (SQL Server, PostgreSQL)
-  - Add caching layers
-  - Consider microservices architecture
-  - Implement API rate limiting
+- Text file storage suitable for small to medium datasets
+- File uploads stored in `wwwroot/uploads` directory
+- Session-based authentication with 30-minute timeout
+- Client-side validation reduces server load
 
 ## Disclaimer
 
-### Educational Purpose
-This application is developed as part of an academic assignment 
-and is intended for educational purposes. It demonstrates core 
-concepts of web application development using ASP.NET Core MVC.
+This application is developed as part of an academic project for **PROG6212: Programming 2B**. It represents a prototype system designed to demonstrate web application development skills using ASP.NET Core MVC and modern software engineering practices.
 
-### Production Readiness
-⚠️ **Not Production Ready** - This system contains several limitations for production use:
+### Important Notes:
+- **Educational Purpose**: This system is for demonstration and learning purposes
+- **Data Security**: While security measures are implemented, production deployment would require additional security hardening
+- **Scalability**: Text file storage is suitable for prototyping but may require database migration for production use
+- **Browser Compatibility**: Tested on modern browsers but may have limitations on older versions
 
-- **Security**: Passwords stored in plain text
-- **Data Persistence**: Text files not suitable for high-volume applications
-- **Error Handling**: Basic error management
-- **Performance**: No caching or optimization for high load
-
-### License and Usage
-This project is provided as-is for educational purposes. 
-Users are encouraged to review and enhance security 
-measures before considering any production deployment.
-
-### Data Privacy
-The system handles user data and claims information. 
-In a production environment, ensure compliance with 
-data protection regulations (GDPR, POPIA, etc.) and 
-implement proper data encryption and privacy measures.
+### License
+This project is developed for academic purposes. 
+All code and documentation are provided as-is 
+for educational reference.
 
 ---
