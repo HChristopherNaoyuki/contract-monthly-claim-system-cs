@@ -220,25 +220,117 @@ namespace contract_monthly_claim_system_cs
         /// </summary>
         private static void InitializeApplication(WebApplication app)
         {
-            using (var scope = app.Services.CreateScope())
+            using var scope = app.Services.CreateScope();
+            var services = scope.ServiceProvider;
+            var logger = services.GetRequiredService<ILogger<Program>>();
+            var dataService = services.GetRequiredService<TextFileDataService>();
+
+            try
             {
-                var services = scope.ServiceProvider;
-                var logger = services.GetRequiredService<ILogger<Program>>();
-                var dataService = services.GetRequiredService<TextFileDataService>();
+                logger.LogInformation("Initializing text file storage...");
 
-                try
+                // Initialize sample data if no data exists
+                InitializeSampleData(dataService);
+
+                logger.LogInformation("Text file storage initialized successfully");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex, "An error occurred while initializing text file storage");
+            }
+        }
+
+        /// <summary>
+        /// Initializes sample data for demonstration purposes
+        /// </summary>
+        private static void InitializeSampleData(TextFileDataService dataService)
+        {
+            try
+            {
+                // Check if users already exist
+                var existingUsers = dataService.GetAllUsers();
+                if (existingUsers.Count == 0)
                 {
-                    logger.LogInformation("Initializing text file storage...");
+                    // Create sample users
+                    var sampleUsers = new[]
+                    {
+                        new Models.DataModels.User
+                        {
+                            UserId = 1,
+                            Name = "System",
+                            Surname = "Administrator",
+                            Username = "admin",
+                            Password = "admin123",
+                            Role = Models.DataModels.UserRole.AcademicManager,
+                            Email = "admin@cmcs.com",
+                            IsActive = true,
+                            CreatedDate = DateTime.UtcNow
+                        },
+                        new Models.DataModels.User
+                        {
+                            UserId = 2,
+                            Name = "John",
+                            Surname = "Smith",
+                            Username = "lecturer",
+                            Password = "lecturer123",
+                            Role = Models.DataModels.UserRole.Lecturer,
+                            Email = "john.smith@university.com",
+                            IsActive = true,
+                            CreatedDate = DateTime.UtcNow
+                        },
+                        new Models.DataModels.User
+                        {
+                            UserId = 3,
+                            Name = "Sarah",
+                            Surname = "Johnson",
+                            Username = "coordinator",
+                            Password = "coordinator123",
+                            Role = Models.DataModels.UserRole.ProgrammeCoordinator,
+                            Email = "sarah.johnson@university.com",
+                            IsActive = true,
+                            CreatedDate = DateTime.UtcNow
+                        }
+                    };
 
-                    // Initialize sample data if no data exists
-                    dataService.InitializeSampleData();
+                    foreach (var user in sampleUsers)
+                    {
+                        dataService.SaveUser(user);
+                    }
 
-                    logger.LogInformation("Text file storage initialized successfully");
+                    // Create sample lecturer
+                    var lecturer = new Models.DataModels.Lecturer
+                    {
+                        LecturerId = 2,
+                        EmployeeNumber = "EMP001",
+                        Department = "Computer Science",
+                        HourlyRate = 150.00m,
+                        ContractStartDate = DateTime.Now.AddYears(-1),
+                        ContractEndDate = DateTime.Now.AddYears(1)
+                    };
+
+                    dataService.SaveLecturer(lecturer);
+
+                    // Create sample claim
+                    var sampleClaim = new Models.DataModels.Claim
+                    {
+                        ClaimId = 1,
+                        LecturerId = 2,
+                        MonthYear = DateTime.Now.ToString("yyyy-MM"),
+                        HoursWorked = 40,
+                        HourlyRate = 150.00m,
+                        Amount = 6000.00m,
+                        Status = Models.DataModels.ClaimStatus.Submitted,
+                        SubmissionComments = "Sample claim for testing purposes",
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now
+                    };
+
+                    dataService.SaveClaim(sampleClaim);
                 }
-                catch (Exception ex)
-                {
-                    logger.LogError(ex, "An error occurred while initializing text file storage");
-                }
+            }
+            catch (Exception ex)
+            {
+                throw new InvalidOperationException("Failed to initialize sample data", ex);
             }
         }
 
