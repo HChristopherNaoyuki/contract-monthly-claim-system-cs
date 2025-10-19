@@ -68,5 +68,19 @@
     "CreatedDate": "2025-10-18T09:11:39.6395097Z",
     "LastLoginDate": null,
     "FullName": "James Maddison"
+  },
+  {
+    "UserId": 6,
+    "Name": "Nicky",
+    "Surname": "Kim",
+    "Username": "NickyKim",
+    "Password": "@Password1234",
+    "Role": 1,
+    "Email": "NickyKim@cmcs.com",
+    "PhoneNumber": "",
+    "IsActive": true,
+    "CreatedDate": "2025-10-19T09:49:10.6769085Z",
+    "LastLoginDate": null,
+    "FullName": "Nicky Kim"
   }
 ]

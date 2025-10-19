@@ -12,6 +12,8 @@
     <div class="card">
         <div class="card-content">
             <form asp-action="Submit" method="post" enctype="multipart/form-data" id="claimForm">
+                @Html.AntiForgeryToken()
+
                 <div class="form-group">
                     <label asp-for="HoursWorked" class="form-label">Hours Worked</label>
                     <input asp-for="HoursWorked" class="form-control" placeholder="Enter hours worked this month" required>
@@ -42,7 +44,7 @@
 
                 <div class="form-group">
                     <label class="form-label">Supporting Documents</label>
-                    <div class="file-upload" id="fileUploadContainer">
+                    <div class="file-upload" id="fileUploadContainer" onclick="document.getElementById('file').click()">
                         <div class="file-upload-icon">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" stroke="currentColor" stroke-width="2" />
@@ -71,86 +73,118 @@
     </div>
 </div>
 
-<script>
-    // Calculate amount based on hours worked and hourly rate
-    document.getElementById('HoursWorked').addEventListener('input', calculateAmount);
-    document.getElementById('HourlyRate').addEventListener('input', calculateAmount);
+@section Scripts {
+    <script>
+        // Calculate amount based on hours worked and hourly rate
+        document.getElementById('HoursWorked').addEventListener('input', calculateAmount);
+        document.getElementById('HourlyRate').addEventListener('input', calculateAmount);
 
-    function calculateAmount()
-    {
-        const hours = parseFloat(document.getElementById('HoursWorked').value) || 0;
-        const rate = parseFloat(document.getElementById('HourlyRate').value) || 0;
-        document.getElementById('Amount').value = (hours * rate).toFixed(2);
-    }
-
-    // Character count for comments
-    const commentsTextarea = document.getElementById('Comments');
-    const charCount = document.getElementById('charCount');
-
-    commentsTextarea.addEventListener('input', function()
-    {
-        charCount.textContent = this.value.length;
-    });
-
-    // File upload handling
-    document.getElementById('file').addEventListener('change', function(e)
-    {
-        const container = document.getElementById('fileUploadContainer');
-        const textSpan = container.querySelector('.file-upload-text');
-        const fileList = document.getElementById('fileList');
-
-        if (this.files.length > 0)
+        function calculateAmount()
         {
-            textSpan.textContent = `${this.files.length} file(s) selected`;
-            container.style.borderColor = 'var(--system-blue)';
-            container.querySelector('.file-upload-icon').style.backgroundColor = 'rgba(0, 122, 255, 0.1)';
+            const hours = parseFloat(document.getElementById('HoursWorked').value) || 0;
+            const rate = parseFloat(document.getElementById('HourlyRate').value) || 0;
+            document.getElementById('Amount').value = (hours * rate).toFixed(2);
+        }
 
-            // Display file names
-            fileList.innerHTML = '';
-            Array.from(this.files).forEach(file =>
+        // Character count for comments
+        const commentsTextarea = document.getElementById('Comments');
+        const charCount = document.getElementById('charCount');
+
+        commentsTextarea.addEventListener('input', function()
+        {
+            charCount.textContent = this.value.length;
+        });
+
+        // File upload handling
+        document.getElementById('file').addEventListener('change', function(e)
+        {
+            const container = document.getElementById('fileUploadContainer');
+            const textSpan = container.querySelector('.file-upload-text');
+            const fileList = document.getElementById('fileList');
+
+            if (this.files.length > 0)
             {
-                const fileItem = document.createElement('div');
-                fileItem.className = 'file-item';
-                fileItem.innerHTML = `
-                    <div class="file-icon">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                            <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" stroke="currentColor"/>
-                            <polyline points="13,2 13,9 20,9" stroke="currentColor"/>
-                        </svg>
-                    </div>
-                    <div class="file-info">
-                        <div class="file-name">${file.name}</div>
-                        <div class="file-size">${formatFileSize(file.size)}</div>
-                    </div>
-                    <button type="button" class="file-remove" onclick="this.parentElement.remove()">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
-                            <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor"/>
-                            <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor"/>
-                        </svg>
-                    </button>
-                `;
-                fileList.appendChild(fileItem);
-            });
-        }
-        else
+                textSpan.textContent = `${this.files.length} file(s) selected`;
+                container.style.borderColor = 'var(--system-blue)';
+                container.querySelector('.file-upload-icon').style.backgroundColor = 'rgba(0, 122, 255, 0.1)';
+
+                // Display file names
+                fileList.innerHTML = '';
+                Array.from(this.files).forEach(file =>
+                {
+                    const fileItem = document.createElement('div');
+                    fileItem.className = 'file-item';
+                    fileItem.innerHTML = `
+                        <div class="file-icon">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z" stroke="currentColor"/>
+                                <polyline points="13,2 13,9 20,9" stroke="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">${file.name}</div>
+                            <div class="file-size">${formatFileSize(file.size)}</div>
+                        </div>
+                        <button type="button" class="file-remove" onclick="removeFile(this, '${file.name}')">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                                <line x1="18" y1="6" x2="6" y2="18" stroke="currentColor"/>
+                                <line x1="6" y1="6" x2="18" y2="18" stroke="currentColor"/>
+                            </svg>
+                        </button>
+                    `;
+                    fileList.appendChild(fileItem);
+                });
+            }
+            else
+            {
+                textSpan.textContent = 'Click to upload supporting documents';
+                container.style.borderColor = 'var(--system-gray-4)';
+                container.querySelector('.file-upload-icon').style.backgroundColor = 'var(--system-gray-6)';
+                fileList.innerHTML = '';
+            }
+        });
+
+        function formatFileSize(bytes)
         {
-            textSpan.textContent = 'Click to upload supporting documents';
-            container.style.borderColor = 'var(--system-gray-4)';
-            container.querySelector('.file-upload-icon').style.backgroundColor = 'var(--system-gray-6)';
-            fileList.innerHTML = '';
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
         }
-    });
 
-    function formatFileSize(bytes)
-    {
-        if (bytes === 0) return '0 Bytes';
-        const k = 1024;
-        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-        const i = Math.floor(Math.log(bytes) / Math.log(k));
-        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-    }
+        function removeFile(button, fileName)
+        {
+            const fileInput = document.getElementById('file');
+            const dt = new DataTransfer();
 
-    // Initialize calculation on page load
-    calculateAmount();
-    charCount.textContent = commentsTextarea.value.length;
-</script>
+            // Remove from file list display
+            button.parentElement.remove();
+
+            // Remove from file input
+            for (let i = 0; i < fileInput.files.length; i++)
+            {
+                if (fileInput.files[i].name !== fileName)
+                {
+                    dt.items.add(fileInput.files[i]);
+                }
+            }
+
+            fileInput.files = dt.files;
+
+            // Update UI
+            if (fileInput.files.length === 0)
+            {
+                const container = document.getElementById('fileUploadContainer');
+                const textSpan = container.querySelector('.file-upload-text');
+                textSpan.textContent = 'Click to upload supporting documents';
+                container.style.borderColor = 'var(--system-gray-4)';
+                container.querySelector('.file-upload-icon').style.backgroundColor = 'var(--system-gray-6)';
+            }
+        }
+
+        // Initialize calculation on page load
+        calculateAmount();
+        charCount.textContent = commentsTextarea.value.length;
+    </script>
+}

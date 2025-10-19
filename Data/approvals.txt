@@ -1,1 +1,38 @@
-[]
+[
+  {
+    "ApprovalId": 1,
+    "ClaimId": 2,
+    "ApproverUserId": 67108864,
+    "ApproverRole": "ProgrammeCoordinator",
+    "ApprovalDate": "2025-10-19T11:36:28.9451865+02:00",
+    "IsApproved": true,
+    "Comments": null,
+    "ApprovalOrder": 1,
+    "Claim": null,
+    "ApproverUser": null
+  },
+  {
+    "ApprovalId": 2,
+    "ClaimId": 1,
+    "ApproverUserId": 67108864,
+    "ApproverRole": "ProgrammeCoordinator",
+    "ApprovalDate": "2025-10-19T11:36:31.9697798+02:00",
+    "IsApproved": false,
+    "Comments": null,
+    "ApprovalOrder": 1,
+    "Claim": null,
+    "ApproverUser": null
+  },
+  {
+    "ApprovalId": 3,
+    "ClaimId": 3,
+    "ApproverUserId": 100663296,
+    "ApproverRole": "ProgrammeCoordinator",
+    "ApprovalDate": "2025-10-19T11:50:14.8751532+02:00",
+    "IsApproved": true,
+    "Comments": null,
+    "ApprovalOrder": 1,
+    "Claim": null,
+    "ApproverUser": null
+  }
+]

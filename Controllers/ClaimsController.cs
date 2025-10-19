@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Logging;
+using System.IO;
 
 namespace contract_monthly_claim_system_cs.Controllers
 {
@@ -51,7 +52,7 @@ namespace contract_monthly_claim_system_cs.Controllers
         }
 
         /// <summary>
-        /// Handles claim submission with validation
+        /// Handles claim submission with validation and document upload
         /// </summary>
         /// <param name="model">Claim submission view model</param>
         /// <returns>Redirect to status page or error view</returns>
@@ -93,14 +94,31 @@ namespace contract_monthly_claim_system_cs.Controllers
                     {
                         if (file.Length > 0)
                         {
+                            // Create uploads directory if it doesn't exist
+                            var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
+                            if (!Directory.Exists(uploadsDirectory))
+                            {
+                                Directory.CreateDirectory(uploadsDirectory);
+                            }
+
+                            // Generate unique file name
+                            var fileName = $"{claim.ClaimId}_{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
+                            var filePath = Path.Combine(uploadsDirectory, fileName);
+
+                            // Save the file
+                            using (var stream = new FileStream(filePath, FileMode.Create))
+                            {
+                                file.CopyTo(stream);
+                            }
+
                             var document = new Document
                             {
                                 DocumentId = _dataService.GetNextId("documents"),
                                 ClaimId = claim.ClaimId,
                                 FileName = file.FileName,
-                                FilePath = $"/uploads/{claim.ClaimId}_{file.FileName}",
+                                FilePath = $"/uploads/{fileName}",
                                 FileSize = file.Length,
-                                FileType = System.IO.Path.GetExtension(file.FileName),
+                                FileType = Path.GetExtension(file.FileName),
                                 UploadDate = DateTime.Now,
                                 IsActive = true
                             };

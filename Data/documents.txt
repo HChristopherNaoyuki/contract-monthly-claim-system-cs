@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "DocumentId": 1,
+    "ClaimId": 3,
+    "FileName": "Mock.pdf",
+    "FilePath": "/uploads/3_4acc9d01-5588-4ff8-87d8-c7c8029a90f2_Mock.pdf",
+    "FileSize": 143136,
+    "FileType": ".pdf",
+    "UploadDate": "2025-10-19T11:49:57.1935054+02:00",
+    "IsActive": true,
+    "Claim": null,
+    "FormattedFileSize": "139.78 KB"
+  }
+]
