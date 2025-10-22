@@ -34,5 +34,17 @@
     "ApprovalOrder": 1,
     "Claim": null,
     "ApproverUser": null
+  },
+  {
+    "ApprovalId": 4,
+    "ClaimId": 4,
+    "ApproverUserId": 50331648,
+    "ApproverRole": "ProgrammeCoordinator",
+    "ApprovalDate": "2025-10-21T08:54:36.1263041+02:00",
+    "IsApproved": false,
+    "Comments": null,
+    "ApprovalOrder": 1,
+    "Claim": null,
+    "ApproverUser": null
   }
 ]

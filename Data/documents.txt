@@ -10,5 +10,17 @@
     "IsActive": true,
     "Claim": null,
     "FormattedFileSize": "139.78 KB"
+  },
+  {
+    "DocumentId": 2,
+    "ClaimId": 4,
+    "FileName": "Part 1 Grade.jpg",
+    "FilePath": "/uploads/4_fb4f53b6-e09c-4e2e-8c76-b6d68a3fedd4_Part 1 Grade.jpg",
+    "FileSize": 67311,
+    "FileType": ".jpg",
+    "UploadDate": "2025-10-21T08:53:49.3065979+02:00",
+    "IsActive": true,
+    "Claim": null,
+    "FormattedFileSize": "65.73 KB"
   }
 ]
