@@ -5,7 +5,7 @@ VisualStudioVersion = 17.14.36401.2
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "contract-monthly-claim-system-cs", "contract-monthly-claim-system-cs.csproj", "{74D3D94C-8C59-4A62-831D-56AFCFB4C705}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "contract-monthly-claim-system-cs.Test", "..\contract-monthly-claim-system-cs.Test\contract-monthly-claim-system-cs.Test.csproj", "{E69829E0-6D02-4B93-A403-69FD41CFEECB}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "contract-monthly-claim-system-cs.Tests", "..\contract-monthly-claim-system-cs.Test\contract-monthly-claim-system-cs.Tests.csproj", "{E69829E0-6D02-4B93-A403-69FD41CFEECB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
