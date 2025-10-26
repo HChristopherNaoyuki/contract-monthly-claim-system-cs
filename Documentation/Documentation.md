@@ -1,267 +1,379 @@
-﻿# Contract Monthly Claim System (CMCS) - Documentation
+﻿# Contract Monthly Claim System - Technical Documentation
 
 ## Table of Contents
-- [Project Overview](#project-overview)
-- [System Architecture](#system-architecture)
-- [UML Class Diagram](#uml-class-diagram)
-- [Project Plan & Timeline](#project-plan--timeline)
-- [GUI Design Philosophy](#gui-design-philosophy)
-- [Core Functionality](#core-functionality)
-- [Technical Implementation](#technical-implementation)
-- [Installation & Setup](#installation--setup)
-- [Usage Guide](#usage-guide)
-- [Testing Strategy](#testing-strategy)
-- [Part 2 Implementation Report](#part-2-implementation-report)
+1. [Project Overview](#project-overview)
+2. [System Architecture](#system-architecture)
+3. [Database Design](#database-design)
+4. [Implementation Details](#implementation-details)
+5. [API Documentation](#api-documentation)
+6. [Testing Strategy](#testing-strategy)
+7. [Deployment Guide](#deployment-guide)
+8. [Maintenance Procedures](#maintenance-procedures)
 
 ## Project Overview
 
-The **Contract Monthly Claim System (CMCS)** is a comprehensive web-based application designed to streamline the monthly claim submission and approval process for independent contractor lecturers. This system addresses complex administrative challenges through an intuitive interface that serves three distinct user roles:
+### Business Context
+The Contract Monthly Claim System (CMCS) is designed to streamline the monthly 
+claim submission and approval process for Independent Contractor (IC) lecturers. 
+The system addresses the complex workflow involving hours worked calculations, 
+hourly rates, and multi-level approval processes by Programme Coordinators and 
+Academic Managers.
 
-### User Roles
-1. **Lecturers**: Submit monthly claims with supporting documentation
-2. **Programme Coordinators**: Review and approve/reject claims
-3. **Academic Managers**: Final approval authority and system oversight
+### Technical Scope
+- **Platform**: ASP.NET Core 8.0 MVC Web Application
+- **Storage**: Text File-based data persistence (JSON format)
+- **Authentication**: Session-based custom implementation
+- **Testing**: xUnit 2.5.3 with Moq framework
+- **UI**: Razor Pages with custom Apple-inspired CSS
 
-### Key Objectives
-- Simplify claim submission process for lecturers
-- Provide transparent approval workflow
-- Enable document upload and management
-- Offer real-time status tracking
-- Ensure data integrity and security
+### POE Requirements Fulfillment
+This implementation comprehensively addresses all three parts of the PROG6212 assignment:
+
+**Part 1**: Project Planning and Prototype Development
+- Complete UML class diagrams
+- Comprehensive project documentation
+- Non-functional GUI prototype
+
+**Part 2**: Prototype Implementation
+- Functional claim submission system
+- Role-based access control
+- Document management system
+
+**Part 3**: POE Automation Enhancement
+- Advanced automation features
+- Comprehensive analytics and reporting
+- Workflow optimization
 
 ## System Architecture
 
-### Technology Stack
-- **Backend**: ASP.NET Core MVC 8.0 with C# 7.0
-- **Frontend**: Razor Views with custom CSS/JavaScript
-- **Storage**: Text file-based database with JSON serialization
-- **Authentication**: Session-based with role management
-- **Testing**: xUnit 2.5.3
-
-### Architectural Pattern
-The system follows the **Model-View-Controller (MVC)** pattern with clear separation of concerns:
-
+### High-Level Architecture
 ```
-Controllers (Business Logic) ←→ Models (Data) ←→ Views (Presentation)
-```
-
-### Key Components
-1. **TextFileDataService**: Custom data persistence layer
-2. **Session Management**: Custom extensions for typed session storage
-3. **File Upload System**: Document management with validation
-4. **Validation Framework**: Comprehensive client and server-side validation
-
-## UML Class Diagram
-
-```mermaid
-classDiagram
-    %% Enumerations
-    class UserRole {
-        <<enumeration>>
-        Lecturer
-        ProgrammeCoordinator
-        AcademicManager
-    }
-
-    class ClaimStatus {
-        <<enumeration>>
-        Submitted
-        UnderReview
-        Approved
-        Rejected
-        Paid
-    }
-
-    %% Main Classes
-    class User {
-        +int UserId
-        +string Name
-        +string Surname
-        +string Username
-        +string Password
-        +UserRole Role
-        +string Email
-        +bool IsActive
-        +DateTime CreatedDate
-        +string FullName
-    }
-
-    class Lecturer {
-        +int LecturerId
-        +string EmployeeNumber
-        +string Department
-        +decimal HourlyRate
-        +DateTime? ContractStartDate
-        +DateTime? ContractEndDate
-    }
-
-    class Claim {
-        +int ClaimId
-        +int LecturerId
-        +DateTime ClaimDate
-        +string MonthYear
-        +decimal HoursWorked
-        +decimal HourlyRate
-        +decimal Amount
-        +ClaimStatus Status
-        +string SubmissionComments
-        +DateTime CreatedDate
-        +DateTime ModifiedDate
-        +CalculateAmount()
-    }
-
-    class Document {
-        +int DocumentId
-        +int ClaimId
-        +string FileName
-        +string FilePath
-        +long FileSize
-        +string FileType
-        +DateTime UploadDate
-        +bool IsActive
-        +string FormattedFileSize
-        +ValidateFile()
-    }
-
-    class Approval {
-        +int ApprovalId
-        +int ClaimId
-        +int ApproverUserId
-        +string ApproverRole
-        +DateTime ApprovalDate
-        +bool IsApproved
-        +string Comments
-        +int ApprovalOrder
-        +ProcessApproval()
-    }
-
-    %% Relationships
-    User "1" -- "1" Lecturer : extends
-    Lecturer "1" -- "*" Claim : submits
-    Claim "1" -- "*" Document : contains
-    Claim "1" -- "*" Approval : undergoes
-    User "1" -- "*" Approval : approves
+Presentation Layer (Views)
+    ↓
+Application Layer (Controllers)
+    ↓
+Business Logic Layer (Services)
+    ↓
+Data Access Layer (TextFileDataService)
+    ↓
+Storage Layer (Text Files)
 ```
 
-## Project Plan & Timeline
+### Component Architecture
 
-### Part 1: Project Planning and Prototype Development (Weeks 1-4)
+#### 1. Presentation Layer
+- **Technology**: ASP.NET Core Razor Pages
+- **Styling**: Custom CSS with Apple design principles
+- **Client-Side**: Vanilla JavaScript for enhanced interactivity
+- **Responsive Design**: Mobile-first approach
 
-**Week 1-2: Requirements Analysis & Design**
-- Stakeholder requirements gathering
-- UML class diagram creation
-- System architecture planning
-- GUI design mockups
+#### 2. Application Layer
+- **Controllers**: 
+  - `AuthController`: Authentication and user management
+  - `ClaimsController`: Core claims processing with automation
+  - `HomeController`: Public pages and navigation
+  - `ServerController`: System diagnostics
+  - `TestController`: System testing utilities
 
-**Week 3-4: Prototype Development**
-- Basic MVC structure setup
-- Non-functional UI implementation
-- Project documentation
-- GitHub repository setup
+#### 3. Business Logic Layer
+- **TextFileDataService**: Comprehensive data operations
+- **Validation Services**: Business rule enforcement
+- **Automation Engine**: Workflow automation
+- **Notification System**: Status updates and alerts
 
-### Part 2: Functional Implementation (Weeks 5-12)
+#### 4. Data Access Layer
+- **Storage Mechanism**: JSON-serialized text files
+- **Data Integrity**: Automated backup and recovery
+- **Performance**: Optimized file operations with buffering
 
-**Week 5-6: Core Framework & Authentication**
-- Text file database implementation
-- Authentication system
-- Session management
-- Basic claim submission
+### Security Architecture
 
-**Week 7-8: Claim Management System**
-- Enhanced claim submission
-- Document upload functionality
-- Approval workflow
-- Status tracking
+#### Authentication Flow
+```
+User Login → Session Creation → Role Validation → Access Control
+```
 
-**Week 9-10: UI/UX Enhancement**
-- Apple-inspired design implementation
-- Responsive layout improvements
-- Interactive elements
-- User experience optimization
+#### Authorization Matrix
+| Role | Claim Submission | Claim Approval | HR Analytics | System Admin |
+|------|------------------|----------------|--------------|--------------|
+| Lecturer | ✓ | ✗ | ✗ | ✗ |
+| Programme Coordinator | ✗ | ✓ | ✗ | ✗ |
+| Academic Manager | ✗ | ✓ | ✓ | ✓ |
 
-**Week 11-12: Testing & Documentation**
-- Unit testing implementation
-- Integration testing
-- Bug fixes and optimization
-- Final documentation
+## Database Design
 
-## GUI Design Philosophy
+### Text File Storage Structure
 
-### Design Principles
-1. **Minimalism**: Clean, uncluttered interfaces with strategic white space
-2. **Consistency**: Uniform typography and visual hierarchy
-3. **Accessibility**: Keyboard navigation and screen reader support
-4. **Responsiveness**: Optimized for desktop and mobile devices
+#### File Organization
+```
+Data/
+├── users.txt          # User accounts and credentials
+├── lecturers.txt      # Lecturer-specific information
+├── claims.txt         # Claim submissions and status
+├── documents.txt      # Supporting document metadata
+├── approvals.txt      # Approval workflow records
+└── analytics.txt      # System usage statistics
+```
 
-### Apple-inspired Aesthetics
-- **Color System**: Based on Apple's design tokens
-- **Typography**: System fonts with proper hierarchy
-- **Spacing**: Consistent spacing system (4px, 8px, 16px, 24px, 32px, 48px)
-- **Interactions**: Subtle animations and transitions
+### Data Models
 
-### Key Interface Components
-1. **Authentication Pages**: Modern login/register with tabbed interface
-2. **Claim Submission**: Intuitive form with real-time calculations
-3. **Document Upload**: Drag-and-drop inspired file interface
-4. **Approval Dashboard**: Clean table layout with action buttons
-5. **Status Tracking**: Clear visual indicators for claim states
+#### User Model
+```csharp
+public class User
+{
+    public int UserId { get; set; }
+    public string Name { get; set; } = string.Empty;
+    public string Surname { get; set; } = string.Empty;
+    public string Username { get; set; } = string.Empty;
+    public string Password { get; set; } = string.Empty;
+    public UserRole Role { get; set; }
+    public string Email { get; set; } = string.Empty;
+    public bool IsActive { get; set; } = true;
+    public DateTime CreatedDate { get; set; } = DateTime.UtcNow;
+    public DateTime? LastLoginDate { get; set; }
+}
+```
 
-## Core Functionality
+#### Claim Model
+```csharp
+public class Claim
+{
+    public int ClaimId { get; set; }
+    public int LecturerId { get; set; }
+    public DateTime ClaimDate { get; set; } = DateTime.Now;
+    public string MonthYear { get; set; } = string.Empty;
+    public decimal HoursWorked { get; set; }
+    public decimal HourlyRate { get; set; }
+    public decimal Amount { get; set; }
+    public ClaimStatus Status { get; set; } = ClaimStatus.Submitted;
+    public string SubmissionComments { get; set; } = string.Empty;
+    public DateTime CreatedDate { get; set; } = DateTime.Now;
+    public DateTime ModifiedDate { get; set; } = DateTime.Now;
+}
+```
 
-### Authentication & Authorization
-- Role-based access control
-- Session management with timeout
-- Secure password handling
-- User registration system
+#### Data Relationships
+```
+User (1) ←→ (1) Lecturer
+Lecturer (1) ←→ (Many) Claims
+Claim (1) ←→ (Many) Documents
+Claim (1) ←→ (Many) Approvals
+```
 
-### Claim Management
-- **Submission**: Hours worked, hourly rate, automatic amount calculation
-- **Validation**: Client and server-side input validation
-- **Documents**: Multiple file upload with type/size restrictions
-- **Tracking**: Real-time status updates throughout approval process
+### Data Integrity Measures
 
-### Approval Workflow
-1. **Lecturer Submission**: Claim created with "Submitted" status
-2. **Coordinator Review**: Initial approval/rejection with comments
-3. **Manager Approval**: Final decision and status update
-4. **Status Propagation**: Real-time updates across all views
+#### Validation Rules
+1. **User Validation**: Unique usernames, password strength
+2. **Claim Validation**: Hours worked (0-744), hourly rate limits
+3. **Document Validation**: File size (5MB max), allowed types
+4. **Business Rules**: Monthly claim limits, approval workflows
 
-### Document Handling
-- **Supported Formats**: PDF, DOC, DOCX, JPG, PNG
-- **Size Limits**: 5MB per file
-- **Storage**: Physical files in `wwwroot/uploads`
-- **Metadata**: Document information in text file database
+#### Backup Strategy
+- Automated backup creation before write operations
+- Recovery mechanisms for corrupted files
+- Data consistency checks on system startup
 
-## Technical Implementation
+## Implementation Details
 
-### Text File Database System
-The system uses JSON serialization for data persistence:
+### Core Controllers
 
+#### ClaimsController
+**Responsibilities**:
+- Claim submission with automated calculation
+- Multi-level approval workflow management
+- HR analytics and reporting
+- Document processing and management
+
+**Key Automation Features**:
+```csharp
+// Auto-calculation with overtime
+private decimal AutoCalculateClaimAmount(decimal hoursWorked, decimal hourlyRate)
+{
+    var amount = hoursWorked * hourlyRate;
+    
+    // Overtime calculation (time and a half after 160 hours)
+    if (hoursWorked > 160)
+    {
+        var overtimeHours = hoursWorked - 160;
+        var overtimeRate = hourlyRate * 1.5m;
+        amount = (160 * hourlyRate) + (overtimeHours * overtimeRate);
+    }
+    
+    return Math.Round(amount, 2);
+}
+
+// Automated validation
+private (bool IsValid, string ErrorMessage) ValidateClaimSubmission(ClaimSubmissionViewModel model, int userId)
+{
+    // Business rule validation
+    if (model.HoursWorked > 744) return (false, "Hours worked cannot exceed 744 hours per month.");
+    if (model.HourlyRate > 500) return (false, "Hourly rate exceeds maximum allowed amount.");
+    
+    // Monthly submission limit
+    var currentMonthClaims = _dataService.GetAllClaims()
+        .Where(c => c.LecturerId == userId && 
+                   c.MonthYear == DateTime.Now.ToString("yyyy-MM"))
+        .Count();
+        
+    if (currentMonthClaims >= 3) return (false, "Maximum of 3 claims allowed per month.");
+    
+    return (true, string.Empty);
+}
+```
+
+#### TextFileDataService
+**Data Operations**:
 ```csharp
 public class TextFileDataService
 {
+    // Enhanced read operation with error recovery
     private List<T> ReadData<T>(string dataType)
     {
         var filePath = GetFilePath(dataType);
-        if (File.Exists(filePath))
+        var maxRetries = 3;
+        
+        for (int attempt = 1; attempt <= maxRetries; attempt++)
         {
-            var json = File.ReadAllText(filePath);
-            return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
+            try
+            {
+                if (File.Exists(filePath))
+                {
+                    var json = File.ReadAllText(filePath);
+                    if (!string.IsNullOrEmpty(json))
+                    {
+                        return JsonSerializer.Deserialize<List<T>>(json) ?? new List<T>();
+                    }
+                }
+                break;
+            }
+            catch (JsonException jsonEx)
+            {
+                // Automated recovery for corrupted files
+                if (attempt == maxRetries)
+                {
+                    CreateDataBackup(filePath);
+                    WriteData(dataType, new List<T>());
+                    return new List<T>();
+                }
+            }
         }
         return new List<T>();
     }
     
+    // Atomic write operation
     private void WriteData<T>(string dataType, List<T> data)
     {
-        var json = JsonSerializer.Serialize(data, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText(filePath, json);
+        var filePath = GetFilePath(dataType);
+        var tempFilePath = filePath + ".tmp";
+        
+        // Create backup
+        CreateDataBackup(filePath);
+        
+        // Write to temporary file first
+        var json = JsonSerializer.Serialize(data, new JsonSerializerOptions 
+        { 
+            WriteIndented = true,
+            PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        });
+        
+        File.WriteAllText(tempFilePath, json);
+        File.Move(tempFilePath, filePath, true);
+        
+        // Update analytics
+        UpdateAnalytics(dataType, data.Count);
     }
 }
 ```
 
-### Session Management
-Custom session extensions provide type-safe session storage:
+### Automation Features
 
+#### Part 3 POE Automation Implementation
+
+**1. Automated Claim Analysis**
+```csharp
+public class ClaimApprovalViewModel
+{
+    // Automated verification flags
+    public bool HasExcessiveHours { get; set; }    // > 160 hours
+    public bool HasUnusualAmount { get; set; }     // > R10,000
+    public bool RequiresManagerApproval { get; set; } // > R5,000 for coordinators
+    
+    // Intelligent prioritization
+    public string Priority 
+    {
+        get
+        {
+            if (Amount > 10000 || DaysPending > 14) return "High";
+            if (Amount > 5000 || DaysPending > 7) return "Medium";
+            return "Low";
+        }
+    }
+}
+```
+
+**2. HR Analytics Automation**
+```csharp
+public class HRDashboardViewModel
+{
+    // Automated performance metrics
+    public decimal ApprovalRate 
+    {
+        get
+        {
+            if (TotalClaims == 0) return 0;
+            return Math.Round((decimal)ApprovedClaims / TotalClaims * 100, 2);
+        }
+    }
+    
+    // Automated trend analysis
+    public List<MonthlyBreakdownViewModel> MonthlyBreakdown { get; set; }
+    public List<TopLecturerViewModel> TopLecturers { get; set; }
+}
+```
+
+**3. Workflow Automation**
+```csharp
+private async Task ProcessUploadedDocuments(List<IFormFile> documents, int claimId)
+{
+    foreach (var file in documents)
+    {
+        // Automated validation
+        if (file.Length > 5 * 1024 * 1024) continue; // 5MB limit
+        
+        var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
+        var fileExtension = Path.GetExtension(file.FileName).ToLower();
+        if (!allowedExtensions.Contains(fileExtension)) continue;
+        
+        // Secure file processing
+        var fileName = $"{claimId}_{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
+        var filePath = Path.Combine(uploadsDirectory, fileName);
+        
+        using (var stream = new FileStream(filePath, FileMode.Create))
+        {
+            await file.CopyToAsync(stream);
+        }
+        
+        // Automated metadata creation
+        var document = new Document
+        {
+            DocumentId = _dataService.GetNextId("documents"),
+            ClaimId = claimId,
+            FileName = file.FileName,
+            FilePath = $"/uploads/{fileName}",
+            FileSize = file.Length,
+            FileType = fileExtension,
+            UploadDate = DateTime.Now,
+            IsActive = true
+        };
+        
+        _dataService.SaveDocument(document);
+    }
+}
+```
+
+### Security Implementation
+
+#### Session Management
 ```csharp
 public static class SessionExtensions
 {
@@ -273,241 +385,333 @@ public static class SessionExtensions
     public static int? GetSessionInt(this ISession session, string key)
     {
         var data = session.Get(key);
-        return data != null ? BitConverter.ToInt32(data, 0) : null;
+        if (data == null || data.Length == 0) return null;
+        return BitConverter.ToInt32(data, 0);
     }
 }
 ```
 
-### File Upload Implementation
-Secure document handling with validation:
-
+#### Input Validation
 ```csharp
-public IActionResult Submit(ClaimSubmissionViewModel model)
+[HttpPost]
+[ValidateAntiForgeryToken]
+public async Task<IActionResult> Submit(ClaimSubmissionViewModel model)
 {
-    if (model.Documents != null && model.Documents.Count > 0)
+    if (ModelState.IsValid)
     {
-        foreach (var file in model.Documents)
+        // Additional server-side validation
+        var validationResult = ValidateClaimSubmission(model, userId);
+        if (!validationResult.IsValid)
         {
-            if (file.Length > 0)
-            {
-                var fileName = $"{claim.ClaimId}_{Guid.NewGuid()}_{Path.GetFileName(file.FileName)}";
-                var filePath = Path.Combine(uploadsDirectory, fileName);
-                
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    file.CopyTo(stream);
-                }
-            }
+            ModelState.AddModelError("", validationResult.ErrorMessage);
+            return View(model);
         }
+        // Process claim...
+    }
+    return View(model);
+}
+```
+
+## API Documentation
+
+### Controller Endpoints
+
+#### Authentication Endpoints
+| Method | Endpoint | Description | Parameters |
+|--------|----------|-------------|------------|
+| GET | /Auth | Login/Registration page | - |
+| POST | /Auth/Login | User authentication | LoginViewModel |
+| POST | /Auth/Register | New user registration | RegisterViewModel |
+| POST | /Auth/Logout | Session termination | - |
+
+#### Claims Management Endpoints
+| Method | Endpoint | Description | Parameters |
+|--------|----------|-------------|------------|
+| GET | /Claims/Submit | Claim submission form | - |
+| POST | /Claims/Submit | Submit new claim | ClaimSubmissionViewModel |
+| GET | /Claims/Approve | Approval dashboard | - |
+| POST | /Claims/ApproveClaim | Process approval | claimId, isApproved, comments |
+| GET | /Claims/Status | Claim status view | claimId |
+| GET | /Claims/Track | Claim tracking | - |
+| GET | /Claims/HRDashboard | HR analytics | - |
+
+#### System Endpoints
+| Method | Endpoint | Description | Parameters |
+|--------|----------|-------------|------------|
+| GET | /Server/Status | System diagnostics | - |
+| GET | /Test/Connection | Database connection test | - |
+
+### View Models
+
+#### ClaimSubmissionViewModel
+```csharp
+public class ClaimSubmissionViewModel
+{
+    [Required(ErrorMessage = "Hours worked is required")]
+    [Range(0, 744, ErrorMessage = "Hours must be between 0 and 744")]
+    public decimal HoursWorked { get; set; }
+
+    [Required(ErrorMessage = "Hourly rate is required")]
+    [Range(0, 999.99, ErrorMessage = "Hourly rate must be between 0 and 999.99")]
+    public decimal HourlyRate { get; set; }
+
+    public decimal Amount { get; set; } // Auto-calculated
+
+    [StringLength(500, ErrorMessage = "Comments cannot exceed 500 characters")]
+    public string Comments { get; set; } = string.Empty;
+
+    public List<IFormFile> Documents { get; set; } = new List<IFormFile>();
+}
+```
+
+## Testing Strategy
+
+### Unit Testing Architecture
+
+#### Test Project Structure
+```
+Tests/
+├── Controllers/
+│   ├── AuthControllerTests.cs
+│   ├── ClaimsControllerTests.cs
+│   └── HomeControllerTests.cs
+├── Extensions/
+│   └── SessionExtensionsTests.cs
+├── Helpers/
+│   ├── MockLogger.cs
+│   └── TestSession.cs
+├── Integration/
+│   └── IntegrationTest.cs
+└── Models/
+    ├── ClaimViewModelTests.cs
+    ├── DataModelTests.cs
+    └── ViewModelTests.cs
+```
+
+#### Comprehensive Test Coverage
+
+**Controller Tests**:
+```csharp
+public class ClaimsControllerTests
+{
+    [Fact]
+    public async Task Submit_WithAutomatedCalculation_CalculatesAmountCorrectly()
+    {
+        // Arrange
+        var model = new ClaimSubmissionViewModel
+        {
+            HoursWorked = 40,
+            HourlyRate = 150.00m
+        };
+
+        // Act
+        var result = await _controller.Submit(model);
+
+        // Assert
+        var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+        _dataServiceMock.Verify(d => d.SaveClaim(It.Is<Claim>(c => c.Amount == 6000.00m)), Times.Once);
+    }
+
+    [Fact]
+    public void Approve_WithHighAmountClaim_SetsRequiresManagerApproval()
+    {
+        // Arrange
+        _sessionMock.Setup(s => s.GetString("Role")).Returns("ProgrammeCoordinator");
+        var highAmountClaim = new Claim { Amount = 10000.00m }; // High amount
+
+        // Act
+        var result = _controller.Approve();
+
+        // Assert
+        var viewResult = Assert.IsType<ViewResult>(result);
+        var model = Assert.IsType<List<ClaimApprovalViewModel>>(viewResult.Model);
+        var highAmountViewModel = model.First(m => m.Amount == 10000.00m);
+        Assert.True(highAmountViewModel.RequiresManagerApproval);
     }
 }
 ```
 
-## Installation & Setup
+**Model Validation Tests**:
+```csharp
+public class DataModelTests
+{
+    [Fact]
+    public void User_ValidModel_PassesValidation()
+    {
+        var user = new User
+        {
+            Name = "Test",
+            Surname = "User",
+            Username = "testuser",
+            Password = "password123",
+            Role = UserRole.Lecturer,
+            Email = "test@example.com"
+        };
 
-### Prerequisites
-- .NET 8.0 SDK
-- Visual Studio 2022 or VS Code
-- Git for version control
+        var validationResults = ValidateModel(user);
+        Assert.Empty(validationResults);
+    }
 
-### Step-by-Step Setup
+    [Fact]
+    public void Claim_ExcessiveHours_FailsValidation()
+    {
+        var claim = new Claim
+        {
+            LecturerId = 1,
+            MonthYear = "2024-01",
+            HoursWorked = 800, // Exceeds maximum
+            HourlyRate = 150.00m,
+            Amount = 120000.00m,
+            Status = ClaimStatus.Submitted
+        };
 
-1. **Clone Repository**
+        var validationResults = ValidateModel(claim);
+        Assert.Single(validationResults);
+        Assert.Contains(validationResults, v => v.MemberNames.Contains("HoursWorked"));
+    }
+}
+```
+
+### Integration Testing
+```csharp
+public class IntegrationTests
+{
+    [Fact]
+    public void CompleteWorkflow_LoginSubmitClaim_WorksCorrectly()
+    {
+        var authController = CreateAuthController();
+        var claimsController = CreateClaimsController();
+
+        // Login
+        var loginResult = authController.Login(new LoginViewModel
+        {
+            Username = "lecturer",
+            Password = "lecturer123"
+        });
+
+        Assert.IsType<RedirectToActionResult>(loginResult);
+
+        // Submit claim
+        var claimModel = new ClaimSubmissionViewModel
+        {
+            HoursWorked = 40,
+            HourlyRate = 150.00m,
+            Comments = "Integration test claim"
+        };
+
+        var submitResult = claimsController.Submit(claimModel);
+        var submitRedirect = Assert.IsType<RedirectToActionResult>(submitResult);
+        Assert.Equal("Status", submitRedirect.ActionName);
+    }
+}
+```
+
+## Deployment Guide
+
+### Development Environment Setup
+
+1. **Prerequisites Installation**
+   ```bash
+   # Install .NET 8.0 SDK
+   # Install Git for version control
+   # Install preferred IDE (Visual Studio 2022 or VS Code)
+   ```
+
+2. **Project Setup**
    ```bash
    git clone https://github.com/HChristopherNaoyuki/contract-monthly-claim-system-cs.git
    cd contract-monthly-claim-system-cs
-   ```
-
-2. **Restore Dependencies**
-   ```bash
    dotnet restore
-   ```
-
-3. **Build Application**
-   ```bash
    dotnet build
    ```
+
+3. **Environment Configuration**
+   - Ensure `Data` directory has write permissions
+   - Create `wwwroot/uploads` directory for file storage
+   - Configure app settings in `appsettings.json`
 
 4. **Run Application**
    ```bash
    dotnet run
+   # Access at http://localhost:5000
    ```
 
-5. **Access Application**
-   - Open browser to `http://localhost:5000`
-   - Use default credentials:
-     - Admin: `admin` / `admin123`
-     - Lecturer: `lecturer` / `lecturer123`
-     - Coordinator: `coordinator` / `coordinator123`
+### Production Considerations
 
-### Configuration
-The application uses `appsettings.json` for configuration:
-- Session timeout settings
-- File upload limits
-- Application behavior settings
+**Security Enhancements**:
+- Implement HTTPS with proper certificates
+- Add additional input sanitization
+- Implement rate limiting
+- Add audit logging
 
-## Usage Guide
+**Performance Optimizations**:
+- Implement caching mechanisms
+- Optimize file I/O operations
+- Add database connection pooling (if migrating to database)
 
-### For Lecturers
+**Monitoring**:
+- Implement health check endpoints
+- Add application performance monitoring
+- Set up log aggregation
 
-1. **Submit a Claim**
-   - Login with lecturer credentials
-   - Navigate to "Submit Claim"
-   - Enter hours worked and hourly rate
-   - Upload supporting documents
-   - Add optional comments
-   - Submit claim
+## Maintenance Procedures
 
-2. **Track Claims**
-   - View "Track Claims" for status
-   - Monitor approval progress
-   - View approval comments
+### Routine Maintenance
 
-### For Programme Coordinators
+1. **Data Backup**
+   - Automated backups are created during write operations
+   - Manual backup: Copy entire `Data` directory
+   - Recovery: Replace corrupted files with backup versions
 
-1. **Review Claims**
-   - Login with coordinator credentials
-   - Navigate to "Review Claims"
-   - View pending submissions
-   - Approve or reject with comments
+2. **Log Management**
+   - Review application logs in `logs` directory
+   - Monitor for error patterns and system issues
+   - Implement log rotation for production
 
-### For Academic Managers
+3. **File System Maintenance**
+   - Monitor `wwwroot/uploads` directory size
+   - Implement archival procedures for old documents
+   - Regular cleanup of temporary files
 
-1. **System Oversight**
-   - Full system access
-   - Final approval authority
-   - User management capabilities
+### Troubleshooting Guide
 
-### File Upload Guidelines
-- Maximum 5MB per file
-- Supported formats: PDF, DOC, DOCX, JPG, PNG
-- Multiple files per claim supported
-- Secure file naming prevents conflicts
+#### Common Issues and Solutions
 
-## Testing Strategy
-
-### Unit Testing
-- **xUnit 2.5.3** framework
-- Test coverage for controllers and models
-- Mock dependencies for isolation
-- Validation logic testing
-
-### Test Categories
-1. **Controller Tests**: Authentication and claim processing
-2. **Model Tests**: Data validation and business logic
-3. **Integration Tests**: End-to-end workflow testing
-4. **Session Tests**: Custom session extension functionality
-
-### Test Structure
-```csharp
-public class AuthControllerTests
-{
-    [Fact]
-    public void Login_ValidCredentials_RedirectsToHome()
-    {
-        // Arrange
-        var model = new LoginViewModel { Username = "admin", Password = "admin123" };
-        
-        // Act
-        var result = _controller.Login(model);
-        
-        // Assert
-        var redirectResult = Assert.IsType<RedirectToActionResult>(result);
-        Assert.Equal("Index", redirectResult.ActionName);
-    }
-}
+**1. Port Conflicts**
+```bash
+# Check port usage
+netstat -ano | findstr :5000
+# Kill process or use different port in launchSettings.json
 ```
 
-## Part 2 Implementation Report
+**2. File Permission Issues**
+- Ensure `Data` and `wwwroot/uploads` directories have write permissions
+- Run application with appropriate user privileges
 
-### Lecturer Feedback Implementation
+**3. Data Corruption**
+- Automated recovery mechanisms attempt to repair corrupted files
+- Manual recovery: Restore from backup files (`*.backup`)
 
-#### Feedback 1: UML Class Diagram Structure
-**Original Feedback:** "UML class diagram needs better alignment with actual implementation and clearer relationships"
+**4. Session Issues**
+- Clear browser cookies and cache
+- Restart application to reset session state
 
-**Implementation:**
-- Updated UML diagram to reflect text file storage approach
-- Added proper inheritance relationships
-- Included view models in the diagram
-- Clarified enumeration usage
+### Performance Monitoring
 
-#### Feedback 2: Database Integration
-**Original Feedback:** "Remove database dependencies and implement text file storage"
+**Key Metrics to Monitor**:
+- Claim processing time
+- File upload success rates
+- System resource usage (CPU, memory, disk I/O)
+- User session statistics
 
-**Implementation:**
-- **TextFileDataService.cs**: Complete text file database implementation
-- **JSON Serialization**: All data stored in human-readable format
-- **Automatic File Creation**: Data files created on application startup
-- **Sample Data**: Pre-populated with default users and claims
+**Automated Health Checks**:
+- Database connectivity tests
+- File system accessibility
+- Application responsiveness
 
-#### Feedback 3: Document Upload Functionality
-**Original Feedback:** "Make document upload feature functional with proper file handling"
-
-**Implementation:**
-- **Physical File Storage**: Documents saved to `wwwroot/uploads`
-- **Metadata Management**: Document information in text files
-- **File Validation**: Type and size restrictions
-- **Unique Naming**: GUID-based file names prevent conflicts
-- **UI Enhancement**: Improved file upload interface
-
-#### Feedback 4: User Interface Improvements
-**Original Feedback:** "Enhance UI with better user experience and Apple-like aesthetics"
-
-**Implementation:**
-- **CSS Design System**: Apple-inspired color palette and typography
-- **Responsive Design**: Mobile-first approach with CSS Grid/Flexbox
-- **Interactive Elements**: Hover effects and smooth transitions
-- **Visual Feedback**: Clear status indicators and progress tracking
-
-#### Feedback 5: Error Handling and Validation
-**Original Feedback:** "Implement comprehensive error handling and input validation"
-
-**Implementation:**
-- **Model Validation**: Data annotations on all view models
-- **Client-Side Validation**: jQuery validation integration
-- **Server-Side Checks**: Comprehensive ModelState validation
-- **User Feedback**: Clear error messages and guidance
-
-### Technical Achievements
-
-#### Text File Database System
-- Complete replacement of database dependencies
-- JSON-based serialization for data persistence
-- Automatic file creation and initialization
-- Robust error handling for file operations
-
-#### Enhanced Security
-- Session-based authentication
-- Anti-forgery token protection
-- Input validation and sanitization
-- Secure file upload handling
-
-#### Performance Optimizations
-- Efficient file I/O operations
-- Client-side calculations reduce server load
-- Optimized session management
-- Responsive design for various devices
-
-### Quality Assurance
-
-#### Code Quality
-- Allman style formatting throughout
-- Comprehensive XML documentation
-- Consistent naming conventions
-- Modular architecture with clear separation
-
-#### Testing Coverage
-- Unit tests for all major components
-- Integration tests for workflows
-- Model validation testing
-- Session management testing
-
-### Future Enhancement Opportunities
-
-1. **Database Migration**: Transition to SQL database for production use
-2. **Email Notifications**: Automated status updates to users
-3. **Reporting Features**: Advanced analytics and reporting
-4. **Advanced Security**: Two-factor authentication and encryption
-5. **API Development**: REST API for mobile applications
+This comprehensive documentation provides complete technical specifications 
+for the Contract Monthly Claim System, ensuring maintainability, scalability, 
+and adherence to academic requirements while demonstrating professional 
+software development practices.
 
 ---

@@ -62,5 +62,21 @@
     "Lecturer": null,
     "Documents": [],
     "Approvals": []
+  },
+  {
+    "ClaimId": 5,
+    "LecturerId": 16777216,
+    "ClaimDate": "2025-10-26T21:05:46.9161483+02:00",
+    "MonthYear": "2025-10",
+    "HoursWorked": 122,
+    "HourlyRate": 99.12,
+    "Amount": 12092.64,
+    "Status": 2,
+    "SubmissionComments": "Check 1.2.3 and 1.2.4.",
+    "CreatedDate": "2025-10-26T21:05:46.9162449+02:00",
+    "ModifiedDate": "2025-10-26T21:06:03.5299964+02:00",
+    "Lecturer": null,
+    "Documents": [],
+    "Approvals": []
   }
 ]

@@ -1,531 +1,486 @@
-﻿# Contract Monthly Claim System (CMCS) - Project Plan
+﻿# Contract Monthly Claim System - Project Plan
 
 ## Table of Contents
-- [Project Overview](#project-overview)
-- [Project Objectives](#project-objectives)
-- [Scope & Deliverables](#scope--deliverables)
-- [Methodology](#methodology)
-- [Timeline & Milestones](#timeline--milestones)
-- [Resource Allocation](#resource-allocation)
-- [Risk Management](#risk-management)
-- [Quality Assurance](#quality-assurance)
-- [Success Criteria](#success-criteria)
-- [Part 1 Detailed Plan](#part-1-detailed-plan)
-- [Part 2 Detailed Plan](#part-2-detailed-plan)
-- [Part 3 Detailed Plan](#part-3-detailed-plan)
+1. [Project Overview](#project-overview)
+2. [Project Scope](#project-scope)
+3. [Methodology](#methodology)
+4. [Timeline and Milestones](#timeline-and-milestones)
+5. [Resource Allocation](#resource-allocation)
+6. [Risk Management](#risk-management)
+7. [Quality Assurance](#quality-assurance)
+8. [Implementation Strategy](#implementation-strategy)
+9. [Success Criteria](#success-criteria)
 
 ## Project Overview
 
-**Project Name:** Contract Monthly Claim System (CMCS)  
-**Project Type:** Academic Web Application Development  
-**Module:** PROG6212 - Programming 2B  
-**Duration:** 12 Weeks (3 Parts)  
-**Technology Stack:** ASP.NET Core MVC, C# 7.0, Text File Storage, xUnit
-
-### Project Vision
-To develop a streamlined, user-friendly web application that simplifies the monthly 
-claim submission and approval process for independent contractor lecturers, 
-eliminating administrative bottlenecks and providing transparent workflow tracking.
-
-### Key Stakeholders
-- **Lecturers:** Primary users submitting monthly claims
-- **Programme Coordinators:** First-level approvers
-- **Academic Managers:** Final approval authority
-- **System Administrators:** Technical maintenance
-
-## Project Objectives
+### Project Description
+The Contract Monthly Claim System (CMCS) is a comprehensive web-based application 
+designed to automate and streamline the monthly claim submission and approval 
+process for Independent Contractor (IC) lecturers. This system replaces manual, 
+paper-based processes with an efficient digital workflow that includes automated 
+calculations, multi-level approvals, and comprehensive reporting.
 
 ### Business Objectives
-1. **Streamline Processes:** Reduce claim processing time by 50%
-2. **Improve Transparency:** Provide real-time status tracking
-3. **Enhance User Experience:** Intuitive interface for all user roles
-4. **Ensure Compliance:** Maintain audit trails and documentation
+- Reduce claim processing time by 60%
+- Eliminate manual calculation errors
+- Provide real-time claim status tracking
+- Enable data-driven decision making through analytics
+- Improve user satisfaction for lecturers and administrators
 
 ### Technical Objectives
-1. **Database-Free Architecture:** Implement text file storage system
-2. **Role-Based Security:** Secure authentication and authorization
-3. **Document Management:** Robust file upload and storage
-4. **Responsive Design:** Apple-inspired minimalist interface
+- Implement robust text file-based data storage
+- Develop comprehensive automation features
+- Ensure system reliability and data integrity
+- Provide intuitive user interface with Apple-like aesthetics
+- Deliver comprehensive unit test coverage
 
-### Learning Objectives
-1. **MVC Mastery:** Advanced ASP.NET Core MVC patterns
-2. **Architecture Design:** Scalable application architecture
-3. **Testing Implementation:** Comprehensive unit testing
-4. **Documentation:** Professional technical documentation
+### POE Requirements Alignment
+This project plan addresses all three parts of the PROG6212 Portfolio of Evidence:
+- **Part 1**: Project planning, UML design, and prototype development
+- **Part 2**: Functional web application implementation
+- **Part 3**: Automation enhancement and comprehensive testing
 
-## Scope & Deliverables
+## Project Scope
 
-### In Scope
-- User authentication and role management
-- Claim submission with document upload
-- Approval workflow management
-- Status tracking and reporting
-- Text file-based data persistence
-- Responsive web interface
+### In-Scope Features
 
-### Out of Scope
-- Payment processing integration
-- Advanced reporting and analytics
+#### Core Functionality
+- User authentication and role-based access control
+- Claim submission with automated calculations
+- Document upload and management
+- Multi-level approval workflow
+- Real-time status tracking
+- Comprehensive reporting and analytics
+
+#### Automation Features (Part 3 Focus)
+- Automated claim amount calculation with overtime
+- Intelligent claim validation and verification
+- Automated notification system
+- HR analytics dashboard
+- Automated report generation
+- System performance monitoring
+
+#### Technical Requirements
+- Text file-based data storage implementation
+- Comprehensive unit testing with xUnit
+- Apple-inspired user interface design
+- Session-based authentication
+- Error handling and recovery mechanisms
+
+### Out-of-Scope Features
+- Integration with external payroll systems
 - Mobile application development
-- Integration with external HR systems
-- Advanced security features (2FA, encryption)
+- Real-time email/SMS notifications
+- Advanced data visualization
+- Multi-tenant architecture
+- Advanced security features (encryption, 2FA)
 
-### Deliverables
+### Constraints and Assumptions
 
-#### Part 1 Deliverables
-- [x] Project documentation (400-500 words)
-- [x] UML class diagram
-- [x] Project plan and timeline
-- [x] Non-functional GUI prototype
-- [x] GitHub repository setup
+#### Constraints
+- Must use text file storage instead of database
+- Limited to .NET 8.0 and C# 7.0
+- Must implement xUnit for testing
+- Apple-like aesthetic requirements
+- 45-hour minimum development time
 
-#### Part 2 Deliverables
-- [x] Functional web application
-- [x] Text file database implementation
-- [x] Document upload functionality
-- [x] Enhanced UI/UX design
-- [x] Unit test suite
-- [x] Updated documentation
-
-#### Part 3 Deliverables
-- [ ] Application enhancements
-- [ ] Automation features
-- [ ] PowerPoint presentation
-- [ ] Final documentation
-- [ ] Code optimization
+#### Assumptions
+- Users have basic computer literacy
+- Maximum 5MB file uploads are acceptable
+- System will handle up to 100 concurrent users
+- Text file storage will perform adequately for the scale
 
 ## Methodology
 
-### Agile Development Approach
-The project follows an **Agile methodology** with iterative development cycles:
+### Development Approach
+**Hybrid Agile-Waterfall Methodology**
 
-```
-Sprint Planning → Development → Testing → Review → Documentation
-```
+#### Phase 1: Planning and Design (Waterfall)
+- Comprehensive requirements analysis
+- Detailed technical design
+- UML modeling and documentation
+- Project planning and risk assessment
 
-### Development Principles
-1. **Test-Driven Development:** Write tests before implementation
-2. **Continuous Integration:** Regular commits to GitHub
-3. **Incremental Delivery:** Functional features delivered each sprint
-4. **User-Centric Design:** Regular UI/UX improvements
+#### Phase 2: Implementation (Agile)
+- Iterative development in two-week sprints
+- Regular progress reviews
+- Continuous integration and testing
+- Adaptive requirement refinement
 
-### Quality Standards
-- **Code Quality:** Allman style formatting, comprehensive comments
-- **Documentation:** Professional technical documentation
-- **Testing:** Minimum 80% test coverage
-- **Version Control:** Descriptive commit messages, regular pushes
+#### Phase 3: Testing and Delivery (Waterfall)
+- Comprehensive system testing
+- User acceptance testing
+- Documentation completion
+- Final delivery and review
 
-## Timeline & Milestones
+### Project Management Tools
+- **Version Control**: Git with GitHub
+- **Project Tracking**: GitHub Projects
+- **Documentation**: Markdown files in repository
+- **Communication**: Development team meetings
+- **Testing**: xUnit test framework
 
-### Key Milestones
+### Quality Gates
+1. **Design Completion**: All UML diagrams and technical specifications
+2. **Core Implementation**: Basic claim submission and approval workflow
+3. **Automation Features**: All Part 3 automation requirements implemented
+4. **Testing Completion**: Comprehensive unit test coverage
+5. **Documentation**: Complete technical and user documentation
 
-#### Milestone 1: Project Foundation (Week 4)
-- ✅ Complete project documentation
-- ✅ Finalized UML class diagram
-- ✅ GUI prototype approved
-- ✅ GitHub repository established
+## Timeline and Milestones
 
-#### Milestone 2: Core Functionality (Week 8)
-- ✅ Text file database operational
-- ✅ Authentication system implemented
-- ✅ Basic claim submission working
-- ✅ Initial testing completed
+### Overall Project Timeline
+**Total Duration**: 6 Weeks (45+ hours development time)
 
-#### Milestone 3: Feature Complete (Week 12)
-- ✅ All Part 2 requirements implemented
-- ✅ Document upload functional
-- ✅ Enhanced UI/UX delivered
-- ✅ Comprehensive testing suite
+### Detailed Milestone Schedule
 
-#### Milestone 4: Project Completion (Week 16)
-- [ ] All enhancements implemented
-- [ ] Final documentation completed
-- [ ] Presentation materials ready
-- [ ] Project submission package
+#### Week 1: Project Initiation and Planning
+**Duration**: 5 days
+**Effort**: 8 hours
+
+| Task | Duration | Dependencies | Deliverables |
+|------|----------|--------------|--------------|
+| Project requirements analysis | 2 days | None | Requirements document |
+| Technical architecture design | 2 days | Requirements | Architecture diagram |
+| Development environment setup | 1 day | Architecture | Working development environment |
+
+**Milestone 1**: Project Foundation Complete
+- Requirements documentation finalized
+- Technical architecture approved
+- Development environment operational
+
+#### Week 2: Part 1 - Prototype Development
+**Duration**: 5 days
+**Effort**: 10 hours
+
+| Task | Duration | Dependencies | Deliverables |
+|------|----------|--------------|--------------|
+| UML class diagram creation | 2 days | Architecture | Complete UML diagrams |
+| Data model implementation | 2 days | UML diagrams | Data model classes |
+| Basic UI prototype | 1 day | Data models | Non-functional UI prototype |
+
+**Milestone 2**: Part 1 Submission Ready
+- UML diagrams completed and documented
+- Data models implemented
+- UI prototype demonstrating Apple aesthetics
+- Project plan finalized
+
+#### Week 3-4: Part 2 - Core Implementation
+**Duration**: 10 days
+**Effort**: 20 hours
+
+**Sprint 1: Foundation Implementation (Week 3)**
+| Task | Duration | Dependencies | Deliverables |
+|------|----------|--------------|--------------|
+| Authentication system | 2 days | Data models | Login/registration |
+| Claim submission workflow | 3 days | Authentication | Functional claim submission |
+
+**Sprint 2: Approval Workflow (Week 4)**
+| Task | Duration | Dependencies | Deliverables |
+|------|----------|--------------|--------------|
+| Approval system | 3 days | Claim submission | Multi-level approval |
+| Document management | 2 days | Approval system | File upload functionality |
+
+**Milestone 3**: Part 2 Submission Ready
+- Functional claim submission system
+- Role-based access control implemented
+- Document upload functionality
+- Basic approval workflow
+
+#### Week 5: Part 3 - Automation Enhancement
+**Duration**: 5 days
+**Effort**: 12 hours
+
+| Task | Duration | Dependencies | Deliverables |
+|------|----------|--------------|--------------|
+| Automated calculations | 1 day | Core system | Auto-calculation engine |
+| Validation automation | 1 day | Calculations | Business rule validation |
+| HR analytics dashboard | 2 days | Validation | Comprehensive analytics |
+| System optimization | 1 day | Analytics | Performance improvements |
+
+**Milestone 4**: Part 3 Automation Complete
+- All automation features implemented
+- HR dashboard with analytics
+- Comprehensive validation system
+- Performance optimizations
+
+#### Week 6: Testing and Finalization
+**Duration**: 5 days
+**Effort**: 8 hours
+
+| Task | Duration | Dependencies | Deliverables |
+|------|----------|--------------|--------------|
+| Comprehensive testing | 2 days | All features | Test reports |
+| Documentation finalization | 2 days | Testing | Complete documentation |
+| Final review and submission | 1 day | Documentation | POE submission |
+
+**Milestone 5**: Project Completion
+- All functionality tested and verified
+- Complete documentation package
+- Final POE submission
+
+### Critical Path
+1. Data Model Design → Authentication → Claim Submission → Approval Workflow → Automation → Testing
+2. Each phase depends on successful completion of the previous phase
+3. Testing cannot begin until all features are implemented
 
 ## Resource Allocation
 
 ### Human Resources
-- **Project Developer:** Naoyuki Christopher Higaki
-- **Role:** Full-stack developer, architect, tester, documentation
-- **Time Commitment:** 15-20 hours per week
+
+#### Development Team
+- **Project Lead/Developer**: Single developer responsible for all aspects
+- **Time Allocation**: 45+ hours over 6 weeks
+- **Skill Requirements**: 
+  - ASP.NET Core MVC
+  - C# programming
+  - xUnit testing
+  - CSS/JavaScript for UI
+  - System architecture design
 
 ### Technical Resources
-- **Development Environment:** Visual Studio 2022
-- **Version Control:** GitHub
-- **Testing Framework:** xUnit 2.5.3
-- **Documentation:** Markdown, Word, PowerPoint
 
-### Software Tools
-| Tool | Purpose | Version |
-|------|---------|---------|
-| Visual Studio | IDE | 2022 |
-| .NET SDK | Framework | 8.0 |
-| Git | Version Control | 2.42+ |
-| xUnit | Testing | 2.5.3 |
-| Browser | Testing | Chrome/Edge |
+#### Development Environment
+- **IDE**: Visual Studio 2022 or VS Code
+- **Version Control**: Git with GitHub
+- **Testing Framework**: xUnit 2.5.3 with Moq
+- **Documentation**: Markdown, UML modeling tools
+
+#### Software Dependencies
+- .NET 8.0 SDK
+- ASP.NET Core MVC
+- Text file storage system (custom implementation)
+- Web browser for testing
+
+### Time Allocation Breakdown
+
+| Phase | Hours | Percentage | Key Activities |
+|-------|-------|------------|----------------|
+| Planning & Design | 8 | 18% | Requirements, architecture, UML |
+| Part 1 Implementation | 10 | 22% | Prototype, data models, UI |
+| Part 2 Implementation | 20 | 44% | Core functionality, testing |
+| Part 3 Implementation | 12 | 27% | Automation, analytics, optimization |
+| Testing & Documentation | 8 | 18% | Comprehensive testing, documentation |
+| **Total** | **58** | **129%** | *Note: Over 100% due to overlapping activities* |
 
 ## Risk Management
 
-### Identified Risks
+### Risk Identification
 
 #### Technical Risks
-1. **Text File Performance**
-   - **Probability:** Medium
-   - **Impact:** High
-   - **Mitigation:** Implement efficient serialization, add data caching
+1. **Text File Storage Limitations**
+   - **Probability**: Medium
+   - **Impact**: High
+   - **Mitigation**: Implement robust file locking, backup mechanisms, and data integrity checks
 
-2. **File Upload Security**
-   - **Probability:** Low
-   - **Impact:** High
-   - **Mitigation:** Strict file validation, secure naming conventions
+2. **Performance Issues with File I/O**
+   - **Probability**: Medium
+   - **Impact**: Medium
+   - **Mitigation**: Optimize file operations, implement caching, use buffered operations
 
-3. **Session Management**
-   - **Probability:** Low
-   - **Impact:** Medium
-   - **Mitigation:** Custom session extensions, timeout handling
+3. **Session Management Security**
+   - **Probability**: Low
+   - **Impact**: High
+   - **Mitigation**: Implement secure session handling, validation, and timeout mechanisms
 
 #### Project Risks
 1. **Scope Creep**
-   - **Probability:** Medium
-   - **Impact:** Medium
-   - **Mitigation:** Strict adherence to requirements, change control
+   - **Probability**: Medium
+   - **Impact**: Medium
+   - **Mitigation**: Strict adherence to defined requirements, change control process
 
 2. **Time Constraints**
-   - **Probability:** High
-   - **Impact:** High
-   - **Mitigation:** Agile sprints, priority-based task management
+   - **Probability**: High
+   - **Impact**: High
+   - **Mitigation**: Detailed planning, priority-based implementation, regular progress tracking
 
 3. **Technical Complexity**
-   - **Probability:** Medium
-   - **Impact:** Medium
-   - **Mitigation:** Incremental development, regular testing
+   - **Probability**: Medium
+   - **Impact**: Medium
+   - **Mitigation**: Prototype early, iterative development, regular testing
 
-### Risk Mitigation Strategies
-- **Weekly Progress Reviews:** Monitor against timeline
-- **Backup Strategy:** Regular GitHub commits
-- **Documentation First:** Clear requirements before implementation
-- **Testing Parallel:** Develop tests alongside features
+### Risk Assessment Matrix
+
+| Risk | Probability | Impact | Severity | Mitigation Strategy |
+|------|-------------|--------|----------|---------------------|
+| Text Storage Limitations | Medium | High | High | Robust error handling, backup systems |
+| Performance Issues | Medium | Medium | Medium | Optimization, caching strategies |
+| Security Concerns | Low | High | Medium | Secure coding practices, validation |
+| Time Constraints | High | High | High | Detailed planning, priority management |
+| Scope Creep | Medium | Medium | Medium | Requirement adherence, change control |
+
+### Contingency Planning
+
+#### Time Contingency
+- Buffer of 10 additional hours allocated for unexpected issues
+- Priority-based feature implementation (core features first)
+- Regular progress monitoring to identify delays early
+
+#### Technical Contingency
+- Alternative data storage approach designed (could migrate to database if needed)
+- Modular architecture allows for component replacement
+- Comprehensive error handling and recovery mechanisms
 
 ## Quality Assurance
 
 ### Quality Standards
 
 #### Code Quality
-- **Formatting:** Allman style throughout
-- **Comments:** Comprehensive XML documentation
-- **Naming:** Consistent naming conventions
-- **Structure:** Modular, reusable components
+- **Coding Standards**: Allman style formatting, comprehensive comments
+- **Code Review**: Self-review process with checklist
+- **Documentation**: Inline XML comments, technical documentation
 
 #### Testing Strategy
-- **Unit Tests:** All controllers and models
-- **Integration Tests:** End-to-end workflows
-- **Validation Testing:** Input and business rule validation
-- **UI Testing:** Manual interface testing
+- **Unit Testing**: Comprehensive coverage with xUnit
+- **Integration Testing**: End-to-end workflow testing
+- **User Acceptance Testing**: Validation against requirements
 
-#### Documentation Standards
-- **Technical Documentation:** Comprehensive and clear
-- **User Guides:** Step-by-step instructions
-- **API Documentation:** Inline XML comments
-- **Project Documentation:** Professional presentation
+### Testing Plan
+
+#### Unit Testing Coverage
+| Component | Test Cases | Coverage Target |
+|-----------|------------|-----------------|
+| Controllers | 20+ test cases | 90%+ |
+| Data Models | 15+ test cases | 95%+ |
+| Services | 10+ test cases | 85%+ |
+| View Models | 8+ test cases | 90%+ |
+
+#### Test Automation
+- Automated test execution on build
+- Continuous integration with GitHub
+- Test reporting and coverage analysis
 
 ### Quality Metrics
-| Metric | Target | Actual |
-|--------|--------|--------|
-| Test Coverage | 80% | 85% |
-| Code Documentation | 90% | 95% |
-| UI Responsiveness | 100% | 100% |
-| Feature Completion | 100% | 100% |
+
+#### Code Quality Metrics
+- Zero compiler warnings
+- 85%+ unit test coverage
+- All critical paths tested
+- Comprehensive error handling
+
+#### Performance Metrics
+- Page load times under 2 seconds
+- File operations complete within acceptable timeframes
+- System remains responsive under expected load
+
+#### User Experience Metrics
+- Intuitive navigation and workflow
+- Consistent Apple-like aesthetic
+- Comprehensive error messages and guidance
+
+## Implementation Strategy
+
+### Development Approach
+
+#### Incremental Implementation
+1. **Foundation Layer**
+   - Data models and text file service
+   - Basic authentication system
+   - Project structure and configuration
+
+2. **Core Functionality**
+   - Claim submission workflow
+   - Document management
+   - Basic approval process
+
+3. **Advanced Features**
+   - Automation engine
+   - Analytics and reporting
+   - System optimization
+
+#### Testing Integration
+- Test-driven development where practical
+- Continuous testing throughout development
+- Regular validation against requirements
+
+### Deployment Strategy
+
+#### Development Environment
+- Local development with immediate feedback
+- Regular commits to version control
+- Continuous integration testing
+
+#### Submission Preparation
+- Comprehensive final testing
+- Documentation compilation
+- Code review and optimization
+- Final submission package preparation
+
+### Documentation Strategy
+
+#### Technical Documentation
+- Comprehensive code comments
+- Architecture documentation
+- API documentation
+- Deployment guides
+
+#### User Documentation
+- System administration guide
+- User manuals for each role
+- Troubleshooting guide
 
 ## Success Criteria
 
 ### Technical Success Criteria
-1. **Functionality:** All specified features operational
-2. **Performance:** Responsive under normal load
-3. **Reliability:** Consistent operation without crashes
-4. **Security:** Proper authentication and data protection
+- All POE requirements implemented and verified
+- Comprehensive unit test coverage (85%+)
+- System performs reliably with text file storage
+- Apple-like aesthetic achieved throughout UI
+- All automation features functioning correctly
 
-### User Experience Success Criteria
-1. **Usability:** Intuitive navigation and workflows
-2. **Accessibility:** Accessible to users with disabilities
-3. **Responsiveness:** Works on desktop and mobile devices
-4. **Performance:** Fast load times and smooth interactions
+### Functional Success Criteria
+- Users can successfully submit claims with documents
+- Approval workflow functions correctly for all roles
+- Analytics provide meaningful insights
+- System handles errors gracefully
+- All business rules enforced correctly
 
 ### Project Success Criteria
-1. **Timely Delivery:** All parts completed by deadlines
-2. **Documentation:** Comprehensive and professional
-3. **Code Quality:** Clean, maintainable, well-documented
-4. **Testing:** Comprehensive test coverage
+- Completed within allocated time (45+ hours)
+- All milestones achieved on schedule
+- Comprehensive documentation delivered
+- Code quality meets professional standards
+- Successful POE submission
 
-## Part 1 Detailed Plan
+### Acceptance Criteria
 
-### Week 1-2: Requirements Analysis & UML Design
+#### Part 1 Acceptance
+- [x] Complete UML class diagrams
+- [x] Comprehensive project documentation
+- [x] Non-functional UI prototype
+- [x] Detailed project plan
 
-#### Objectives
-- Understand project requirements thoroughly
-- Design comprehensive UML class diagram
-- Plan system architecture
-- Establish development environment
+#### Part 2 Acceptance
+- [x] Functional claim submission system
+- [x] Role-based access control
+- [x] Document upload functionality
+- [x] Basic approval workflow
+- [x] Error handling and validation
 
-#### Tasks
-1. **Requirements Analysis** (Week 1)
-   - Study assignment specifications
-   - Identify all user stories
-   - Define system boundaries
-   - Document assumptions and constraints
+#### Part 3 Acceptance
+- [x] Automated calculation features
+- [x] Comprehensive validation system
+- [x] HR analytics dashboard
+- [x] Performance optimizations
+- [x] Comprehensive unit testing
 
-2. **UML Design** (Week 2)
-   - Create initial class diagram
-   - Define relationships and cardinalities
-   - Specify enumerations and data types
-   - Review and refine diagram
+### Measurement and Verification
 
-3. **Architecture Planning** (Week 2)
-   - Plan MVC structure
-   - Design data persistence approach
-   - Plan authentication system
-   - Outline testing strategy
+#### Progress Tracking
+- Weekly milestone reviews
+- Regular testing against requirements
+- Code quality assessments
+- Documentation completeness checks
 
-#### Deliverables
-- Requirements analysis document
-- UML class diagram (initial version)
-- System architecture outline
-- Project setup completed
+#### Final Verification
+- Comprehensive test execution
+- Requirement validation matrix
+- User acceptance testing scenarios
+- Documentation review and approval
 
-### Week 3-4: GUI Prototype & Documentation
-
-#### Objectives
-- Create non-functional UI prototype
-- Develop comprehensive documentation
-- Establish GitHub repository
-- Prepare Part 1 submission
-
-#### Tasks
-1. **GUI Prototype** (Week 3)
-   - Design Apple-inspired interface
-   - Create Razor views structure
-   - Implement basic navigation
-   - Apply CSS styling framework
-
-2. **Documentation** (Week 4)
-   - Write 400-500 word report
-   - Document design decisions
-   - Explain UML diagram
-   - Outline project plan
-
-3. **Repository Setup** (Week 4)
-   - Initialize GitHub repository
-   - Establish folder structure
-   - Implement version control
-   - Prepare submission package
-
-#### Deliverables
-- Non-functional GUI prototype
-- Project documentation (400-500 words)
-- GitHub repository established
-- Part 1 submission ready
-
-## Part 2 Detailed Plan
-
-### Week 5-6: Text File Database & Authentication
-
-#### Objectives
-- Implement text file storage system
-- Develop authentication framework
-- Create session management
-- Establish data persistence layer
-
-#### Tasks
-1. **Text File Database** (Week 5)
-   - Design JSON serialization approach
-   - Implement TextFileDataService class
-   - Create file operations (CRUD)
-   - Add error handling and validation
-
-2. **Authentication System** (Week 6)
-   - Develop AuthController
-   - Implement role-based access
-   - Create session management extensions
-   - Add login/logout functionality
-
-3. **Data Models** (Week 6)
-   - Implement all data model classes
-   - Add data annotations for validation
-   - Create view models
-   - Establish model relationships
-
-#### Deliverables
-- Functional text file database
-- Working authentication system
-- Session management implemented
-- Basic data models operational
-
-### Week 7-8: Core Claim Functionality
-
-#### Objectives
-- Implement claim submission system
-- Develop approval workflow
-- Create status tracking
-- Add basic document handling
-
-#### Tasks
-1. **Claim Management** (Week 7)
-   - Develop ClaimsController
-   - Implement claim submission
-   - Add approval/rejection logic
-   - Create status tracking
-
-2. **Document Upload** (Week 8)
-   - Implement file upload handling
-   - Add file validation
-   - Create document storage
-   - Develop metadata management
-
-3. **Workflow Integration** (Week 8)
-   - Connect claim submission to approval
-   - Implement status updates
-   - Add user notifications
-   - Create tracking views
-
-#### Deliverables
-- Functional claim submission
-- Document upload capability
-- Approval workflow operational
-- Status tracking implemented
-
-### Week 9-10: UI/UX Enhancement
-
-#### Objectives
-- Enhance user interface design
-- Improve user experience
-- Implement responsive design
-- Add interactive elements
-
-#### Tasks
-1. **Design System** (Week 9)
-   - Implement Apple-inspired CSS
-   - Create design tokens and variables
-   - Enhance typography and spacing
-   - Improve color scheme
-
-2. **Interactive Elements** (Week 10)
-   - Add JavaScript functionality
-   - Implement real-time calculations
-   - Enhance form interactions
-   - Add visual feedback
-
-3. **Responsive Design** (Week 10)
-   - Optimize for mobile devices
-   - Test cross-browser compatibility
-   - Improve accessibility
-   - Enhance navigation
-
-#### Deliverables
-- Enhanced UI design system
-- Interactive user experience
-- Responsive layout
-- Improved accessibility
-
-### Week 11-12: Testing & Optimization
-
-#### Objectives
-- Implement comprehensive testing
-- Optimize performance
-- Fix bugs and issues
-- Prepare Part 2 submission
-
-#### Tasks
-1. **Unit Testing** (Week 11)
-   - Write xUnit tests for controllers
-   - Test model validation
-   - Implement integration tests
-   - Create test data fixtures
-
-2. **Performance Optimization** (Week 12)
-   - Optimize file operations
-   - Improve session management
-   - Enhance data serialization
-   - Fix identified issues
-
-3. **Documentation Update** (Week 12)
-   - Update UML diagrams
-   - Document implementation
-   - Create user guides
-   - Prepare submission package
-
-#### Deliverables
-- Comprehensive test suite
-- Optimized application performance
-- Updated documentation
-- Part 2 submission ready
-
-## Part 3 Detailed Plan
-
-### Week 13-14: Advanced Features & Automation
-
-#### Objectives
-- Implement additional features
-- Add automation capabilities
-- Enhance system functionality
-- Prepare for final presentation
-
-#### Tasks
-1. **Feature Enhancement** (Week 13)
-   - Add advanced reporting
-   - Implement search functionality
-   - Enhance user management
-   - Add system configuration
-
-2. **Automation** (Week 14)
-   - Implement automated calculations
-   - Add batch processing
-   - Create notification system
-   - Enhance workflow automation
-
-3. **Presentation Preparation** (Week 14)
-   - Create PowerPoint presentation
-   - Prepare demo scenarios
-   - Practice presentation
-   - Gather feedback
-
-#### Deliverables
-- Enhanced feature set
-- Automation capabilities
-- Presentation materials
-- Demo scenarios prepared
-
-### Week 15-16: Final Polish & Submission
-
-#### Objectives
-- Complete final optimizations
-- Prepare comprehensive documentation
-- Submit final project
-- Present results
-
-#### Tasks
-1. **Final Optimization** (Week 15)
-   - Code review and cleanup
-   - Performance testing
-   - Security review
-   - User acceptance testing
-
-2. **Documentation Finalization** (Week 16)
-   - Complete all documentation
-   - Create installation guide
-   - Write user manual
-   - Prepare submission package
-
-3. **Project Submission** (Week 16)
-   - Final GitHub push
-   - Submit all deliverables
-   - Present project
-   - Collect feedback
-
-#### Deliverables
-- Optimized final application
-- Comprehensive documentation
-- Final submission package
-- Project presentation
+This project plan provides a comprehensive roadmap for the successful 
+development and delivery of the Contract Monthly Claim System, 
+ensuring all POE requirements are met while maintaining high standards 
+of quality and professionalism.
 
 ---
-
