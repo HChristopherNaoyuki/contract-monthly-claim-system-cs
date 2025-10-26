@@ -171,34 +171,45 @@ namespace contract_monthly_claim_system_cs.Controllers
             // Retrieve and process pending claims
             var submittedClaims = _dataService.GetAllClaims()
                 .Where(c => c.Status == ClaimStatus.Submitted)
-                .Select(c => new ClaimApprovalViewModel
-                {
-                    ClaimId = c.ClaimId,
-                    LecturerName = GetLecturerName(c.LecturerId),
-                    ClaimDate = c.ClaimDate,
-                    HoursWorked = c.HoursWorked,
-                    HourlyRate = c.HourlyRate,
-                    Amount = c.Amount,
-                    Status = c.Status.ToString(),
-                    DocumentNames = _dataService.GetDocumentsByClaimId(c.ClaimId)
-                        .Select(d => d.FileName)
-                        .ToList(),
-                    SubmissionComments = c.SubmissionComments,
-                    // Part 3 Automation: Automated verification flags
-                    HasExcessiveHours = c.HoursWorked > 160,
-                    HasUnusualAmount = c.Amount > 10000,
-                    RequiresManagerApproval = c.Amount > 5000 && userRole == UserRole.ProgrammeCoordinator.ToString(),
-                    DaysPending = (int)(DateTime.Now - c.ClaimDate).TotalDays
-                })
+                .Select(c => CreateClaimApprovalViewModel(c, userRole))
                 .OrderByDescending(c => c.RequiresManagerApproval)
                 .ThenByDescending(c => c.Amount)
-                .ThenBy(c => c.DaysPending)
+                .ThenBy(c => c.ClaimDate)
                 .ToList();
 
             _logger.LogInformation("Automated approval view generated for {UserRole} - {ClaimCount} claims pending",
                 userRole, submittedClaims.Count);
 
             return View(submittedClaims);
+        }
+
+        /// <summary>
+        /// Creates a ClaimApprovalViewModel with automated verification flags
+        /// Part 3 automation: Automated claim analysis for approvers
+        /// </summary>
+        /// <param name="claim">Claim entity to convert</param>
+        /// <param name="userRole">Current user's role for permission checks</param>
+        /// <returns>Populated ClaimApprovalViewModel</returns>
+        private ClaimApprovalViewModel CreateClaimApprovalViewModel(Claim claim, string userRole)
+        {
+            return new ClaimApprovalViewModel
+            {
+                ClaimId = claim.ClaimId,
+                LecturerName = GetLecturerName(claim.LecturerId),
+                ClaimDate = claim.ClaimDate,
+                HoursWorked = claim.HoursWorked,
+                HourlyRate = claim.HourlyRate,
+                Amount = claim.Amount,
+                Status = claim.Status.ToString(),
+                DocumentNames = _dataService.GetDocumentsByClaimId(claim.ClaimId)
+                    .Select(d => d.FileName)
+                    .ToList(),
+                SubmissionComments = claim.SubmissionComments,
+                // Part 3 Automation: Automated verification flags
+                HasExcessiveHours = claim.HoursWorked > 160,
+                HasUnusualAmount = claim.Amount > 10000,
+                RequiresManagerApproval = claim.Amount > 5000 && userRole == UserRole.ProgrammeCoordinator.ToString()
+            };
         }
 
         /// <summary>
@@ -342,21 +353,7 @@ namespace contract_monthly_claim_system_cs.Controllers
             }
 
             // Create detailed status view model
-            var viewModel = new ClaimApprovalViewModel
-            {
-                ClaimId = claim.ClaimId,
-                LecturerName = GetLecturerName(claim.LecturerId),
-                ClaimDate = claim.ClaimDate,
-                HoursWorked = claim.HoursWorked,
-                HourlyRate = claim.HourlyRate,
-                Amount = claim.Amount,
-                Status = claim.Status.ToString(),
-                DocumentNames = _dataService.GetDocumentsByClaimId(claimId)
-                    .Select(d => d.FileName)
-                    .ToList(),
-                SubmissionComments = claim.SubmissionComments,
-                DaysPending = (int)(DateTime.Now - claim.ClaimDate).TotalDays
-            };
+            var viewModel = CreateClaimApprovalViewModel(claim, HttpContext.Session.GetString("Role"));
 
             // Get approval history and comments
             var approvals = _dataService.GetApprovalsByClaimId(claimId);
@@ -403,19 +400,7 @@ namespace contract_monthly_claim_system_cs.Controllers
             }
 
             // Create tracking view models
-            var viewModels = claims.Select(c => new ClaimApprovalViewModel
-            {
-                ClaimId = c.ClaimId,
-                LecturerName = GetLecturerName(c.LecturerId),
-                ClaimDate = c.ClaimDate,
-                HoursWorked = c.HoursWorked,
-                HourlyRate = c.HourlyRate,
-                Amount = c.Amount,
-                Status = c.Status.ToString(),
-                SubmissionComments = c.SubmissionComments,
-                ApprovalComments = GetApprovalComments(c.ClaimId),
-                DaysPending = (int)(DateTime.Now - c.ClaimDate).TotalDays
-            }).ToList();
+            var viewModels = claims.Select(c => CreateClaimApprovalViewModel(c, userRole)).ToList();
 
             _logger.LogInformation("Tracking view generated for user {UserId} with role {Role} - {ClaimCount} claims",
                 userId, userRole, claims.Count);
@@ -743,19 +728,6 @@ namespace contract_monthly_claim_system_cs.Controllers
         {
             var user = _dataService.GetUserById(lecturerId);
             return user != null ? $"{user.Name} {user.Surname}" : "Unknown Lecturer";
-        }
-
-        /// <summary>
-        /// Gets formatted approval comments for display
-        /// </summary>
-        /// <param name="claimId">Claim ID for comment retrieval</param>
-        /// <returns>Concatenated approval comments</returns>
-        private string GetApprovalComments(int claimId)
-        {
-            var approvals = _dataService.GetApprovalsByClaimId(claimId);
-            return string.Join("; ",
-                approvals.Where(a => !string.IsNullOrEmpty(a.Comments))
-                        .Select(a => $"{a.ApproverRole}: {a.Comments}"));
         }
 
         #endregion
