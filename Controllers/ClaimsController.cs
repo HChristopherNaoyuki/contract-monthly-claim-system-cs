@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Http;
 using contract_monthly_claim_system_cs.Models.ClaimViewModels;
+using contract_monthly_claim_system_cs.Models.ViewModels;
 using contract_monthly_claim_system_cs.Models.DataModels;
+using contract_monthly_claim_system_cs.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +14,9 @@ using System.Threading.Tasks;
 namespace contract_monthly_claim_system_cs.Controllers
 {
     /// <summary>
-    /// Enhanced Claims Controller with automation features for Part 3 POE requirements
-    /// Includes auto-calculation, validation, and workflow automation
+    /// Enhanced Claims Controller with comprehensive automation features for Part 3 POE requirements
+    /// Handles claim submission, approval workflow, HR analytics, and automated processing
+    /// Uses text file storage instead of database as per assignment requirements
     /// </summary>
     public class ClaimsController : Controller
     {
@@ -24,7 +27,7 @@ namespace contract_monthly_claim_system_cs.Controllers
         /// Initializes a new instance of ClaimsController with dependency injection
         /// </summary>
         /// <param name="dataService">Data service for text file operations</param>
-        /// <param name="logger">Logger instance for tracking operations</param>
+        /// <param name="logger">Logger instance for tracking operations and debugging</param>
         public ClaimsController(TextFileDataService dataService, ILogger<ClaimsController> logger)
         {
             _dataService = dataService;
@@ -33,19 +36,24 @@ namespace contract_monthly_claim_system_cs.Controllers
 
         /// <summary>
         /// Displays enhanced claim submission form with auto-calculation features
+        /// Part 3 requirement: Automated claim submission with validation
         /// Requires user authentication and validates lecturer status
         /// </summary>
         /// <returns>Claim submission view or redirect to authentication</returns>
+        [HttpGet]
         public IActionResult Submit()
         {
+            // Check if user is authenticated
             if (HttpContext.Session.GetInt32("UserId") == null)
             {
+                _logger.LogWarning("Unauthorized access attempt to claim submission");
                 return RedirectToAction("Index", "Auth");
             }
 
             var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
             var lecturer = _dataService.GetLecturerById(userId);
 
+            // Create view model with pre-populated data
             var viewModel = new ClaimSubmissionViewModel
             {
                 HourlyRate = lecturer?.HourlyRate ?? 150.00m
@@ -57,7 +65,8 @@ namespace contract_monthly_claim_system_cs.Controllers
 
         /// <summary>
         /// Handles automated claim submission with enhanced validation and auto-calculation
-        /// Implements Part 3 automation requirements for claim processing
+        /// Part 3 automation requirement: Auto-calculation feature and validation checks
+        /// Implements automated workflow for claim processing
         /// </summary>
         /// <param name="model">Claim submission data with validation</param>
         /// <returns>Redirect to status page or error view</returns>
@@ -65,28 +74,34 @@ namespace contract_monthly_claim_system_cs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Submit(ClaimSubmissionViewModel model)
         {
+            // Validate user authentication
             if (HttpContext.Session.GetInt32("UserId") == null)
             {
+                _logger.LogWarning("Unauthorized POST attempt to claim submission");
                 return RedirectToAction("Index", "Auth");
             }
 
+            // Validate model state
             if (ModelState.IsValid)
             {
                 try
                 {
                     var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
 
-                    // Automated calculation - Part 3 requirement
+                    // Part 3 Automation: Auto-calculation feature
                     model.Amount = AutoCalculateClaimAmount(model.HoursWorked, model.HourlyRate);
 
-                    // Enhanced validation - Part 3 requirement
+                    // Part 3 Automation: Enhanced validation checks
                     var validationResult = ValidateClaimSubmission(model, userId);
                     if (!validationResult.IsValid)
                     {
                         ModelState.AddModelError("", validationResult.ErrorMessage);
+                        _logger.LogWarning("Claim validation failed for user {UserId}: {Error}",
+                            userId, validationResult.ErrorMessage);
                         return View(model);
                     }
 
+                    // Create new claim entity
                     var claim = new Claim
                     {
                         ClaimId = _dataService.GetNextId("claims"),
@@ -102,16 +117,17 @@ namespace contract_monthly_claim_system_cs.Controllers
                         ModifiedDate = DateTime.Now
                     };
 
+                    // Save claim to text file storage
                     _dataService.SaveClaim(claim);
 
-                    // Automated document processing - Part 3 requirement
+                    // Part 3 Automation: Automated document processing
                     await ProcessUploadedDocuments(model.Documents, claim.ClaimId);
 
-                    // Automated notification - Part 3 requirement
+                    // Part 3 Automation: Automated notification system
                     await NotifyCoordinators(claim);
 
-                    _logger.LogInformation("Automated claim submission successful - User {UserId}, Claim {ClaimId}",
-                        userId, claim.ClaimId);
+                    _logger.LogInformation("Automated claim submission successful - User {UserId}, Claim {ClaimId}, Amount {Amount}",
+                        userId, claim.ClaimId, claim.Amount);
 
                     return RedirectToAction("Status", new { claimId = claim.ClaimId });
                 }
@@ -123,18 +139,23 @@ namespace contract_monthly_claim_system_cs.Controllers
                 }
             }
 
+            // Return to view with validation errors
             return View(model);
         }
 
         /// <summary>
         /// Enhanced approval view with automated claim verification for coordinators and managers
-        /// Implements Part 3 automation requirements for approval workflow
+        /// Part 3 automation requirement: Automated verification and approval processes
+        /// Provides intelligent claim analysis and workflow management
         /// </summary>
         /// <returns>Approval view with automated claim analysis</returns>
+        [HttpGet]
         public IActionResult Approve()
         {
+            // Validate authentication and authorization
             if (HttpContext.Session.GetInt32("UserId") == null)
             {
+                _logger.LogWarning("Unauthorized access attempt to approval page");
                 return RedirectToAction("Index", "Auth");
             }
 
@@ -142,9 +163,12 @@ namespace contract_monthly_claim_system_cs.Controllers
             if (userRole != UserRole.ProgrammeCoordinator.ToString() &&
                 userRole != UserRole.AcademicManager.ToString())
             {
+                _logger.LogWarning("User {UserId} with role {Role} attempted to access approval page",
+                    HttpContext.Session.GetInt32("UserId"), userRole);
                 return RedirectToAction("Index", "Home");
             }
 
+            // Retrieve and process pending claims
             var submittedClaims = _dataService.GetAllClaims()
                 .Where(c => c.Status == ClaimStatus.Submitted)
                 .Select(c => new ClaimApprovalViewModel
@@ -160,16 +184,18 @@ namespace contract_monthly_claim_system_cs.Controllers
                         .Select(d => d.FileName)
                         .ToList(),
                     SubmissionComments = c.SubmissionComments,
-                    // Automated verification flags - Part 3 requirement
+                    // Part 3 Automation: Automated verification flags
                     HasExcessiveHours = c.HoursWorked > 160,
                     HasUnusualAmount = c.Amount > 10000,
-                    RequiresManagerApproval = c.Amount > 5000 && userRole == UserRole.ProgrammeCoordinator.ToString()
+                    RequiresManagerApproval = c.Amount > 5000 && userRole == UserRole.ProgrammeCoordinator.ToString(),
+                    DaysPending = (int)(DateTime.Now - c.ClaimDate).TotalDays
                 })
                 .OrderByDescending(c => c.RequiresManagerApproval)
                 .ThenByDescending(c => c.Amount)
+                .ThenBy(c => c.DaysPending)
                 .ToList();
 
-            _logger.LogInformation("Automated approval view generated for {UserRole} - {ClaimCount} claims",
+            _logger.LogInformation("Automated approval view generated for {UserRole} - {ClaimCount} claims pending",
                 userRole, submittedClaims.Count);
 
             return View(submittedClaims);
@@ -177,25 +203,29 @@ namespace contract_monthly_claim_system_cs.Controllers
 
         /// <summary>
         /// Automated claim approval/rejection with workflow management
-        /// Implements Part 3 automation requirements for approval process
+        /// Part 3 automation requirement: Approval workflows and automated processing
+        /// Handles multi-level approval system with notifications
         /// </summary>
         /// <param name="claimId">ID of claim to process</param>
-        /// <param name="isApproved">Approval decision</param>
-        /// <param name="comments">Approval comments</param>
-        /// <returns>Redirect to approval page</returns>
+        /// <param name="isApproved">Approval decision (true for approve, false for reject)</param>
+        /// <param name="comments">Approval comments for audit trail</param>
+        /// <returns>Redirect to approval page with status message</returns>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApproveClaim(int claimId, bool isApproved, string comments)
         {
+            // Validate authentication
             if (HttpContext.Session.GetInt32("UserId") == null)
             {
+                _logger.LogWarning("Unauthorized approval attempt for claim {ClaimId}", claimId);
                 return RedirectToAction("Index", "Auth");
             }
 
+            // Retrieve claim from text file storage
             var claim = _dataService.GetClaimById(claimId);
             if (claim != null)
             {
-                // Automated status update - Part 3 requirement
+                // Part 3 Automation: Automated status update
                 claim.Status = isApproved ? ClaimStatus.Approved : ClaimStatus.Rejected;
                 claim.ModifiedDate = DateTime.Now;
                 _dataService.SaveClaim(claim);
@@ -203,6 +233,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                 var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
                 var userRole = HttpContext.Session.GetString("Role") ?? "Unknown";
 
+                // Create approval record for audit trail
                 var approval = new Approval
                 {
                     ApprovalId = _dataService.GetNextId("approvals"),
@@ -217,40 +248,54 @@ namespace contract_monthly_claim_system_cs.Controllers
 
                 _dataService.SaveApproval(approval);
 
-                // Automated notification - Part 3 requirement
+                // Part 3 Automation: Automated notification to lecturer
                 await NotifyLecturerOfDecision(claim, isApproved, comments);
 
-                // Automated reporting for HR - Part 3 requirement
+                // Part 3 Automation: Automated reporting for HR on final approval
                 if (isApproved && userRole == UserRole.AcademicManager.ToString())
                 {
                     await GenerateHRReport(claim);
                 }
 
                 var action = isApproved ? "approved" : "rejected";
-                _logger.LogInformation("Automated claim {Action}: Claim {ClaimId} by user {UserId}",
-                    action, claimId, userId);
+                _logger.LogInformation("Automated claim {Action}: Claim {ClaimId} by user {UserId} with role {Role}",
+                    action, claimId, userId, userRole);
+
+                TempData["SuccessMessage"] = $"Claim #{claimId} has been {action} successfully.";
+            }
+            else
+            {
+                _logger.LogWarning("Claim {ClaimId} not found for approval processing", claimId);
+                TempData["ErrorMessage"] = $"Claim #{claimId} not found.";
             }
 
             return RedirectToAction("Approve");
         }
 
         /// <summary>
-        /// Enhanced HR view with automated data management and reporting
-        /// Implements Part 3 automation requirements for HR functionality
+        /// Enhanced HR dashboard with automated data management and reporting
+        /// Part 3 automation requirement: HR view automation and data management
+        /// Provides comprehensive analytics and reporting features
         /// </summary>
-        /// <returns>HR dashboard view</returns>
+        /// <returns>HR dashboard view with automated analytics</returns>
+        [HttpGet]
         public IActionResult HRDashboard()
         {
+            // Validate authentication and authorization (Academic Managers only)
             if (HttpContext.Session.GetInt32("UserId") == null ||
                 HttpContext.Session.GetString("Role") != UserRole.AcademicManager.ToString())
             {
+                _logger.LogWarning("Unauthorized access attempt to HR dashboard");
                 return RedirectToAction("Index", "Home");
             }
 
+            // Retrieve all claims for analytics
             var allClaims = _dataService.GetAllClaims();
             var approvedClaims = allClaims.Where(c => c.Status == ClaimStatus.Approved).ToList();
             var paidClaims = allClaims.Where(c => c.Status == ClaimStatus.Paid).ToList();
+            var submittedClaims = allClaims.Where(c => c.Status == ClaimStatus.Submitted).ToList();
 
+            // Part 3 Automation: Create comprehensive HR dashboard view model
             var hrViewModel = new HRDashboardViewModel
             {
                 TotalClaims = allClaims.Count,
@@ -258,35 +303,149 @@ namespace contract_monthly_claim_system_cs.Controllers
                 PaidClaims = paidClaims.Count,
                 TotalAmountApproved = approvedClaims.Sum(c => c.Amount),
                 TotalAmountPaid = paidClaims.Sum(c => c.Amount),
-                PendingApprovalCount = allClaims.Count(c => c.Status == ClaimStatus.Submitted),
-                // Automated analytics - Part 3 requirement
+                PendingApprovalCount = submittedClaims.Count,
                 AverageClaimAmount = approvedClaims.Any() ? approvedClaims.Average(c => c.Amount) : 0,
+                // Part 3 Automation: Advanced analytics
                 TopLecturers = GetTopPerformingLecturers(approvedClaims),
-                MonthlyBreakdown = GetMonthlyClaimBreakdown(approvedClaims)
+                MonthlyBreakdown = GetMonthlyClaimBreakdown(approvedClaims),
+                GeneratedAt = DateTime.Now
             };
 
-            _logger.LogInformation("HR dashboard generated with automated analytics");
+            _logger.LogInformation("HR dashboard generated with automated analytics - {TotalClaims} total claims",
+                allClaims.Count);
+
             return View(hrViewModel);
         }
 
         /// <summary>
-        /// Automated claim amount calculation
-        /// Part 3 automation requirement for financial calculations
+        /// Displays detailed claim status with tracking information
+        /// Part 3 requirement: Claim status tracking transparency
+        /// </summary>
+        /// <param name="claimId">ID of the claim to display</param>
+        /// <returns>Claim status view with detailed information</returns>
+        [HttpGet]
+        public IActionResult Status(int claimId)
+        {
+            // Validate authentication
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
+
+            // Retrieve claim from text file storage
+            var claim = _dataService.GetClaimById(claimId);
+            if (claim == null)
+            {
+                _logger.LogWarning("Claim {ClaimId} not found for status display", claimId);
+                TempData["ErrorMessage"] = $"Claim #{claimId} not found.";
+                return RedirectToAction("Track");
+            }
+
+            // Create detailed status view model
+            var viewModel = new ClaimApprovalViewModel
+            {
+                ClaimId = claim.ClaimId,
+                LecturerName = GetLecturerName(claim.LecturerId),
+                ClaimDate = claim.ClaimDate,
+                HoursWorked = claim.HoursWorked,
+                HourlyRate = claim.HourlyRate,
+                Amount = claim.Amount,
+                Status = claim.Status.ToString(),
+                DocumentNames = _dataService.GetDocumentsByClaimId(claimId)
+                    .Select(d => d.FileName)
+                    .ToList(),
+                SubmissionComments = claim.SubmissionComments,
+                DaysPending = (int)(DateTime.Now - claim.ClaimDate).TotalDays
+            };
+
+            // Get approval history and comments
+            var approvals = _dataService.GetApprovalsByClaimId(claimId);
+            if (approvals.Any())
+            {
+                viewModel.ApprovalComments = string.Join("; ",
+                    approvals.Where(a => !string.IsNullOrEmpty(a.Comments))
+                            .Select(a => $"{a.ApproverRole}: {a.Comments}"));
+            }
+
+            _logger.LogInformation("Status displayed for claim {ClaimId} with status {Status}",
+                claimId, claim.Status);
+
+            return View(viewModel);
+        }
+
+        /// <summary>
+        /// Displays claim tracking for users with role-based filtering
+        /// Part 3 requirement: Transparent claim status tracking
+        /// </summary>
+        /// <returns>Claim tracking view with filtered claims</returns>
+        [HttpGet]
+        public IActionResult Track()
+        {
+            // Validate authentication
+            if (HttpContext.Session.GetInt32("UserId") == null)
+            {
+                return RedirectToAction("Index", "Auth");
+            }
+
+            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+            var userRole = HttpContext.Session.GetString("Role");
+
+            List<Claim> claims;
+
+            // Part 3 Automation: Role-based data filtering
+            if (userRole == UserRole.Lecturer.ToString())
+            {
+                claims = _dataService.GetClaimsByLecturerId(userId);
+            }
+            else
+            {
+                claims = _dataService.GetAllClaims();
+            }
+
+            // Create tracking view models
+            var viewModels = claims.Select(c => new ClaimApprovalViewModel
+            {
+                ClaimId = c.ClaimId,
+                LecturerName = GetLecturerName(c.LecturerId),
+                ClaimDate = c.ClaimDate,
+                HoursWorked = c.HoursWorked,
+                HourlyRate = c.HourlyRate,
+                Amount = c.Amount,
+                Status = c.Status.ToString(),
+                SubmissionComments = c.SubmissionComments,
+                ApprovalComments = GetApprovalComments(c.ClaimId),
+                DaysPending = (int)(DateTime.Now - c.ClaimDate).TotalDays
+            }).ToList();
+
+            _logger.LogInformation("Tracking view generated for user {UserId} with role {Role} - {ClaimCount} claims",
+                userId, userRole, claims.Count);
+
+            return View(viewModels);
+        }
+
+        #region Part 3 Automation Methods
+
+        /// <summary>
+        /// Automated claim amount calculation with overtime consideration
+        /// Part 3 automation requirement: Auto-calculation feature
         /// </summary>
         /// <param name="hoursWorked">Hours worked by lecturer</param>
         /// <param name="hourlyRate">Lecturer's hourly rate</param>
-        /// <returns>Calculated claim amount</returns>
+        /// <returns>Calculated claim amount with overtime if applicable</returns>
         private decimal AutoCalculateClaimAmount(decimal hoursWorked, decimal hourlyRate)
         {
             // Basic calculation
             var amount = hoursWorked * hourlyRate;
 
-            // Automated overtime calculation - Part 3 enhancement
-            if (hoursWorked > 160) // More than 160 hours per month
+            // Part 3 Automation: Overtime calculation
+            if (hoursWorked > 160) // More than 160 hours per month (standard full-time)
             {
                 var overtimeHours = hoursWorked - 160;
                 var overtimeRate = hourlyRate * 1.5m; // Time and a half for overtime
                 amount = (160 * hourlyRate) + (overtimeHours * overtimeRate);
+
+                _logger.LogDebug("Overtime calculated: {RegularHours} regular + {OvertimeHours} overtime",
+                    160, overtimeHours);
             }
 
             return Math.Round(amount, 2);
@@ -294,23 +453,34 @@ namespace contract_monthly_claim_system_cs.Controllers
 
         /// <summary>
         /// Enhanced claim validation with automated business rules
-        /// Part 3 automation requirement for data validation
+        /// Part 3 automation requirement: Validation checks for accurate data entry
         /// </summary>
         /// <param name="model">Claim submission data</param>
-        /// <param name="userId">User ID for validation</param>
-        /// <returns>Validation result</returns>
+        /// <param name="userId">User ID for validation context</param>
+        /// <returns>Validation result with error message if invalid</returns>
         private (bool IsValid, string ErrorMessage) ValidateClaimSubmission(ClaimSubmissionViewModel model, int userId)
         {
-            // Maximum hours validation
-            if (model.HoursWorked > 744) // Maximum hours in a month
+            // Maximum hours validation (744 hours in a 31-day month)
+            if (model.HoursWorked > 744)
             {
                 return (false, "Hours worked cannot exceed 744 hours per month.");
             }
 
+            // Minimum hours validation
+            if (model.HoursWorked <= 0)
+            {
+                return (false, "Hours worked must be greater than 0.");
+            }
+
             // Rate validation
-            if (model.HourlyRate > 500) // Maximum hourly rate
+            if (model.HourlyRate > 500) // Maximum hourly rate constraint
             {
                 return (false, "Hourly rate exceeds maximum allowed amount.");
+            }
+
+            if (model.HourlyRate <= 0)
+            {
+                return (false, "Hourly rate must be greater than 0.");
             }
 
             // Monthly submission limit validation
@@ -324,14 +494,21 @@ namespace contract_monthly_claim_system_cs.Controllers
                 return (false, "Maximum of 3 claims allowed per month.");
             }
 
+            // Amount validation
+            var calculatedAmount = AutoCalculateClaimAmount(model.HoursWorked, model.HourlyRate);
+            if (calculatedAmount > 50000) // Maximum claim amount
+            {
+                return (false, "Claim amount exceeds maximum allowed limit.");
+            }
+
             return (true, string.Empty);
         }
 
         /// <summary>
-        /// Automated document processing with validation
-        /// Part 3 automation requirement for file handling
+        /// Automated document processing with validation and secure storage
+        /// Part 3 automation requirement: Document upload and management
         /// </summary>
-        /// <param name="documents">Uploaded documents</param>
+        /// <param name="documents">Uploaded document files</param>
         /// <param name="claimId">Claim ID for document association</param>
         private async Task ProcessUploadedDocuments(List<IFormFile> documents, int claimId)
         {
@@ -341,11 +518,30 @@ namespace contract_monthly_claim_system_cs.Controllers
                 {
                     if (file.Length > 0)
                     {
+                        // Validate file size (5MB limit)
+                        if (file.Length > 5 * 1024 * 1024)
+                        {
+                            _logger.LogWarning("File {FileName} exceeds size limit for claim {ClaimId}",
+                                file.FileName, claimId);
+                            continue;
+                        }
+
+                        // Validate file type
+                        var allowedExtensions = new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" };
+                        var fileExtension = Path.GetExtension(file.FileName).ToLower();
+                        if (!allowedExtensions.Contains(fileExtension))
+                        {
+                            _logger.LogWarning("Invalid file type {FileType} for claim {ClaimId}",
+                                fileExtension, claimId);
+                            continue;
+                        }
+
                         // Create uploads directory if it doesn't exist
                         var uploadsDirectory = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "uploads");
                         if (!Directory.Exists(uploadsDirectory))
                         {
                             Directory.CreateDirectory(uploadsDirectory);
+                            _logger.LogInformation("Created uploads directory: {UploadsDirectory}", uploadsDirectory);
                         }
 
                         // Generate secure file name
@@ -358,6 +554,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                             await file.CopyToAsync(stream);
                         }
 
+                        // Create document record
                         var document = new Document
                         {
                             DocumentId = _dataService.GetNextId("documents"),
@@ -365,20 +562,22 @@ namespace contract_monthly_claim_system_cs.Controllers
                             FileName = file.FileName,
                             FilePath = $"/uploads/{fileName}",
                             FileSize = file.Length,
-                            FileType = Path.GetExtension(file.FileName),
+                            FileType = fileExtension,
                             UploadDate = DateTime.Now,
                             IsActive = true
                         };
 
                         _dataService.SaveDocument(document);
+                        _logger.LogInformation("Document {FileName} processed for claim {ClaimId}",
+                            file.FileName, claimId);
                     }
                 }
             }
         }
 
         /// <summary>
-        /// Automated notification system for coordinators
-        /// Part 3 automation requirement for workflow notifications
+        /// Automated notification system for coordinators about new claims
+        /// Part 3 automation requirement: Workflow notifications
         /// </summary>
         /// <param name="claim">Newly submitted claim</param>
         private async Task NotifyCoordinators(Claim claim)
@@ -406,11 +605,11 @@ namespace contract_monthly_claim_system_cs.Controllers
 
         /// <summary>
         /// Automated notification to lecturer about claim decision
-        /// Part 3 automation requirement for user communication
+        /// Part 3 automation requirement: User communication and transparency
         /// </summary>
         /// <param name="claim">Processed claim</param>
         /// <param name="isApproved">Approval status</param>
-        /// <param name="comments">Decision comments</param>
+        /// <param name="comments">Decision comments for context</param>
         private async Task NotifyLecturerOfDecision(Claim claim, bool isApproved, string comments)
         {
             try
@@ -433,9 +632,9 @@ namespace contract_monthly_claim_system_cs.Controllers
 
         /// <summary>
         /// Automated HR report generation for approved claims
-        /// Part 3 automation requirement for reporting
+        /// Part 3 automation requirement: Automated reporting and data management
         /// </summary>
-        /// <param name="claim">Approved claim</param>
+        /// <param name="claim">Approved claim for reporting</param>
         private async Task GenerateHRReport(Claim claim)
         {
             try
@@ -443,7 +642,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                 var lecturer = _dataService.GetUserById(claim.LecturerId);
                 var lecturerDetails = _dataService.GetLecturerById(claim.LecturerId);
 
-                // Generate report data
+                // Generate comprehensive report data
                 var reportData = new
                 {
                     ClaimId = claim.ClaimId,
@@ -451,15 +650,23 @@ namespace contract_monthly_claim_system_cs.Controllers
                     EmployeeNumber = lecturerDetails?.EmployeeNumber,
                     Department = lecturerDetails?.Department,
                     Amount = claim.Amount,
+                    HoursWorked = claim.HoursWorked,
+                    HourlyRate = claim.HourlyRate,
                     ApprovalDate = DateTime.Now,
                     BankDetails = new
                     {
                         AccountNumber = lecturerDetails?.BankAccountNumber,
                         BankName = lecturerDetails?.BankName
+                    },
+                    TaxInformation = new
+                    {
+                        TaxNumber = lecturerDetails?.TaxNumber
                     }
                 };
 
-                _logger.LogInformation("HR report generated for claim {ClaimId}", claim.ClaimId);
+                _logger.LogInformation("HR report generated for claim {ClaimId} - Amount: {Amount}",
+                    claim.ClaimId, claim.Amount);
+
                 await Task.CompletedTask; // Simulate async report generation
             }
             catch (Exception ex)
@@ -470,9 +677,9 @@ namespace contract_monthly_claim_system_cs.Controllers
 
         /// <summary>
         /// Gets the next approval order for workflow management
-        /// Part 3 automation requirement for multi-level approval
+        /// Part 3 automation requirement: Multi-level approval workflow
         /// </summary>
-        /// <param name="claimId">Claim ID</param>
+        /// <param name="claimId">Claim ID for order calculation</param>
         /// <returns>Next approval order number</returns>
         private int GetNextApprovalOrder(int claimId)
         {
@@ -481,49 +688,39 @@ namespace contract_monthly_claim_system_cs.Controllers
         }
 
         /// <summary>
-        /// Gets lecturer name for display purposes
-        /// </summary>
-        /// <param name="lecturerId">Lecturer ID</param>
-        /// <returns>Formatted lecturer name</returns>
-        private string GetLecturerName(int lecturerId)
-        {
-            var user = _dataService.GetUserById(lecturerId);
-            return user != null ? $"{user.Name} {user.Surname}" : "Unknown Lecturer";
-        }
-
-        /// <summary>
         /// Automated analytics for top performing lecturers
-        /// Part 3 automation requirement for HR analytics
+        /// Part 3 automation requirement: Performance analytics and reporting
         /// </summary>
-        /// <param name="approvedClaims">List of approved claims</param>
-        /// <returns>List of top lecturers</returns>
-        private List<TopLecturer> GetTopPerformingLecturers(List<Claim> approvedClaims)
+        /// <param name="approvedClaims">List of approved claims for analysis</param>
+        /// <returns>List of top lecturers with performance metrics</returns>
+        private List<TopLecturerViewModel> GetTopPerformingLecturers(List<Claim> approvedClaims)
         {
             return approvedClaims
                 .GroupBy(c => c.LecturerId)
-                .Select(g => new TopLecturer
+                .Select(g => new TopLecturerViewModel
                 {
                     LecturerId = g.Key,
                     LecturerName = GetLecturerName(g.Key),
                     TotalAmount = g.Sum(c => c.Amount),
-                    ClaimCount = g.Count()
+                    ClaimCount = g.Count(),
+                    Department = _dataService.GetLecturerById(g.Key)?.Department ?? "Unknown"
                 })
                 .OrderByDescending(l => l.TotalAmount)
-                .Take(5)
+                .Take(5) // Top 5 performers
                 .ToList();
         }
 
         /// <summary>
-        /// Automated monthly breakdown analysis
-        /// Part 3 automation requirement for financial reporting
+        /// Automated monthly breakdown analysis for trend reporting
+        /// Part 3 automation requirement: Financial reporting and trend analysis
         /// </summary>
-        /// <param name="approvedClaims">List of approved claims</param>
-        /// <returns>Monthly breakdown data</returns>
-        private List<MonthlyBreakdown> GetMonthlyClaimBreakdown(List<Claim> approvedClaims)
+        /// <param name="approvedClaims">List of approved claims for breakdown</param>
+        /// <returns>Monthly breakdown data for analytics</returns>
+        private List<MonthlyBreakdownViewModel> GetMonthlyClaimBreakdown(List<Claim> approvedClaims)
         {
             return approvedClaims
                 .GroupBy(c => c.MonthYear)
-                .Select(g => new MonthlyBreakdown
+                .Select(g => new MonthlyBreakdownViewModel
                 {
                     MonthYear = g.Key,
                     TotalAmount = g.Sum(c => c.Amount),
@@ -532,45 +729,35 @@ namespace contract_monthly_claim_system_cs.Controllers
                 .OrderBy(m => m.MonthYear)
                 .ToList();
         }
-    }
 
-    /// <summary>
-    /// ViewModel for HR Dashboard with automated analytics
-    /// Part 3 requirement for enhanced reporting
-    /// </summary>
-    public class HRDashboardViewModel
-    {
-        public int TotalClaims { get; set; }
-        public int ApprovedClaims { get; set; }
-        public int PaidClaims { get; set; }
-        public decimal TotalAmountApproved { get; set; }
-        public decimal TotalAmountPaid { get; set; }
-        public int PendingApprovalCount { get; set; }
-        public decimal AverageClaimAmount { get; set; }
-        public List<TopLecturer> TopLecturers { get; set; } = new List<TopLecturer>();
-        public List<MonthlyBreakdown> MonthlyBreakdown { get; set; } = new List<MonthlyBreakdown>();
-    }
+        #endregion
 
-    /// <summary>
-    /// Data structure for top performing lecturers
-    /// Part 3 requirement for analytics
-    /// </summary>
-    public class TopLecturer
-    {
-        public int LecturerId { get; set; }
-        public string LecturerName { get; set; } = string.Empty;
-        public decimal TotalAmount { get; set; }
-        public int ClaimCount { get; set; }
-    }
+        #region Helper Methods
 
-    /// <summary>
-    /// Data structure for monthly claim breakdown
-    /// Part 3 requirement for financial reporting
-    /// </summary>
-    public class MonthlyBreakdown
-    {
-        public string MonthYear { get; set; } = string.Empty;
-        public decimal TotalAmount { get; set; }
-        public int ClaimCount { get; set; }
+        /// <summary>
+        /// Gets formatted lecturer name for display purposes
+        /// </summary>
+        /// <param name="lecturerId">Lecturer ID for name lookup</param>
+        /// <returns>Formatted lecturer full name</returns>
+        private string GetLecturerName(int lecturerId)
+        {
+            var user = _dataService.GetUserById(lecturerId);
+            return user != null ? $"{user.Name} {user.Surname}" : "Unknown Lecturer";
+        }
+
+        /// <summary>
+        /// Gets formatted approval comments for display
+        /// </summary>
+        /// <param name="claimId">Claim ID for comment retrieval</param>
+        /// <returns>Concatenated approval comments</returns>
+        private string GetApprovalComments(int claimId)
+        {
+            var approvals = _dataService.GetApprovalsByClaimId(claimId);
+            return string.Join("; ",
+                approvals.Where(a => !string.IsNullOrEmpty(a.Comments))
+                        .Select(a => $"{a.ApproverRole}: {a.Comments}"));
+        }
+
+        #endregion
     }
 }
