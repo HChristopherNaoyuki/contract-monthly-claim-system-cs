@@ -1,4 +1,4 @@
-﻿@model contract_monthly_claim_system_cs.Controllers.HRDashboardViewModel
+﻿@model contract_monthly_claim_system_cs.Models.ViewModels.HRDashboardViewModel
 @{
     ViewData["Title"] = "HR Dashboard - Automated Analytics";
 }
@@ -44,6 +44,41 @@
         </div>
     </div>
 
+    <!-- Performance Metrics -->
+    <div class="card-grid mt-lg">
+        <div class="card">
+            <div class="card-content">
+                <h3 class="card-title">Approval Rate</h3>
+                <p class="card-stat">@Model.ApprovalRate%</p>
+                <p class="card-desc">Claims approved vs submitted</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content">
+                <h3 class="card-title">Payment Rate</h3>
+                <p class="card-stat">@Model.PaymentProcessingRate%</p>
+                <p class="card-desc">Claims paid vs approved</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content">
+                <h3 class="card-title">Pending Approval</h3>
+                <p class="card-stat">@Model.PendingApprovalCount</p>
+                <p class="card-desc">Awaiting review</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content">
+                <h3 class="card-title">Paid Claims</h3>
+                <p class="card-stat">@Model.PaidClaims</p>
+                <p class="card-desc">Successfully processed</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Top Performers Section -->
     <div class="card mt-xl">
         <div class="card-content">
@@ -57,9 +92,11 @@
                         <thead>
                             <tr>
                                 <th>Lecturer</th>
+                                <th>Department</th>
                                 <th>Total Claims</th>
                                 <th>Total Amount</th>
                                 <th>Average per Claim</th>
+                                <th>Performance</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -74,9 +111,15 @@
                                             <span>@lecturer.LecturerName</span>
                                         </div>
                                     </td>
+                                    <td>@lecturer.Department</td>
                                     <td>@lecturer.ClaimCount</td>
                                     <td>@lecturer.TotalAmount.ToString("C")</td>
-                                    <td>@((lecturer.TotalAmount / lecturer.ClaimCount).ToString("C"))</td>
+                                    <td>@lecturer.AveragePerClaim.ToString("C")</td>
+                                    <td>
+                                        <span class="status-badge @GetPerformanceBadgeClass(lecturer.PerformanceRating)">
+                                            @lecturer.PerformanceRating
+                                        </span>
+                                    </td>
                                 </tr>
                             }
                         </tbody>
@@ -109,6 +152,7 @@
                                 <th>Month</th>
                                 <th>Claims Processed</th>
                                 <th>Total Amount</th>
+                                <th>Monthly Average</th>
                                 <th>Trend</th>
                             </tr>
                         </thead>
@@ -117,15 +161,13 @@
                             {
                                 <tr>
                                     <td>
-                                        <strong>@month.MonthYear</strong>
+                                        <strong>@month.MonthName</strong>
                                     </td>
                                     <td>@month.ClaimCount</td>
                                     <td>@month.TotalAmount.ToString("C")</td>
+                                    <td>@month.MonthlyAverage.ToString("C")</td>
                                     <td>
-                                        @{
-                                            var trend = month.ClaimCount > 5 ? "📈" : "➡️";
-                                        }
-                                        <span style="font-size: 18px;">@trend</span>
+                                        <span style="font-size: 18px;">@month.Trend</span>
                                     </td>
                                 </tr>
                             }
@@ -162,6 +204,11 @@
                 </button>
             </div>
         </div>
+    </div>
+
+    <!-- Last Updated -->
+    <div class="text-center mt-lg">
+        <p class="text-muted">Last updated: @Model.GeneratedAt.ToString("f")</p>
     </div>
 </div>
 
@@ -265,4 +312,17 @@
             }
         }
     </style>
+}
+
+@functions {
+    private string GetPerformanceBadgeClass(string performanceRating)
+    {
+        return performanceRating.ToLower() switch
+        {
+            "excellent" => "status-approved",
+            "very good" => "status-submitted",
+            "good" => "status-pending",
+            _ => "status-under-review"
+        };
+    }
 }
