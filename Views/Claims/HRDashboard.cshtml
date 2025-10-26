@@ -1,0 +1,268 @@
+﻿@model contract_monthly_claim_system_cs.Controllers.HRDashboardViewModel
+@{
+    ViewData["Title"] = "HR Dashboard - Automated Analytics";
+}
+
+<div class="container">
+    <div class="hero">
+        <h1 class="hero-title">HR Analytics Dashboard</h1>
+        <p class="hero-subtitle">Automated claim processing and lecturer performance analytics</p>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="card-grid">
+        <div class="card">
+            <div class="card-content">
+                <h3 class="card-title">Total Claims</h3>
+                <p class="card-stat">@Model.TotalClaims</p>
+                <p class="card-desc">All-time submitted claims</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content">
+                <h3 class="card-title">Approved Claims</h3>
+                <p class="card-stat">@Model.ApprovedClaims</p>
+                <p class="card-desc">Ready for payment processing</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content">
+                <h3 class="card-title">Total Approved</h3>
+                <p class="card-stat">@Model.TotalAmountApproved.ToString("C")</p>
+                <p class="card-desc">Amount approved for payment</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-content">
+                <h3 class="card-title">Average Claim</h3>
+                <p class="card-stat">@Model.AverageClaimAmount.ToString("C")</p>
+                <p class="card-desc">Average approved claim amount</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Top Performers Section -->
+    <div class="card mt-xl">
+        <div class="card-content">
+            <h3 class="card-title">Top Performing Lecturers</h3>
+            <p class="card-subtitle">Automated performance analytics</p>
+
+            @if (Model.TopLecturers.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Lecturer</th>
+                                <th>Total Claims</th>
+                                <th>Total Amount</th>
+                                <th>Average per Claim</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var lecturer in Model.TopLecturers)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center gap-sm">
+                                            <div class="user-avatar small">
+                                                @lecturer.LecturerName[0]
+                                            </div>
+                                            <span>@lecturer.LecturerName</span>
+                                        </div>
+                                    </td>
+                                    <td>@lecturer.ClaimCount</td>
+                                    <td>@lecturer.TotalAmount.ToString("C")</td>
+                                    <td>@((lecturer.TotalAmount / lecturer.ClaimCount).ToString("C"))</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center p-lg">
+                    <div style="font-size: 48px; color: var(--system-gray-3); margin-bottom: var(--spacing-md);">📊</div>
+                    <h4 style="color: var(--system-text-tertiary);">No performance data available</h4>
+                    <p style="color: var(--system-text-tertiary);">Analytics will appear as claims are approved</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Monthly Breakdown -->
+    <div class="card mt-lg">
+        <div class="card-content">
+            <h3 class="card-title">Monthly Claim Breakdown</h3>
+            <p class="card-subtitle">Automated financial reporting</p>
+
+            @if (Model.MonthlyBreakdown.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Month</th>
+                                <th>Claims Processed</th>
+                                <th>Total Amount</th>
+                                <th>Trend</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var month in Model.MonthlyBreakdown)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@month.MonthYear</strong>
+                                    </td>
+                                    <td>@month.ClaimCount</td>
+                                    <td>@month.TotalAmount.ToString("C")</td>
+                                    <td>
+                                        @{
+                                            var trend = month.ClaimCount > 5 ? "📈" : "➡️";
+                                        }
+                                        <span style="font-size: 18px;">@trend</span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            }
+            else
+            {
+                <div class="text-center p-lg">
+                    <div style="font-size: 48px; color: var(--system-gray-3); margin-bottom: var(--spacing-md);">📅</div>
+                    <h4 style="color: var(--system-text-tertiary);">No monthly data available</h4>
+                    <p style="color: var(--system-text-tertiary);">Monthly breakdown will appear over time</p>
+                </div>
+            }
+        </div>
+    </div>
+
+    <!-- Automated Actions -->
+    <div class="card mt-lg">
+        <div class="card-content">
+            <h3 class="card-title">Automated HR Actions</h3>
+            <p class="card-subtitle">Part 3 automation features</p>
+
+            <div class="d-flex gap-md flex-wrap">
+                <button class="btn btn-primary" onclick="generateMonthlyReport()">
+                    📊 Generate Monthly Report
+                </button>
+                <button class="btn btn-success" onclick="processBatchPayments()">
+                    💳 Process Batch Payments
+                </button>
+                <button class="btn btn-outline" onclick="exportAnalyticsData()">
+                    📥 Export Analytics Data
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Automated HR dashboard functionality
+        function generateMonthlyReport() {
+            showNotification('Generating automated monthly report...', 'info');
+            // Simulate API call
+            setTimeout(() => {
+                showNotification('Monthly report generated successfully!', 'success');
+            }, 2000);
+        }
+
+        function processBatchPayments() {
+            showNotification('Processing batch payments automatically...', 'info');
+            // Simulate API call
+            setTimeout(() => {
+                showNotification('Batch payments processed successfully!', 'success');
+            }, 3000);
+        }
+
+        function exportAnalyticsData() {
+            showNotification('Exporting analytics data...', 'info');
+            // Simulate export process
+            setTimeout(() => {
+                showNotification('Data exported successfully!', 'success');
+
+                // Create and trigger download
+                const data = JSON.stringify(@Html.Raw(Json.Serialize(Model)), null, 2);
+                const blob = new Blob([data], { type: 'application/json' });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `hr-analytics-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+            }, 1500);
+        }
+
+        function showNotification(message, type) {
+            // Create notification element
+            const notification = document.createElement('div');
+            notification.className = `alert alert-${type} animate-fadeIn`;
+            notification.innerHTML = `
+                <div class="alert-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
+                <div class="alert-message">${message}</div>
+            `;
+
+            // Add to page
+            document.querySelector('.container').prepend(notification);
+
+            // Remove after 5 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+        }
+
+        // Auto-refresh dashboard every 30 seconds
+        setInterval(() => {
+            window.location.reload();
+        }, 30000);
+    </script>
+
+    <style>
+        .card-stat {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--system-blue);
+            margin-bottom: var(--spacing-sm);
+            line-height: 1;
+        }
+
+        .user-avatar.small {
+            width: 32px;
+            height: 32px;
+            font-size: var(--font-size-subhead);
+        }
+
+        .alert {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: var(--z-modal);
+            min-width: 300px;
+            max-width: 400px;
+            animation: slideInRight 0.3s ease;
+        }
+
+        @@keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+    </style>
+}
