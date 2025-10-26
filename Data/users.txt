@@ -82,5 +82,19 @@
     "CreatedDate": "2025-10-19T09:49:10.6769085Z",
     "LastLoginDate": null,
     "FullName": "Nicky Kim"
+  },
+  {
+    "UserId": 7,
+    "Name": "Corey",
+    "Surname": "House",
+    "Username": "housecorey",
+    "Password": "Password12345",
+    "Role": 0,
+    "Email": "housecorey@cmcs.com",
+    "PhoneNumber": "",
+    "IsActive": true,
+    "CreatedDate": "2025-10-26T19:20:51.4269315Z",
+    "LastLoginDate": null,
+    "FullName": "Corey House"
   }
 ]
