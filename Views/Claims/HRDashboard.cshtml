@@ -238,12 +238,13 @@
                 showNotification('Data exported successfully!', 'success');
 
                 // Create and trigger download
-                const data = JSON.stringify(@Html.Raw(Json.Serialize(Model)), null, 2);
+                const modelData = @Html.Raw(Json.Serialize(Model));
+                const data = JSON.stringify(modelData, null, 2);
                 const blob = new Blob([data], { type: 'application/json' });
                 const url = window.URL.createObjectURL(blob);
                 const a = document.createElement('a');
                 a.href = url;
-                a.download = `hr-analytics-${new Date().toISOString().split('T')[0]}.json`;
+                a.download = 'hr-analytics-' + new Date().toISOString().split('T')[0] + '.json';
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
@@ -254,11 +255,10 @@
         function showNotification(message, type) {
             // Create notification element
             const notification = document.createElement('div');
-            notification.className = `alert alert-${type} animate-fadeIn`;
-            notification.innerHTML = `
-                <div class="alert-title">${type.charAt(0).toUpperCase() + type.slice(1)}</div>
-                <div class="alert-message">${message}</div>
-            `;
+            notification.className = 'alert alert-' + type + ' animate-fadeIn';
+            notification.innerHTML =
+                '<div class="alert-title">' + type.charAt(0).toUpperCase() + type.slice(1) + '</div>' +
+                '<div class="alert-message">' + message + '</div>';
 
             // Add to page
             document.querySelector('.container').prepend(notification);

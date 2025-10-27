@@ -27,12 +27,13 @@
                         <a href="@Url.Action("Approve", "Claims")" class="nav-button">Review Claims</a>
                         <a href="@Url.Action("Track", "Claims")" class="nav-button">Track Claims</a>
 
-                        <!-- HR Dashboard - Only visible to Academic Managers -->
+                        <!-- Part 3 POE: HR Dashboard - Only visible to Academic Managers -->
                         @if (role == "AcademicManager")
                         {
                             <a href="@Url.Action("HRDashboard", "Claims")" class="nav-button">HR Analytics</a>
                         }
 
+                        <a href="@Url.Action("Features", "Home")" class="nav-button">Features</a>
                         <a href="@Url.Action("Privacy", "Home")" class="nav-button">Privacy</a>
                     </div>
                 }
@@ -40,6 +41,7 @@
                 {
                     <div class="nav-center">
                         <a href="@Url.Action("Index", "Home")" class="nav-button">Home</a>
+                        <a href="@Url.Action("Features", "Home")" class="nav-button">Features</a>
                         <a href="@Url.Action("Privacy", "Home")" class="nav-button">Privacy</a>
                         <a href="@Url.Action("Index", "Auth")" class="nav-button">Login</a>
                     </div>
@@ -70,6 +72,24 @@
         <main class="app-main">
             @RenderBody()
         </main>
+
+        <!-- Part 3 POE: Enhanced Footer with System Information -->
+        <footer class="app-footer">
+            <div class="footer-content">
+                <div class="footer-links">
+                    <a href="@Url.Action("Index", "Home")" class="footer-link">Home</a>
+                    <a href="@Url.Action("Features", "Home")" class="footer-link">Features</a>
+                    <a href="@Url.Action("Privacy", "Home")" class="footer-link">Privacy</a>
+                    <a href="@Url.Action("Index", "Auth")" class="footer-link">Login</a>
+                </div>
+                <div class="copyright">
+                    © @DateTime.Now.Year - Contract Monthly Claim System | Part 3 POE Automation
+                </div>
+                <div class="system-info">
+                    <small>Text File Storage | Apple-inspired Design | xUnit Testing</small>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <!-- Render Scripts section only if it's defined in the view -->

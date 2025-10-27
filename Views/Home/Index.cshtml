@@ -11,6 +11,18 @@
         {
             <div class="welcome-message">
                 <p>Welcome back, <strong>@ViewData["UserName"]</strong>! You are logged in as <strong>@ViewData["UserRole"]</strong>.</p>
+
+                <!-- Part 3 POE: HR Dashboard Access for Academic Managers -->
+                @if (ViewData["ShowHRAnalytics"] as bool? == true)
+                {
+                    <div class="hr-access-card">
+                        <h4>🚀 HR Analytics Dashboard Available</h4>
+                        <p>@ViewData["HRDashboardMessage"]</p>
+                        <a href="@Url.Action("HRDashboard", "Claims")" class="btn btn-success btn-lg">
+                            Access HR Analytics
+                        </a>
+                    </div>
+                }
             </div>
         }
         else
@@ -54,27 +66,70 @@
                 </a>
             </div>
         </div>
+
+        <!-- Part 3 POE: HR Analytics Card for Academic Managers -->
+        @if (ViewData["ShowHRAnalytics"] as bool? == true)
+        {
+            <div class="card">
+                <div class="card-content">
+                    <h3 class="card-title">HR Analytics</h3>
+                    <p class="card-desc">Comprehensive analytics, automated reporting, and performance insights for HR management.</p>
+                    <a href="@Url.Action("HRDashboard", "Claims")" class="card-action">
+                        View Analytics
+                        <span class="card-action-arrow">→</span>
+                    </a>
+                </div>
+            </div>
+        }
     </div>
 
+    <!-- Part 3 POE: System Features Section -->
     <div class="system-info">
-        <h2>System Features</h2>
+        <h2>Part 3 POE Automation Features</h2>
         <div class="features-grid">
             <div class="feature">
-                <h4>Role-Based Access</h4>
+                <h4>🤖 Automated Calculations</h4>
+                <p>Automatic claim amount calculation with overtime consideration and validation checks</p>
+            </div>
+            <div class="feature">
+                <h4>📊 HR Analytics Dashboard</h4>
+                <p>Comprehensive analytics and automated reporting for Academic Managers</p>
+            </div>
+            <div class="feature">
+                <h4>⚡ Multi-level Approval</h4>
+                <p>Automated workflow with coordinator and manager approval levels</p>
+            </div>
+            <div class="feature">
+                <h4>📈 Performance Tracking</h4>
+                <p>Automated lecturer performance analytics and trend analysis</p>
+            </div>
+            <div class="feature">
+                <h4>🔒 Role-Based Access</h4>
                 <p>Different access levels for lecturers, coordinators, and academic managers</p>
             </div>
             <div class="feature">
-                <h4>Document Upload</h4>
-                <p>Support for multiple file types with secure document storage</p>
+                <h4>📁 Document Management</h4>
+                <p>Secure document upload and management with automated processing</p>
             </div>
-            <div class="feature">
-                <h4>Real-Time Tracking</h4>
-                <p>Transparent claim status tracking throughout the approval process</p>
-            </div>
-            <div class="feature">
-                <h4>Automated Calculations</h4>
-                <p>Automatic calculation of claim amounts based on hours and rates</p>
-            </div>
+        </div>
+    </div>
+
+    <!-- Part 3 POE: Quick Access Section -->
+    <div class="quick-access">
+        <h3>Quick Access</h3>
+        <div class="access-buttons">
+            <a href="@Url.Action("Features", "Home")" class="btn btn-outline">
+                🚀 View All Features
+            </a>
+            <a href="@Url.Action("Privacy", "Home")" class="btn btn-outline">
+                📄 Privacy Policy
+            </a>
+            @if (ViewData["IsLoggedIn"] as bool? != true)
+            {
+                <a href="@Url.Action("Index", "Auth")" class="btn btn-primary">
+                    🔐 Get Started
+                </a>
+            }
         </div>
     </div>
 </div>
@@ -87,6 +142,20 @@
         margin-top: var(--spacing-md);
         text-align: center;
     }
+
+    .hr-access-card {
+        background: linear-gradient(135deg, #34C759, #30B852);
+        color: white;
+        padding: var(--spacing-lg);
+        border-radius: var(--border-radius-lg);
+        margin-top: var(--spacing-md);
+        text-align: center;
+    }
+
+        .hr-access-card h4 {
+            margin-bottom: var(--spacing-sm);
+            font-size: var(--font-size-title-3);
+        }
 
     .auth-buttons {
         margin-top: var(--spacing-lg);
@@ -101,19 +170,54 @@
 
     .features-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
         gap: var(--spacing-lg);
         margin-top: var(--spacing-lg);
     }
 
     .feature {
-        padding: var(--spacing-md);
+        padding: var(--spacing-lg);
         background-color: var(--system-gray-6);
         border-radius: var(--border-radius-md);
+        border-left: 4px solid var(--system-blue);
     }
 
         .feature h4 {
             color: var(--system-blue);
             margin-bottom: var(--spacing-sm);
+            font-size: var(--font-size-headline);
         }
+
+    .quick-access {
+        margin-top: var(--spacing-xl);
+        padding: var(--spacing-lg);
+        background-color: var(--system-background-primary);
+        border-radius: var(--border-radius-lg);
+        text-align: center;
+        border: 1px solid var(--system-gray-5);
+    }
+
+    .access-buttons {
+        display: flex;
+        gap: var(--spacing-md);
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: var(--spacing-md);
+    }
+
+    @@media (max-width: 768px) {
+        .features-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .access-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+
+            .access-buttons .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+    }
 </style>
