@@ -88,27 +88,5 @@ namespace contract_monthly_claim_system_cs.Controllers
             _logger.LogError("Error page displayed for request: {RequestId}", Activity.Current?.Id ?? HttpContext.TraceIdentifier);
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
-        /// <summary>
-        /// Displays system features and Part 3 POE automation capabilities
-        /// Part 3 POE requirement: System documentation and feature showcase
-        /// </summary>
-        /// <returns>Features overview view</returns>
-        public IActionResult Features()
-        {
-            ViewData["Title"] = "System Features - Part 3 POE Automation";
-            ViewData["POEFeatures"] = new[]
-            {
-                "Automated Claim Calculation & Validation",
-                "Multi-level Approval Workflow",
-                "HR Analytics Dashboard",
-                "Automated Reporting & Data Export",
-                "Real-time Status Tracking",
-                "Document Management System"
-            };
-
-            _logger.LogInformation("Features page accessed showcasing Part 3 POE automation");
-            return View();
-        }
     }
 }
