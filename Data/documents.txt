@@ -46,5 +46,17 @@
     "IsActive": true,
     "Claim": null,
     "FormattedFileSize": "76.84 KB"
+  },
+  {
+    "DocumentId": 5,
+    "ClaimId": 8,
+    "FileName": "Explore Card Track.JPG",
+    "FilePath": "/uploads/8_e0d3b8f5-0aa7-4e47-9fba-024e3a8b6574_Explore Card Track.JPG",
+    "FileSize": 78681,
+    "FileType": ".jpg",
+    "UploadDate": "2025-10-27T16:24:13.8358728+02:00",
+    "IsActive": true,
+    "Claim": null,
+    "FormattedFileSize": "76.84 KB"
   }
 ]
