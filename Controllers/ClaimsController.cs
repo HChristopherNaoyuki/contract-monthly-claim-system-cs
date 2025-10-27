@@ -43,24 +43,34 @@ namespace contract_monthly_claim_system_cs.Controllers
         [HttpGet]
         public IActionResult Submit()
         {
-            // Check if user is authenticated
-            if (HttpContext.Session.GetInt32("UserId") == null)
+            try
             {
-                _logger.LogWarning("Unauthorized access attempt to claim submission");
-                return RedirectToAction("Index", "Auth");
+                // Check if user is authenticated
+                if (HttpContext.Session.GetInt32("UserId") == null)
+                {
+                    _logger.LogWarning("Unauthorized access attempt to claim submission");
+                    TempData["ErrorMessage"] = "Please log in to submit claims.";
+                    return RedirectToAction("Index", "Auth");
+                }
+
+                var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+                var lecturer = _dataService.GetLecturerById(userId);
+
+                // Create view model with pre-populated data
+                var viewModel = new ClaimSubmissionViewModel
+                {
+                    HourlyRate = lecturer?.HourlyRate ?? 150.00m
+                };
+
+                _logger.LogInformation("User {UserId} accessed claim submission form", userId);
+                return View(viewModel);
             }
-
-            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-            var lecturer = _dataService.GetLecturerById(userId);
-
-            // Create view model with pre-populated data
-            var viewModel = new ClaimSubmissionViewModel
+            catch (Exception ex)
             {
-                HourlyRate = lecturer?.HourlyRate ?? 150.00m
-            };
-
-            _logger.LogInformation("User {UserId} accessed claim submission form", userId);
-            return View(viewModel);
+                _logger.LogError(ex, "Error loading claim submission form");
+                TempData["ErrorMessage"] = "An error occurred while loading the claim submission form.";
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         /// <summary>
@@ -74,73 +84,76 @@ namespace contract_monthly_claim_system_cs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Submit(ClaimSubmissionViewModel model)
         {
-            // Validate user authentication
-            if (HttpContext.Session.GetInt32("UserId") == null)
+            try
             {
-                _logger.LogWarning("Unauthorized POST attempt to claim submission");
-                return RedirectToAction("Index", "Auth");
-            }
+                // Validate user authentication
+                if (HttpContext.Session.GetInt32("UserId") == null)
+                {
+                    _logger.LogWarning("Unauthorized POST attempt to claim submission");
+                    TempData["ErrorMessage"] = "Please log in to submit claims.";
+                    return RedirectToAction("Index", "Auth");
+                }
 
-            // Validate model state
-            if (ModelState.IsValid)
+                // Validate model state
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogWarning("Claim submission model validation failed");
+                    return View(model);
+                }
+
+                var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+
+                // Part 3 Automation: Auto-calculation feature
+                model.Amount = AutoCalculateClaimAmount(model.HoursWorked, model.HourlyRate);
+
+                // Part 3 Automation: Enhanced validation checks
+                var validationResult = ValidateClaimSubmission(model, userId);
+                if (!validationResult.IsValid)
+                {
+                    ModelState.AddModelError("", validationResult.ErrorMessage);
+                    _logger.LogWarning("Claim validation failed for user {UserId}: {Error}",
+                        userId, validationResult.ErrorMessage);
+                    return View(model);
+                }
+
+                // Create new claim entity
+                var claim = new Claim
+                {
+                    ClaimId = _dataService.GetNextId("claims"),
+                    LecturerId = userId,
+                    ClaimDate = DateTime.Now,
+                    MonthYear = DateTime.Now.ToString("yyyy-MM"),
+                    HoursWorked = model.HoursWorked,
+                    HourlyRate = model.HourlyRate,
+                    Amount = model.Amount,
+                    Status = ClaimStatus.Submitted,
+                    SubmissionComments = model.Comments,
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                };
+
+                // Save claim to text file storage
+                _dataService.SaveClaim(claim);
+
+                // Part 3 Automation: Automated document processing
+                await ProcessUploadedDocuments(model.Documents, claim.ClaimId);
+
+                // Part 3 Automation: Automated notification system
+                await NotifyCoordinators(claim);
+
+                _logger.LogInformation("Automated claim submission successful - User {UserId}, Claim {ClaimId}, Amount {Amount}",
+                    userId, claim.ClaimId, claim.Amount);
+
+                TempData["SuccessMessage"] = $"Claim #{claim.ClaimId} submitted successfully! Amount: {claim.Amount:C}";
+                return RedirectToAction("Status", new { claimId = claim.ClaimId });
+            }
+            catch (Exception ex)
             {
-                try
-                {
-                    var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-
-                    // Part 3 Automation: Auto-calculation feature
-                    model.Amount = AutoCalculateClaimAmount(model.HoursWorked, model.HourlyRate);
-
-                    // Part 3 Automation: Enhanced validation checks
-                    var validationResult = ValidateClaimSubmission(model, userId);
-                    if (!validationResult.IsValid)
-                    {
-                        ModelState.AddModelError("", validationResult.ErrorMessage);
-                        _logger.LogWarning("Claim validation failed for user {UserId}: {Error}",
-                            userId, validationResult.ErrorMessage);
-                        return View(model);
-                    }
-
-                    // Create new claim entity
-                    var claim = new Claim
-                    {
-                        ClaimId = _dataService.GetNextId("claims"),
-                        LecturerId = userId,
-                        ClaimDate = DateTime.Now,
-                        MonthYear = DateTime.Now.ToString("yyyy-MM"),
-                        HoursWorked = model.HoursWorked,
-                        HourlyRate = model.HourlyRate,
-                        Amount = model.Amount,
-                        Status = ClaimStatus.Submitted,
-                        SubmissionComments = model.Comments,
-                        CreatedDate = DateTime.Now,
-                        ModifiedDate = DateTime.Now
-                    };
-
-                    // Save claim to text file storage
-                    _dataService.SaveClaim(claim);
-
-                    // Part 3 Automation: Automated document processing
-                    await ProcessUploadedDocuments(model.Documents, claim.ClaimId);
-
-                    // Part 3 Automation: Automated notification system
-                    await NotifyCoordinators(claim);
-
-                    _logger.LogInformation("Automated claim submission successful - User {UserId}, Claim {ClaimId}, Amount {Amount}",
-                        userId, claim.ClaimId, claim.Amount);
-
-                    return RedirectToAction("Status", new { claimId = claim.ClaimId });
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError(ex, "Automated claim submission failed for user {UserId}",
-                        HttpContext.Session.GetInt32("UserId"));
-                    ModelState.AddModelError("", "An error occurred during claim submission. Please try again.");
-                }
+                _logger.LogError(ex, "Automated claim submission failed for user {UserId}",
+                    HttpContext.Session.GetInt32("UserId"));
+                ModelState.AddModelError("", "An error occurred during claim submission. Please try again.");
+                return View(model);
             }
-
-            // Return to view with validation errors
-            return View(model);
         }
 
         /// <summary>
@@ -152,64 +165,46 @@ namespace contract_monthly_claim_system_cs.Controllers
         [HttpGet]
         public IActionResult Approve()
         {
-            // Validate authentication and authorization
-            if (HttpContext.Session.GetInt32("UserId") == null)
+            try
             {
-                _logger.LogWarning("Unauthorized access attempt to approval page");
-                return RedirectToAction("Index", "Auth");
-            }
+                // Validate authentication and authorization
+                if (HttpContext.Session.GetInt32("UserId") == null)
+                {
+                    _logger.LogWarning("Unauthorized access attempt to approval page");
+                    TempData["ErrorMessage"] = "Please log in to access approval features.";
+                    return RedirectToAction("Index", "Auth");
+                }
 
-            var userRole = HttpContext.Session.GetString("Role") ?? string.Empty;
-            if (userRole != UserRole.ProgrammeCoordinator.ToString() &&
-                userRole != UserRole.AcademicManager.ToString())
+                var userRole = HttpContext.Session.GetString("Role") ?? string.Empty;
+                if (userRole != UserRole.ProgrammeCoordinator.ToString() &&
+                    userRole != UserRole.AcademicManager.ToString())
+                {
+                    _logger.LogWarning("User {UserId} with role {Role} attempted to access approval page",
+                        HttpContext.Session.GetInt32("UserId"), userRole);
+                    TempData["ErrorMessage"] = "Access denied. Approval features are only available for Programme Coordinators and Academic Managers.";
+                    return RedirectToAction("Index", "Home");
+                }
+
+                // Retrieve and process pending claims
+                var submittedClaims = _dataService.GetAllClaims()
+                    .Where(c => c.Status == ClaimStatus.Submitted)
+                    .Select(c => CreateClaimApprovalViewModel(c, userRole))
+                    .OrderByDescending(c => c.RequiresManagerApproval)
+                    .ThenByDescending(c => c.Amount)
+                    .ThenBy(c => c.ClaimDate)
+                    .ToList();
+
+                _logger.LogInformation("Automated approval view generated for {UserRole} - {ClaimCount} claims pending",
+                    userRole, submittedClaims.Count);
+
+                return View(submittedClaims);
+            }
+            catch (Exception ex)
             {
-                _logger.LogWarning("User {UserId} with role {Role} attempted to access approval page",
-                    HttpContext.Session.GetInt32("UserId"), userRole);
+                _logger.LogError(ex, "Error loading approval page");
+                TempData["ErrorMessage"] = "An error occurred while loading the approval page.";
                 return RedirectToAction("Index", "Home");
             }
-
-            // Retrieve and process pending claims
-            var submittedClaims = _dataService.GetAllClaims()
-                .Where(c => c.Status == ClaimStatus.Submitted)
-                .Select(c => CreateClaimApprovalViewModel(c, userRole))
-                .OrderByDescending(c => c.RequiresManagerApproval)
-                .ThenByDescending(c => c.Amount)
-                .ThenBy(c => c.ClaimDate)
-                .ToList();
-
-            _logger.LogInformation("Automated approval view generated for {UserRole} - {ClaimCount} claims pending",
-                userRole, submittedClaims.Count);
-
-            return View(submittedClaims);
-        }
-
-        /// <summary>
-        /// Creates a ClaimApprovalViewModel with automated verification flags
-        /// Part 3 automation: Automated claim analysis for approvers
-        /// </summary>
-        /// <param name="claim">Claim entity to convert</param>
-        /// <param name="userRole">Current user's role for permission checks</param>
-        /// <returns>Populated ClaimApprovalViewModel</returns>
-        private ClaimApprovalViewModel CreateClaimApprovalViewModel(Claim claim, string userRole)
-        {
-            return new ClaimApprovalViewModel
-            {
-                ClaimId = claim.ClaimId,
-                LecturerName = GetLecturerName(claim.LecturerId),
-                ClaimDate = claim.ClaimDate,
-                HoursWorked = claim.HoursWorked,
-                HourlyRate = claim.HourlyRate,
-                Amount = claim.Amount,
-                Status = claim.Status.ToString(),
-                DocumentNames = _dataService.GetDocumentsByClaimId(claim.ClaimId)
-                    .Select(d => d.FileName)
-                    .ToList(),
-                SubmissionComments = claim.SubmissionComments,
-                // Part 3 Automation: Automated verification flags
-                HasExcessiveHours = claim.HoursWorked > 160,
-                HasUnusualAmount = claim.Amount > 10000,
-                RequiresManagerApproval = claim.Amount > 5000 && userRole == UserRole.ProgrammeCoordinator.ToString()
-            };
         }
 
         /// <summary>
@@ -225,24 +220,32 @@ namespace contract_monthly_claim_system_cs.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApproveClaim(int claimId, bool isApproved, string comments)
         {
-            // Validate authentication
-            if (HttpContext.Session.GetInt32("UserId") == null)
+            try
             {
-                _logger.LogWarning("Unauthorized approval attempt for claim {ClaimId}", claimId);
-                return RedirectToAction("Index", "Auth");
-            }
+                // Validate authentication
+                if (HttpContext.Session.GetInt32("UserId") == null)
+                {
+                    _logger.LogWarning("Unauthorized approval attempt for claim {ClaimId}", claimId);
+                    TempData["ErrorMessage"] = "Please log in to approve claims.";
+                    return RedirectToAction("Index", "Auth");
+                }
 
-            // Retrieve claim from text file storage
-            var claim = _dataService.GetClaimById(claimId);
-            if (claim != null)
-            {
+                // Retrieve claim from text file storage
+                var claim = _dataService.GetClaimById(claimId);
+                if (claim == null)
+                {
+                    _logger.LogWarning("Claim {ClaimId} not found for approval processing", claimId);
+                    TempData["ErrorMessage"] = $"Claim #{claimId} not found.";
+                    return RedirectToAction("Approve");
+                }
+
+                var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+                var userRole = HttpContext.Session.GetString("Role") ?? "Unknown";
+
                 // Part 3 Automation: Automated status update
                 claim.Status = isApproved ? ClaimStatus.Approved : ClaimStatus.Rejected;
                 claim.ModifiedDate = DateTime.Now;
                 _dataService.SaveClaim(claim);
-
-                var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-                var userRole = HttpContext.Session.GetString("Role") ?? "Unknown";
 
                 // Create approval record for audit trail
                 var approval = new Approval
@@ -274,10 +277,10 @@ namespace contract_monthly_claim_system_cs.Controllers
 
                 TempData["SuccessMessage"] = $"Claim #{claimId} has been {action} successfully.";
             }
-            else
+            catch (Exception ex)
             {
-                _logger.LogWarning("Claim {ClaimId} not found for approval processing", claimId);
-                TempData["ErrorMessage"] = $"Claim #{claimId} not found.";
+                _logger.LogError(ex, "Error processing claim approval for claim {ClaimId}", claimId);
+                TempData["ErrorMessage"] = $"An error occurred while processing claim #{claimId}.";
             }
 
             return RedirectToAction("Approve");
@@ -292,40 +295,57 @@ namespace contract_monthly_claim_system_cs.Controllers
         [HttpGet]
         public IActionResult HRDashboard()
         {
-            // Validate authentication and authorization (Academic Managers only)
-            if (HttpContext.Session.GetInt32("UserId") == null ||
-                HttpContext.Session.GetString("Role") != UserRole.AcademicManager.ToString())
+            try
             {
-                _logger.LogWarning("Unauthorized access attempt to HR dashboard");
+                // Validate authentication and authorization (Academic Managers only)
+                if (HttpContext.Session.GetInt32("UserId") == null)
+                {
+                    _logger.LogWarning("Unauthenticated access attempt to HR dashboard");
+                    TempData["ErrorMessage"] = "Please log in to access HR analytics.";
+                    return RedirectToAction("Index", "Auth");
+                }
+
+                var userRole = HttpContext.Session.GetString("Role");
+                if (userRole != UserRole.AcademicManager.ToString())
+                {
+                    _logger.LogWarning("Unauthorized access attempt to HR dashboard by user with role: {UserRole}", userRole);
+                    TempData["ErrorMessage"] = "Access denied. HR Dashboard is only available for Academic Managers.";
+                    return RedirectToAction("Index", "Home");
+                }
+
+                // Retrieve all claims for analytics
+                var allClaims = _dataService.GetAllClaims();
+                var approvedClaims = allClaims.Where(c => c.Status == ClaimStatus.Approved).ToList();
+                var paidClaims = allClaims.Where(c => c.Status == ClaimStatus.Paid).ToList();
+                var submittedClaims = allClaims.Where(c => c.Status == ClaimStatus.Submitted).ToList();
+
+                // Part 3 Automation: Create comprehensive HR dashboard view model
+                var hrViewModel = new HRDashboardViewModel
+                {
+                    TotalClaims = allClaims.Count,
+                    ApprovedClaims = approvedClaims.Count,
+                    PaidClaims = paidClaims.Count,
+                    TotalAmountApproved = approvedClaims.Sum(c => c.Amount),
+                    TotalAmountPaid = paidClaims.Sum(c => c.Amount),
+                    PendingApprovalCount = submittedClaims.Count,
+                    AverageClaimAmount = approvedClaims.Any() ? approvedClaims.Average(c => c.Amount) : 0,
+                    // Part 3 Automation: Advanced analytics
+                    TopLecturers = GetTopPerformingLecturers(approvedClaims),
+                    MonthlyBreakdown = GetMonthlyClaimBreakdown(approvedClaims),
+                    GeneratedAt = DateTime.Now
+                };
+
+                _logger.LogInformation("HR dashboard generated with automated analytics - {TotalClaims} total claims",
+                    allClaims.Count);
+
+                return View(hrViewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating HR dashboard");
+                TempData["ErrorMessage"] = "An error occurred while generating the HR dashboard. Please try again.";
                 return RedirectToAction("Index", "Home");
             }
-
-            // Retrieve all claims for analytics
-            var allClaims = _dataService.GetAllClaims();
-            var approvedClaims = allClaims.Where(c => c.Status == ClaimStatus.Approved).ToList();
-            var paidClaims = allClaims.Where(c => c.Status == ClaimStatus.Paid).ToList();
-            var submittedClaims = allClaims.Where(c => c.Status == ClaimStatus.Submitted).ToList();
-
-            // Part 3 Automation: Create comprehensive HR dashboard view model
-            var hrViewModel = new HRDashboardViewModel
-            {
-                TotalClaims = allClaims.Count,
-                ApprovedClaims = approvedClaims.Count,
-                PaidClaims = paidClaims.Count,
-                TotalAmountApproved = approvedClaims.Sum(c => c.Amount),
-                TotalAmountPaid = paidClaims.Sum(c => c.Amount),
-                PendingApprovalCount = submittedClaims.Count,
-                AverageClaimAmount = approvedClaims.Any() ? approvedClaims.Average(c => c.Amount) : 0,
-                // Part 3 Automation: Advanced analytics
-                TopLecturers = GetTopPerformingLecturers(approvedClaims),
-                MonthlyBreakdown = GetMonthlyClaimBreakdown(approvedClaims),
-                GeneratedAt = DateTime.Now
-            };
-
-            _logger.LogInformation("HR dashboard generated with automated analytics - {TotalClaims} total claims",
-                allClaims.Count);
-
-            return View(hrViewModel);
         }
 
         /// <summary>
@@ -337,37 +357,58 @@ namespace contract_monthly_claim_system_cs.Controllers
         [HttpGet]
         public IActionResult Status(int claimId)
         {
-            // Validate authentication
-            if (HttpContext.Session.GetInt32("UserId") == null)
+            try
             {
-                return RedirectToAction("Index", "Auth");
-            }
+                // Validate authentication
+                if (HttpContext.Session.GetInt32("UserId") == null)
+                {
+                    TempData["ErrorMessage"] = "Please log in to view claim status.";
+                    return RedirectToAction("Index", "Auth");
+                }
 
-            // Retrieve claim from text file storage
-            var claim = _dataService.GetClaimById(claimId);
-            if (claim == null)
+                // Retrieve claim from text file storage
+                var claim = _dataService.GetClaimById(claimId);
+                if (claim == null)
+                {
+                    _logger.LogWarning("Claim {ClaimId} not found for status display", claimId);
+                    TempData["ErrorMessage"] = $"Claim #{claimId} not found.";
+                    return RedirectToAction("Track");
+                }
+
+                // Validate user access to this claim
+                var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+                var userRole = HttpContext.Session.GetString("Role") ?? string.Empty;
+
+                if (userRole == UserRole.Lecturer.ToString() && claim.LecturerId != userId)
+                {
+                    _logger.LogWarning("User {UserId} attempted to access claim {ClaimId} belonging to another lecturer", userId, claimId);
+                    TempData["ErrorMessage"] = "Access denied. You can only view your own claims.";
+                    return RedirectToAction("Track");
+                }
+
+                // Create detailed status view model
+                var viewModel = CreateClaimApprovalViewModel(claim, userRole);
+
+                // Get approval history and comments
+                var approvals = _dataService.GetApprovalsByClaimId(claimId);
+                if (approvals.Any())
+                {
+                    viewModel.ApprovalComments = string.Join("; ",
+                        approvals.Where(a => !string.IsNullOrEmpty(a.Comments))
+                                .Select(a => $"{a.ApproverRole}: {a.Comments}"));
+                }
+
+                _logger.LogInformation("Status displayed for claim {ClaimId} with status {Status}",
+                    claimId, claim.Status);
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
             {
-                _logger.LogWarning("Claim {ClaimId} not found for status display", claimId);
-                TempData["ErrorMessage"] = $"Claim #{claimId} not found.";
+                _logger.LogError(ex, "Error loading claim status for claim {ClaimId}", claimId);
+                TempData["ErrorMessage"] = "An error occurred while loading claim status.";
                 return RedirectToAction("Track");
             }
-
-            // Create detailed status view model
-            var viewModel = CreateClaimApprovalViewModel(claim, HttpContext.Session.GetString("Role") ?? string.Empty);
-
-            // Get approval history and comments
-            var approvals = _dataService.GetApprovalsByClaimId(claimId);
-            if (approvals.Any())
-            {
-                viewModel.ApprovalComments = string.Join("; ",
-                    approvals.Where(a => !string.IsNullOrEmpty(a.Comments))
-                            .Select(a => $"{a.ApproverRole}: {a.Comments}"));
-            }
-
-            _logger.LogInformation("Status displayed for claim {ClaimId} with status {Status}",
-                claimId, claim.Status);
-
-            return View(viewModel);
         }
 
         /// <summary>
@@ -378,37 +419,78 @@ namespace contract_monthly_claim_system_cs.Controllers
         [HttpGet]
         public IActionResult Track()
         {
-            // Validate authentication
-            if (HttpContext.Session.GetInt32("UserId") == null)
+            try
             {
-                return RedirectToAction("Index", "Auth");
+                // Validate authentication
+                if (HttpContext.Session.GetInt32("UserId") == null)
+                {
+                    TempData["ErrorMessage"] = "Please log in to track claims.";
+                    return RedirectToAction("Index", "Auth");
+                }
+
+                var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+                var userRole = HttpContext.Session.GetString("Role") ?? string.Empty;
+
+                List<Claim> claims;
+
+                // Part 3 Automation: Role-based data filtering
+                if (userRole == UserRole.Lecturer.ToString())
+                {
+                    claims = _dataService.GetClaimsByLecturerId(userId);
+                }
+                else
+                {
+                    claims = _dataService.GetAllClaims();
+                }
+
+                // Create tracking view models
+                var viewModels = claims.Select(c => CreateClaimApprovalViewModel(c, userRole))
+                                      .OrderByDescending(c => c.ClaimDate)
+                                      .ToList();
+
+                _logger.LogInformation("Tracking view generated for user {UserId} with role {Role} - {ClaimCount} claims",
+                    userId, userRole, claims.Count);
+
+                return View(viewModels);
             }
-
-            var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-            var userRole = HttpContext.Session.GetString("Role") ?? string.Empty;
-
-            List<Claim> claims;
-
-            // Part 3 Automation: Role-based data filtering
-            if (userRole == UserRole.Lecturer.ToString())
+            catch (Exception ex)
             {
-                claims = _dataService.GetClaimsByLecturerId(userId);
+                _logger.LogError(ex, "Error loading claim tracking page");
+                TempData["ErrorMessage"] = "An error occurred while loading claim tracking.";
+                return RedirectToAction("Index", "Home");
             }
-            else
-            {
-                claims = _dataService.GetAllClaims();
-            }
-
-            // Create tracking view models
-            var viewModels = claims.Select(c => CreateClaimApprovalViewModel(c, userRole)).ToList();
-
-            _logger.LogInformation("Tracking view generated for user {UserId} with role {Role} - {ClaimCount} claims",
-                userId, userRole, claims.Count);
-
-            return View(viewModels);
         }
 
         #region Part 3 Automation Methods
+
+        /// <summary>
+        /// Creates a ClaimApprovalViewModel with automated verification flags
+        /// Part 3 automation: Automated claim analysis for approvers
+        /// </summary>
+        /// <param name="claim">Claim entity to convert</param>
+        /// <param name="userRole">Current user's role for permission checks</param>
+        /// <returns>Populated ClaimApprovalViewModel</returns>
+        private ClaimApprovalViewModel CreateClaimApprovalViewModel(Claim claim, string userRole)
+        {
+            return new ClaimApprovalViewModel
+            {
+                ClaimId = claim.ClaimId,
+                LecturerName = GetLecturerName(claim.LecturerId),
+                ClaimDate = claim.ClaimDate,
+                HoursWorked = claim.HoursWorked,
+                HourlyRate = claim.HourlyRate,
+                Amount = claim.Amount,
+                Status = claim.Status.ToString(),
+                DocumentNames = _dataService.GetDocumentsByClaimId(claim.ClaimId)
+                    .Select(d => d.FileName)
+                    .ToList(),
+                SubmissionComments = claim.SubmissionComments,
+                // Part 3 Automation: Automated verification flags
+                HasExcessiveHours = claim.HoursWorked > 160,
+                HasUnusualAmount = claim.Amount > 10000,
+                RequiresManagerApproval = claim.Amount > 5000 && userRole == UserRole.ProgrammeCoordinator.ToString()
+            };
+        }
 
         /// <summary>
         /// Automated claim amount calculation with overtime consideration
