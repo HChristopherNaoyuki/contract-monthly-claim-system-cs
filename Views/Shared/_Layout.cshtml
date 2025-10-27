@@ -26,6 +26,13 @@
                         <a href="@Url.Action("Submit", "Claims")" class="nav-button">Submit Claim</a>
                         <a href="@Url.Action("Approve", "Claims")" class="nav-button">Review Claims</a>
                         <a href="@Url.Action("Track", "Claims")" class="nav-button">Track Claims</a>
+
+                        <!-- HR Dashboard - Only visible to Academic Managers -->
+                        @if (role == "AcademicManager")
+                        {
+                            <a href="@Url.Action("HRDashboard", "Claims")" class="nav-button">HR Analytics</a>
+                        }
+
                         <a href="@Url.Action("Privacy", "Home")" class="nav-button">Privacy</a>
                     </div>
                 }

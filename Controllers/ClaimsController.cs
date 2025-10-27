@@ -159,7 +159,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                 return RedirectToAction("Index", "Auth");
             }
 
-            var userRole = HttpContext.Session.GetString("Role");
+            var userRole = HttpContext.Session.GetString("Role") ?? string.Empty;
             if (userRole != UserRole.ProgrammeCoordinator.ToString() &&
                 userRole != UserRole.AcademicManager.ToString())
             {
@@ -353,7 +353,7 @@ namespace contract_monthly_claim_system_cs.Controllers
             }
 
             // Create detailed status view model
-            var viewModel = CreateClaimApprovalViewModel(claim, HttpContext.Session.GetString("Role"));
+            var viewModel = CreateClaimApprovalViewModel(claim, HttpContext.Session.GetString("Role") ?? string.Empty);
 
             // Get approval history and comments
             var approvals = _dataService.GetApprovalsByClaimId(claimId);
@@ -385,7 +385,7 @@ namespace contract_monthly_claim_system_cs.Controllers
             }
 
             var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
-            var userRole = HttpContext.Session.GetString("Role");
+            var userRole = HttpContext.Session.GetString("Role") ?? string.Empty;
 
             List<Claim> claims;
 
