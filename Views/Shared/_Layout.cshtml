@@ -1,4 +1,5 @@
 ﻿@using contract_monthly_claim_system_cs.Extensions
+@using contract_monthly_claim_system_cs.Models.DataModels
 @{
     var userId = Context.Session.GetSessionInt("UserId");
     var username = Context.Session.GetSessionString("Username");
@@ -27,8 +28,8 @@
                         <a href="@Url.Action("Approve", "Claims")" class="nav-button">Review Claims</a>
                         <a href="@Url.Action("Track", "Claims")" class="nav-button">Track Claims</a>
 
-                        <!-- Part 3 POE: HR Dashboard - Only visible to Academic Managers -->
-                        @if (role == "AcademicManager")
+                        <!-- Part 3 POE: HR Dashboard - Only visible to Academic Managers and Human Resources -->
+                        @if (role == UserRole.AcademicManager.ToString() || role == UserRole.HumanResource.ToString())
                         {
                             <a href="@Url.Action("HRDashboard", "Claims")" class="nav-button">HR Analytics</a>
                         }

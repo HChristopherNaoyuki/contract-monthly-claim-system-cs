@@ -6,6 +6,7 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
 {
     /// <summary>
     /// Represents a system user with authentication credentials and role-based access
+    /// Part 3 POE requirement: Enhanced role system with Human Resource role
     /// </summary>
     [Table("Users")]
     public class User
@@ -51,6 +52,7 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
 
         /// <summary>
         /// Gets or sets the user's role in the system
+        /// Part 3 POE requirement: Added Human Resource role
         /// </summary>
         [Required(ErrorMessage = "Role is required")]
         [Column("Role")]
@@ -105,6 +107,7 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
 
     /// <summary>
     /// Defines the possible roles for system users
+    /// Part 3 POE requirement: Enhanced role system with Human Resource role
     /// </summary>
     public enum UserRole
     {
@@ -121,6 +124,12 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
         /// <summary>
         /// Has full system access and final approval authority
         /// </summary>
-        AcademicManager = 2
+        AcademicManager = 2,
+
+        /// <summary>
+        /// Part 3 POE requirement: Human Resource role for HR operations
+        /// Can access HR analytics and manage lecturer data
+        /// </summary>
+        HumanResource = 3
     }
 }
