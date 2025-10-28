@@ -27,6 +27,9 @@ namespace contract_monthly_claim_system_cs.Controllers
         {
             _dataService = dataService;
             _logger = logger;
+
+            // Initialize sample data for Part 3 POE demonstration
+            InitializeSampleData();
         }
 
         /// <summary>
@@ -266,7 +269,24 @@ namespace contract_monthly_claim_system_cs.Controllers
 
                 _dataService.SaveLecturer(lecturer);
 
-                _logger.LogInformation("Sample data initialization completed with all roles");
+                // Create sample claims for demonstration
+                var sampleClaim = new Claim
+                {
+                    ClaimId = 1,
+                    LecturerId = 2,
+                    MonthYear = System.DateTime.Now.ToString("yyyy-MM"),
+                    HoursWorked = 40,
+                    HourlyRate = 150.00m,
+                    Amount = 6000.00m,
+                    Status = ClaimStatus.Submitted,
+                    SubmissionComments = "Sample claim for Part 3 POE demonstration",
+                    CreatedDate = System.DateTime.Now,
+                    ModifiedDate = System.DateTime.Now
+                };
+
+                _dataService.SaveClaim(sampleClaim);
+
+                _logger.LogInformation("Sample data initialization completed with all roles for Part 3 POE");
             }
         }
     }
