@@ -54,6 +54,16 @@ namespace contract_monthly_claim_system_cs.Controllers
                 }
 
                 var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+                var userRole = HttpContext.Session.GetString("Role") ?? string.Empty;
+
+                // Only lecturers can submit claims
+                if (userRole != UserRole.Lecturer.ToString())
+                {
+                    _logger.LogWarning("User {UserId} with role {Role} attempted to submit claims", userId, userRole);
+                    TempData["ErrorMessage"] = "Only lecturers can submit claims.";
+                    return RedirectToAction("Index", "Home");
+                }
+
                 var lecturer = _dataService.GetLecturerById(userId);
 
                 // Create view model with pre-populated data
@@ -94,14 +104,23 @@ namespace contract_monthly_claim_system_cs.Controllers
                     return RedirectToAction("Index", "Auth");
                 }
 
+                var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
+                var userRole = HttpContext.Session.GetString("Role") ?? string.Empty;
+
+                // Only lecturers can submit claims
+                if (userRole != UserRole.Lecturer.ToString())
+                {
+                    _logger.LogWarning("User {UserId} with role {Role} attempted to submit claims", userId, userRole);
+                    TempData["ErrorMessage"] = "Only lecturers can submit claims.";
+                    return RedirectToAction("Index", "Home");
+                }
+
                 // Validate model state
                 if (!ModelState.IsValid)
                 {
                     _logger.LogWarning("Claim submission model validation failed");
                     return View(model);
                 }
-
-                var userId = HttpContext.Session.GetInt32("UserId") ?? 0;
 
                 // Part 3 Automation: Auto-calculation feature
                 model.Amount = AutoCalculateClaimAmount(model.HoursWorked, model.HourlyRate);
@@ -177,11 +196,12 @@ namespace contract_monthly_claim_system_cs.Controllers
 
                 var userRole = HttpContext.Session.GetString("Role") ?? string.Empty;
                 if (userRole != UserRole.ProgrammeCoordinator.ToString() &&
-                    userRole != UserRole.AcademicManager.ToString())
+                    userRole != UserRole.AcademicManager.ToString() &&
+                    userRole != UserRole.HumanResource.ToString())
                 {
                     _logger.LogWarning("User {UserId} with role {Role} attempted to access approval page",
                         HttpContext.Session.GetInt32("UserId"), userRole);
-                    TempData["ErrorMessage"] = "Access denied. Approval features are only available for Programme Coordinators and Academic Managers.";
+                    TempData["ErrorMessage"] = "Access denied. Approval features are only available for Programme Coordinators, Academic Managers, and Human Resources.";
                     return RedirectToAction("Index", "Home");
                 }
 
@@ -266,7 +286,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                 await NotifyLecturerOfDecision(claim, isApproved, comments);
 
                 // Part 3 Automation: Automated reporting for HR on final approval
-                if (isApproved && userRole == UserRole.AcademicManager.ToString())
+                if (isApproved && (userRole == UserRole.AcademicManager.ToString() || userRole == UserRole.HumanResource.ToString()))
                 {
                     await GenerateHRReport(claim);
                 }
@@ -297,7 +317,7 @@ namespace contract_monthly_claim_system_cs.Controllers
         {
             try
             {
-                // Validate authentication and authorization (Academic Managers only)
+                // Validate authentication and authorization (Academic Managers and Human Resources only)
                 if (HttpContext.Session.GetInt32("UserId") == null)
                 {
                     _logger.LogWarning("Unauthenticated access attempt to HR dashboard");
@@ -306,10 +326,10 @@ namespace contract_monthly_claim_system_cs.Controllers
                 }
 
                 var userRole = HttpContext.Session.GetString("Role");
-                if (userRole != UserRole.AcademicManager.ToString())
+                if (userRole != UserRole.AcademicManager.ToString() && userRole != UserRole.HumanResource.ToString())
                 {
                     _logger.LogWarning("Unauthorized access attempt to HR dashboard by user with role: {UserRole}", userRole);
-                    TempData["ErrorMessage"] = "Access denied. HR Dashboard is only available for Academic Managers.";
+                    TempData["ErrorMessage"] = "Access denied. HR Dashboard is only available for Academic Managers and Human Resources.";
                     return RedirectToAction("Index", "Home");
                 }
 
@@ -414,6 +434,7 @@ namespace contract_monthly_claim_system_cs.Controllers
         /// <summary>
         /// Displays claim tracking for users with role-based filtering
         /// Part 3 requirement: Transparent claim status tracking
+        /// Fixed: Lecturers can now see their own claims in Track view
         /// </summary>
         /// <returns>Claim tracking view with filtered claims</returns>
         [HttpGet]
@@ -436,11 +457,23 @@ namespace contract_monthly_claim_system_cs.Controllers
                 // Part 3 Automation: Role-based data filtering
                 if (userRole == UserRole.Lecturer.ToString())
                 {
+                    // Fixed: Lecturers should only see their own claims
                     claims = _dataService.GetClaimsByLecturerId(userId);
+                    _logger.LogInformation("Lecturer {UserId} viewing their {ClaimCount} claims", userId, claims.Count);
+                }
+                else if (userRole == UserRole.ProgrammeCoordinator.ToString() ||
+                         userRole == UserRole.AcademicManager.ToString() ||
+                         userRole == UserRole.HumanResource.ToString())
+                {
+                    // Coordinators, Managers, and HR can see all claims
+                    claims = _dataService.GetAllClaims();
+                    _logger.LogInformation("{UserRole} {UserId} viewing all {ClaimCount} claims", userRole, userId, claims.Count);
                 }
                 else
                 {
-                    claims = _dataService.GetAllClaims();
+                    // Default to user's own claims for unknown roles
+                    claims = _dataService.GetClaimsByLecturerId(userId);
+                    _logger.LogWarning("Unknown role {UserRole} for user {UserId}, defaulting to own claims", userRole, userId);
                 }
 
                 // Create tracking view models
@@ -652,7 +685,9 @@ namespace contract_monthly_claim_system_cs.Controllers
             try
             {
                 var coordinators = _dataService.GetAllUsers()
-                    .Where(u => u.Role == UserRole.ProgrammeCoordinator && u.IsActive)
+                    .Where(u => (u.Role == UserRole.ProgrammeCoordinator ||
+                                u.Role == UserRole.AcademicManager ||
+                                u.Role == UserRole.HumanResource) && u.IsActive)
                     .ToList();
 
                 // In a real system, this would send emails or other notifications

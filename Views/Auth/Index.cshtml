@@ -349,6 +349,15 @@
                     Streamline your monthly claim submissions and approvals with our intuitive platform.
                     Join thousands of lecturers and administrators who trust our system.
                 </p>
+                <div style="margin-top: 20px; font-size: 14px; opacity: 0.8;">
+                    <p><strong>Part 3 POE Automation Features:</strong></p>
+                    <ul style="text-align: left; margin-left: 20px;">
+                        <li>Automated claim calculations</li>
+                        <li>Multi-level approval workflow</li>
+                        <li>HR analytics dashboard</li>
+                        <li>Role-based access control</li>
+                    </ul>
+                </div>
             </div>
 
             <!-- Right Side - Auth Forms -->
@@ -405,6 +414,17 @@
                         <p class="form-switch" style="margin-top: 10px;">
                             <a href="@Url.Action("ForgotPassword", "Auth")" style="font-size: 13px;">Forgot your password?</a>
                         </p>
+
+                        <!-- Demo Accounts -->
+                        <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 8px; font-size: 12px;">
+                            <p style="margin: 0; color: #666; font-weight: 600;">Demo Accounts:</p>
+                            <p style="margin: 5px 0 0 0; color: #666;">
+                                Lecturer: lecturer / lecturer123<br>
+                                Coordinator: coordinator / coordinator123<br>
+                                Manager: admin / admin123<br>
+                                HR: hr / hr123
+                            </p>
+                        </div>
                     </form>
                 </div>
 
@@ -482,6 +502,7 @@
                                 <option value="0">Lecturer</option>
                                 <option value="1">Programme Coordinator</option>
                                 <option value="2">Academic Manager</option>
+                                <option value="3">Human Resource</option>
                             </select>
                             <span class="form-label-custom" style="top: -10px; font-size: 0.7em;">Role</span>
                             @if (ViewData.ModelState.ContainsKey("Role"))
