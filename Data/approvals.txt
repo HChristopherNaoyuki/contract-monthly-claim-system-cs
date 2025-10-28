@@ -94,5 +94,17 @@
     "ApprovalOrder": 1,
     "Claim": null,
     "ApproverUser": null
+  },
+  {
+    "ApprovalId": 9,
+    "ClaimId": 9,
+    "ApproverUserId": 134217728,
+    "ApproverRole": "AcademicManager",
+    "ApprovalDate": "2025-10-28T14:36:43.9917794+02:00",
+    "IsApproved": true,
+    "Comments": null,
+    "ApprovalOrder": 1,
+    "Claim": null,
+    "ApproverUser": null
   }
 ]

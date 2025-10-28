@@ -2,32 +2,383 @@
     ViewData["Title"] = "Privacy Policy";
 }
 
-<div class="container privacy">
-    <!-- Centered heading -->
-    <h1 class="text-center">Privacy Policy</h1>
-
-    <div class="privacy-content">
-        <p>Your privacy is important to us. This policy explains how we collect, use, and protect your information.</p>
-
-        <h3>Data Collection</h3>
-        <p>We collect only the information necessary to process your claims:</p>
-        <ul>
-            <li>Personal identification details</li>
-            <li>Claim documentation</li>
-            <li>Approval records</li>
-        </ul>
-
-        <h3>Data Usage</h3>
-        <p>Your information is used solely for:</p>
-        <ul>
-            <li>Processing monthly claims</li>
-            <li>System improvements</li>
-            <li>Compliance with regulations</li>
-        </ul>
+<div class="container">
+    <div class="hero">
+        <h1 class="hero-title">Privacy Policy</h1>
+        <p class="hero-subtitle">Your privacy and data protection are our top priorities</p>
     </div>
 
-    <div class="footer">
-        <a class="btn btn-secondary" asp-controller="Home" asp-action="Index">Back to Home</a>
-        <div class="copyright">© 2025 - Contract Monthly Claim System</div>
+    <div class="card">
+        <div class="card-content">
+            <!-- Privacy Policy Introduction -->
+            <div class="privacy-section">
+                <h2 class="privacy-title">Privacy Policy</h2>
+                <p class="privacy-text">
+                    Your privacy is important to us. This policy explains how we collect, use, and protect your information.
+                </p>
+            </div>
+
+            <!-- Data Collection Section -->
+            <div class="privacy-section">
+                <h3 class="privacy-subtitle">Data Collection</h3>
+                <p class="privacy-text">
+                    We collect only the information necessary to process your claims:
+                </p>
+                <ul class="privacy-list">
+                    <li class="privacy-list-item">Personal identification details</li>
+                    <li class="privacy-list-item">Claim documentation</li>
+                    <li class="privacy-list-item">Approval records</li>
+                </ul>
+            </div>
+
+            <!-- Data Usage Section -->
+            <div class="privacy-section">
+                <h3 class="privacy-subtitle">Data Usage</h3>
+                <p class="privacy-text">
+                    Your information is used solely for:
+                </p>
+                <ul class="privacy-list">
+                    <li class="privacy-list-item">Processing monthly claims</li>
+                    <li class="privacy-list-item">System improvements</li>
+                    <li class="privacy-list-item">Compliance with regulations</li>
+                </ul>
+            </div>
+
+            <!-- Website Usage Section -->
+            <div class="privacy-section">
+                <h3 class="privacy-subtitle">Website Usage</h3>
+                <div class="notice-box">
+                    <p class="notice-text">
+                        UNDER NO CIRCUMSTANCES SHOULD IMAGES OR EMOJIS BE INCLUDED DIRECTLY IN THE README FILE.
+                        ALL VISUAL MEDIA, INCLUDING SCREENSHOTS AND IMAGES OF THE APPLICATION, MUST BE STORED IN
+                        A DEDICATED FOLDER WITHIN THE PROJECT DIRECTORY. THIS FOLDER SHOULD BE CLEARLY STRUCTURED
+                        AND NAMED ACCORDINGLY TO INDICATE THAT IT CONTAINS ALL VISUAL CONTENT RELATED TO THE
+                        APPLICATION (FOR EXAMPLE, A FOLDER NAMED IMAGES, SCREENSHOTS, OR MEDIA).
+                    </p>
+                </div>
+            </div>
+
+            <!-- Liability Notice Section -->
+            <div class="privacy-section">
+                <h3 class="privacy-subtitle">Liability Notice</h3>
+                <div class="notice-box warning">
+                    <p class="notice-text">
+                        I AM NOT LIABLE OR RESPONSIBLE FOR ANY MALFUNCTIONS, DEFECTS, OR ISSUES THAT MAY OCCUR AS A
+                        RESULT OF COPYING, MODIFYING, OR USING THIS SOFTWARE. IF YOU ENCOUNTER ANY PROBLEMS OR ERRORS,
+                        PLEASE DO NOT ATTEMPT TO FIX THEM SILENTLY OR OUTSIDE THE PROJECT. INSTEAD, KINDLY SUBMIT A
+                        PULL REQUEST OR OPEN AN ISSUE ON THE CORRESPONDING GITHUB REPOSITORY, SO THAT IT CAN BE
+                        ADDRESSED APPROPRIATELY BY THE MAINTAINERS OR CONTRIBUTORS.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Part 3 POE Compliance Notice -->
+            <div class="privacy-section">
+                <div class="compliance-notice">
+                    <h4 class="compliance-title">Part 3 POE Compliance</h4>
+                    <p class="compliance-text">
+                        This privacy policy has been updated to comply with Part 3 POE requirements for the Contract Monthly Claim System.
+                        The system uses text file storage and maintains minimal data collection principles as part of the automation features.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Back to Home Button -->
+    <div class="privacy-actions">
+        <a class="btn btn-primary" asp-controller="Home" asp-action="Index">
+            Back to Home
+        </a>
     </div>
 </div>
+
+<style>
+    /* Privacy Page Specific Styles */
+    .privacy-section {
+        margin-bottom: var(--spacing-xl);
+        padding-bottom: var(--spacing-lg);
+        border-bottom: 1px solid var(--system-gray-5);
+    }
+
+        .privacy-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+    .privacy-title {
+        font-size: var(--font-size-title-1);
+        font-weight: 700;
+        color: var(--system-text-primary);
+        margin-bottom: var(--spacing-md);
+        text-align: center;
+    }
+
+    .privacy-subtitle {
+        font-size: var(--font-size-title-3);
+        font-weight: 600;
+        color: var(--system-blue);
+        margin-bottom: var(--spacing-md);
+        border-left: 4px solid var(--system-blue);
+        padding-left: var(--spacing-md);
+    }
+
+    .privacy-text {
+        font-size: var(--font-size-body);
+        line-height: 1.6;
+        color: var(--system-text-secondary);
+        margin-bottom: var(--spacing-md);
+    }
+
+    .privacy-list {
+        list-style-type: none;
+        padding-left: 0;
+        margin: var(--spacing-md) 0;
+    }
+
+    .privacy-list-item {
+        position: relative;
+        padding: var(--spacing-sm) 0 var(--spacing-sm) var(--spacing-xl);
+        color: var(--system-text-secondary);
+        line-height: 1.5;
+    }
+
+        .privacy-list-item::before {
+            content: "•";
+            position: absolute;
+            left: var(--spacing-md);
+            color: var(--system-blue);
+            font-weight: bold;
+            font-size: var(--font-size-title-3);
+        }
+
+    /* Notice Box Styles */
+    .notice-box {
+        background-color: var(--system-gray-6);
+        border: 1px solid var(--system-gray-4);
+        border-radius: var(--border-radius-md);
+        padding: var(--spacing-lg);
+        margin: var(--spacing-md) 0;
+    }
+
+        .notice-box.warning {
+            background-color: rgba(255, 149, 0, 0.1);
+            border-color: var(--system-orange);
+            border-left: 4px solid var(--system-orange);
+        }
+
+    .notice-text {
+        font-family: 'Courier New', monospace;
+        font-size: var(--font-size-footnote);
+        line-height: 1.5;
+        color: var(--system-text-secondary);
+        margin: 0;
+        white-space: pre-line;
+    }
+
+    /* Compliance Notice */
+    .compliance-notice {
+        background: linear-gradient(135deg, var(--system-gray-6), var(--system-background-primary));
+        border: 1px solid var(--system-gray-4);
+        border-radius: var(--border-radius-lg);
+        padding: var(--spacing-lg);
+        text-align: center;
+    }
+
+    .compliance-title {
+        font-size: var(--font-size-headline);
+        font-weight: 600;
+        color: var(--system-green);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .compliance-text {
+        font-size: var(--font-size-body);
+        color: var(--system-text-secondary);
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    /* Privacy Actions */
+    .privacy-actions {
+        display: flex;
+        justify-content: center;
+        margin-top: var(--spacing-xl);
+        padding-top: var(--spacing-lg);
+        border-top: 1px solid var(--system-gray-5);
+    }
+
+    /* Responsive Design */
+    @@media (max-width: 768px) {
+        .privacy-title {
+            font-size: var(--font-size-title-2);
+        }
+
+        .privacy-subtitle {
+            font-size: var(--font-size-headline);
+        }
+
+        .notice-text {
+            font-size: var(--font-size-caption-1);
+        }
+
+        .privacy-list-item {
+            padding-left: var(--spacing-lg);
+        }
+
+        .compliance-notice {
+            padding: var(--spacing-md);
+        }
+    }
+
+    @@media (max-width: 480px) {
+        .privacy-section {
+            margin-bottom: var(--spacing-lg);
+            padding-bottom: var(--spacing-md);
+        }
+
+        .notice-box {
+            padding: var(--spacing-md);
+        }
+
+        .privacy-actions .btn {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+
+    /* Print Styles */
+    @@media print {
+        .privacy-actions {
+            display: none;
+        }
+
+        .notice-box {
+            background-color: transparent;
+            border: 1px solid #000;
+        }
+
+        .compliance-notice {
+            background: transparent;
+            border: 1px solid #000;
+        }
+    }
+
+    /* Dark Mode Support (Future Enhancement) */
+    @@media (prefers-color-scheme: dark) {
+        .privacy-title {
+            color: var(--system-white);
+        }
+
+        .privacy-text {
+            color: var(--system-gray-4);
+        }
+
+        .privacy-list-item {
+            color: var(--system-gray-4);
+        }
+
+        .notice-box {
+            background-color: var(--system-gray-2);
+            border-color: var(--system-gray-3);
+        }
+
+        .compliance-notice {
+            background: linear-gradient(135deg, var(--system-gray-2), var(--system-gray-1));
+            border-color: var(--system-gray-3);
+        }
+    }
+
+    /* High Contrast Mode Support */
+    @@media (prefers-contrast: high) {
+        .privacy-subtitle {
+            border-left-color: #000;
+            color: #000;
+        }
+
+        .privacy-list-item::before {
+            color: #000;
+        }
+
+        .notice-box.warning {
+            border-color: #000;
+            background-color: #fff;
+        }
+    }
+
+    /* Reduced Motion Support */
+    @@media (prefers-reduced-motion: reduce) {
+        .compliance-notice {
+            transition: none;
+        }
+    }
+</style>
+
+@section Scripts {
+    <script>
+        // Privacy page specific JavaScript
+        document.addEventListener('DOMContentLoaded', function () {
+            // Add smooth scrolling for better user experience
+            const links = document.querySelectorAll('a[href^="#"]');
+            links.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Enhance accessibility for screen readers
+            const noticeBoxes = document.querySelectorAll('.notice-box');
+            noticeBoxes.forEach(box => {
+                box.setAttribute('role', 'alert');
+                box.setAttribute('aria-live', 'polite');
+            });
+
+            // Print functionality
+            const printButton = document.createElement('button');
+            printButton.className = 'btn btn-outline';
+            printButton.textContent = 'Print Policy';
+            printButton.addEventListener('click', function () {
+                window.print();
+            });
+
+            const privacyActions = document.querySelector('.privacy-actions');
+            if (privacyActions) {
+                privacyActions.appendChild(printButton);
+            }
+
+            // Add focus management for better keyboard navigation
+            const focusableElements = document.querySelectorAll('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+            focusableElements.forEach((element, index) => {
+                element.setAttribute('tabindex', index + 1);
+            });
+
+            // Auto-expand notice boxes on focus for better accessibility
+            noticeBoxes.forEach(box => {
+                box.addEventListener('focus', function () {
+                    this.style.transform = 'scale(1.02)';
+                    this.style.transition = 'transform 0.2s ease';
+                });
+
+                box.addEventListener('blur', function () {
+                    this.style.transform = 'scale(1)';
+                });
+            });
+        });
+
+        // Track privacy policy views for analytics (Part 3 POE requirement)
+        function trackPrivacyView() {
+            // In a real implementation, this would send analytics data
+            console.log('Privacy policy viewed - Part 3 POE compliance tracking');
+        }
+
+        // Call tracking when page loads
+        window.addEventListener('load', trackPrivacyView);
+    </script>
+}

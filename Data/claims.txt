@@ -126,5 +126,21 @@
     "Lecturer": null,
     "Documents": [],
     "Approvals": []
+  },
+  {
+    "ClaimId": 9,
+    "LecturerId": 117440512,
+    "ClaimDate": "2025-10-28T14:35:30.2408053+02:00",
+    "MonthYear": "2025-10",
+    "HoursWorked": 12.00,
+    "HourlyRate": 99.33,
+    "Amount": 1191.96,
+    "Status": 2,
+    "SubmissionComments": "Need reviewing ASAP",
+    "CreatedDate": "2025-10-28T14:35:30.2408121+02:00",
+    "ModifiedDate": "2025-10-28T14:36:43.9621312+02:00",
+    "Lecturer": null,
+    "Documents": [],
+    "Approvals": []
   }
 ]

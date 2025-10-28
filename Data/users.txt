@@ -110,5 +110,33 @@
     "CreatedDate": "2025-10-27T08:14:23.7546718Z",
     "LastLoginDate": null,
     "FullName": "Nathan Maddison"
+  },
+  {
+    "UserId": 9,
+    "Name": "Corey",
+    "Surname": "House",
+    "Username": "Correy",
+    "Password": "breakit123",
+    "Role": 3,
+    "Email": "Correy@cmcs.com",
+    "PhoneNumber": "",
+    "IsActive": true,
+    "CreatedDate": "2025-10-28T12:33:00.989014Z",
+    "LastLoginDate": null,
+    "FullName": "Corey House"
+  },
+  {
+    "UserId": 10,
+    "Name": "Human",
+    "Surname": "Resource",
+    "Username": "hr",
+    "Password": "hr123",
+    "Role": 3,
+    "Email": "hr@cmcs.com",
+    "PhoneNumber": "",
+    "IsActive": true,
+    "CreatedDate": "2025-10-28T12:38:20.6845453Z",
+    "LastLoginDate": null,
+    "FullName": "Human Resource"
   }
 ]

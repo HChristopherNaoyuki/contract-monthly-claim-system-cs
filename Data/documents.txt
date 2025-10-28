@@ -58,5 +58,17 @@
     "IsActive": true,
     "Claim": null,
     "FormattedFileSize": "76.84 KB"
+  },
+  {
+    "DocumentId": 6,
+    "ClaimId": 9,
+    "FileName": "Presentation.pdf",
+    "FilePath": "/uploads/9_da493af3-d3d1-4238-baea-578d7fc1ed74_Presentation.pdf",
+    "FileSize": 4955485,
+    "FileType": ".pdf",
+    "UploadDate": "2025-10-28T14:35:30.476212+02:00",
+    "IsActive": true,
+    "Claim": null,
+    "FormattedFileSize": "4.73 MB"
   }
 ]
