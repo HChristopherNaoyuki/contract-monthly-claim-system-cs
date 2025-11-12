@@ -128,7 +128,7 @@ namespace contract_monthly_claim_system_cs.Models.DataModels
 
         /// <summary>
         /// Part 3 POE requirement: Human Resource role for HR operations
-        /// Can access HR analytics and manage lecturer data
+        /// Can access HR analytics, manage lecturer data, and edit submissions
         /// </summary>
         HumanResource = 3
     }

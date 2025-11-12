@@ -1,0 +1,274 @@
+﻿@model contract_monthly_claim_system_cs.Models.ClaimViewModels.HREditClaimViewModel
+@{
+    ViewData["Title"] = "HR Edit Claim";
+}
+
+<div class="container container-sm">
+    <div class="hero">
+        <h1 class="hero-title">HR Edit Claim</h1>
+        <p class="hero-subtitle">Edit claim details for Lecturer: <strong>@Model.LecturerName</strong></p>
+    </div>
+
+    <div class="card">
+        <div class="card-content">
+            <form asp-action="HREditClaim" method="post" id="hrEditForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="ClaimId" />
+                <input type="hidden" asp-for="LecturerId" />
+                <input type="hidden" asp-for="LecturerName" />
+
+                <!-- Original Values Display -->
+                <div class="form-section">
+                    <h3 class="section-title">Original Values</h3>
+                    <div class="original-values">
+                        <div class="value-row">
+                            <label>Original Hours:</label>
+                            <span class="original-value">@Model.OriginalHoursWorked</span>
+                        </div>
+                        <div class="value-row">
+                            <label>Original Rate:</label>
+                            <span class="original-value">@Model.OriginalHourlyRate.ToString("C")</span>
+                        </div>
+                        <div class="value-row">
+                            <label>Original Amount:</label>
+                            <span class="original-value">@Model.OriginalAmount.ToString("C")</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Editable Fields -->
+                <div class="form-section">
+                    <h3 class="section-title">Edit Values</h3>
+
+                    <div class="form-group">
+                        <label asp-for="HoursWorked" class="form-label">Hours Worked</label>
+                        <input asp-for="HoursWorked" class="form-control"
+                               data-original="@Model.OriginalHoursWorked"
+                               onchange="calculateChanges()" />
+                        <span asp-validation-for="HoursWorked" class="validation-error"></span>
+                        <div class="change-indicator" id="hoursChange"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="HourlyRate" class="form-label">Hourly Rate</label>
+                        <input asp-for="HourlyRate" class="form-control"
+                               data-original="@Model.OriginalHourlyRate"
+                               onchange="calculateChanges()" />
+                        <span asp-validation-for="HourlyRate" class="validation-error"></span>
+                        <div class="change-indicator" id="rateChange"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="Amount" class="form-label">Amount</label>
+                        <input asp-for="Amount" class="form-control"
+                               data-original="@Model.OriginalAmount"
+                               onchange="calculateChanges()" />
+                        <span asp-validation-for="Amount" class="validation-error"></span>
+                        <div class="change-indicator" id="amountChange"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label asp-for="SubmissionComments" class="form-label">Comments</label>
+                        <textarea asp-for="SubmissionComments" class="form-control form-textarea"
+                                  rows="4" placeholder="Enter any comments about this claim edit..."></textarea>
+                        <span asp-validation-for="SubmissionComments" class="validation-error"></span>
+                    </div>
+                </div>
+
+                <!-- Change Summary -->
+                <div class="form-section" id="changeSummary" style="display: none;">
+                    <h3 class="section-title">Change Summary</h3>
+                    <div class="change-summary">
+                        <div class="summary-item">
+                            <label>Hours Change:</label>
+                            <span id="summaryHours"></span>
+                        </div>
+                        <div class="summary-item">
+                            <label>Rate Change:</label>
+                            <span id="summaryRate"></span>
+                        </div>
+                        <div class="summary-item">
+                            <label>Amount Change:</label>
+                            <span id="summaryAmount"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="form-actions">
+                    <a class="btn btn-outline" asp-controller="Claims" asp-action="HRDashboard">Cancel</a>
+                    <button type="submit" class="btn btn-primary" id="submitBtn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function calculateChanges() {
+            const hoursInput = document.getElementById('HoursWorked');
+            const rateInput = document.getElementById('HourlyRate');
+            const amountInput = document.getElementById('Amount');
+
+            const originalHours = parseFloat(hoursInput.getAttribute('data-original')) || 0;
+            const originalRate = parseFloat(rateInput.getAttribute('data-original')) || 0;
+            const originalAmount = parseFloat(amountInput.getAttribute('data-original')) || 0;
+
+            const currentHours = parseFloat(hoursInput.value) || 0;
+            const currentRate = parseFloat(rateInput.value) || 0;
+            const currentAmount = parseFloat(amountInput.value) || 0;
+
+            // Calculate differences
+            const hoursDiff = currentHours - originalHours;
+            const rateDiff = currentRate - originalRate;
+            const amountDiff = currentAmount - originalAmount;
+
+            // Update change indicators
+            updateChangeIndicator('hoursChange', hoursDiff, 'hours');
+            updateChangeIndicator('rateChange', rateDiff, 'currency', originalRate);
+            updateChangeIndicator('amountChange', amountDiff, 'currency', originalAmount);
+
+            // Update summary
+            updateChangeSummary(hoursDiff, rateDiff, amountDiff);
+
+            // Show/hide summary section
+            const hasChanges = hoursDiff !== 0 || rateDiff !== 0 || amountDiff !== 0;
+            document.getElementById('changeSummary').style.display = hasChanges ? 'block' : 'none';
+        }
+
+        function updateChangeIndicator(elementId, difference, type, originalValue = 0) {
+            const element = document.getElementById(elementId);
+            if (difference === 0) {
+                element.innerHTML = '';
+                element.className = 'change-indicator';
+                return;
+            }
+
+            const isPositive = difference > 0;
+            const arrow = isPositive ? '↗' : '↘';
+            const colorClass = isPositive ? 'positive' : 'negative';
+
+            let text = '';
+            if (type === 'hours') {
+                text = `${arrow} ${isPositive ? '+' : ''}${difference.toFixed(1)} hours`;
+            } else if (type === 'currency') {
+                const percentage = originalValue > 0 ? (difference / originalValue * 100) : 0;
+                text = `${arrow} ${isPositive ? '+' : ''}${difference.toFixed(2)} (${percentage.toFixed(1)}%)`;
+            }
+
+            element.innerHTML = text;
+            element.className = `change-indicator ${colorClass}`;
+        }
+
+        function updateChangeSummary(hoursDiff, rateDiff, amountDiff) {
+            document.getElementById('summaryHours').textContent =
+                `${hoursDiff > 0 ? '+' : ''}${hoursDiff.toFixed(1)} hours`;
+            document.getElementById('summaryHours').className =
+                hoursDiff > 0 ? 'positive' : hoursDiff < 0 ? 'negative' : '';
+
+            document.getElementById('summaryRate').textContent =
+                `${rateDiff > 0 ? '+' : ''}${rateDiff.toFixed(2)}`;
+            document.getElementById('summaryRate').className =
+                rateDiff > 0 ? 'positive' : rateDiff < 0 ? 'negative' : '';
+
+            document.getElementById('summaryAmount').textContent =
+                `${amountDiff > 0 ? '+' : ''}${amountDiff.toFixed(2)}`;
+            document.getElementById('summaryAmount').className =
+                amountDiff > 0 ? 'positive' : amountDiff < 0 ? 'negative' : '';
+        }
+
+        // Initialize on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            calculateChanges();
+        });
+    </script>
+
+    <style>
+        .form-section {
+            margin-bottom: var(--spacing-xl);
+            padding: var(--spacing-lg);
+            background-color: var(--system-gray-6);
+            border-radius: var(--border-radius-md);
+        }
+
+        .section-title {
+            color: var(--system-blue);
+            margin-bottom: var(--spacing-md);
+            font-size: var(--font-size-headline);
+        }
+
+        .original-values {
+            display: grid;
+            gap: var(--spacing-sm);
+        }
+
+        .value-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-sm);
+            background-color: var(--system-background-primary);
+            border-radius: var(--border-radius-sm);
+        }
+
+        .original-value {
+            font-weight: 600;
+            color: var(--system-text-primary);
+        }
+
+        .change-indicator {
+            font-size: var(--font-size-footnote);
+            font-weight: 500;
+            margin-top: var(--spacing-xs);
+            padding: 2px 6px;
+            border-radius: var(--border-radius-sm);
+            display: inline-block;
+        }
+
+        .change-indicator.positive {
+            background-color: rgba(52, 199, 89, 0.1);
+            color: var(--system-green);
+        }
+
+        .change-indicator.negative {
+            background-color: rgba(255, 59, 48, 0.1);
+            color: var(--system-red);
+        }
+
+        .change-summary {
+            background-color: var(--system-background-primary);
+            padding: var(--spacing-md);
+            border-radius: var(--border-radius-md);
+            border-left: 4px solid var(--system-blue);
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--spacing-sm);
+        }
+
+        .summary-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .positive {
+            color: var(--system-green);
+            font-weight: 600;
+        }
+
+        .negative {
+            color: var(--system-red);
+            font-weight: 600;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            justify-content: flex-end;
+            margin-top: var(--spacing-lg);
+        }
+    </style>
+}

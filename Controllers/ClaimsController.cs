@@ -10,12 +10,14 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using System.IO;
 using System.Threading.Tasks;
+using System.Text;
+using contract_monthly_claim_system_cs.Extensions;
 
 namespace contract_monthly_claim_system_cs.Controllers
 {
     /// <summary>
     /// Enhanced Claims Controller with comprehensive automation features for Part 3 POE requirements
-    /// Handles claim submission, approval workflow, HR analytics, and automated processing
+    /// Handles claim submission, approval workflow, HR analytics, automated processing, and PDF report generation
     /// Uses text file storage instead of database as per assignment requirements
     /// </summary>
     public class ClaimsController : Controller
@@ -494,6 +496,196 @@ namespace contract_monthly_claim_system_cs.Controllers
             }
         }
 
+        /// <summary>
+        /// HR Edit Claim - Allows Human Resources to edit claim submissions
+        /// Part 3 POE requirement: HR can edit submissions
+        /// </summary>
+        /// <param name="claimId">ID of the claim to edit</param>
+        /// <returns>Edit view or redirect</returns>
+        [HttpGet]
+        public IActionResult HREditClaim(int claimId)
+        {
+            try
+            {
+                // Validate authentication and authorization
+                if (HttpContext.Session.GetInt32("UserId") == null)
+                {
+                    _logger.LogWarning("Unauthorized access attempt to HR edit claim");
+                    TempData["ErrorMessage"] = "Please log in to access HR features.";
+                    return RedirectToAction("Index", "Auth");
+                }
+
+                var userRole = HttpContext.Session.GetString("Role") ?? string.Empty;
+                if (userRole != UserRole.HumanResource.ToString())
+                {
+                    _logger.LogWarning("User {UserId} with role {Role} attempted to access HR edit claim",
+                        HttpContext.Session.GetInt32("UserId"), userRole);
+                    TempData["ErrorMessage"] = "Access denied. HR edit features are only available for Human Resources.";
+                    return RedirectToAction("Index", "Home");
+                }
+
+                // Retrieve claim from text file storage
+                var claim = _dataService.GetClaimById(claimId);
+                if (claim == null)
+                {
+                    _logger.LogWarning("Claim {ClaimId} not found for HR editing", claimId);
+                    TempData["ErrorMessage"] = $"Claim #{claimId} not found.";
+                    return RedirectToAction("HRDashboard");
+                }
+
+                // Create edit view model
+                var viewModel = new HREditClaimViewModel
+                {
+                    ClaimId = claim.ClaimId,
+                    LecturerId = claim.LecturerId,
+                    LecturerName = GetLecturerName(claim.LecturerId),
+                    OriginalHoursWorked = claim.HoursWorked,
+                    HoursWorked = claim.HoursWorked,
+                    OriginalHourlyRate = claim.HourlyRate,
+                    HourlyRate = claim.HourlyRate,
+                    OriginalAmount = claim.Amount,
+                    Amount = claim.Amount,
+                    Status = claim.Status,
+                    SubmissionComments = claim.SubmissionComments,
+                    MonthYear = claim.MonthYear,
+                    ClaimDate = claim.ClaimDate
+                };
+
+                _logger.LogInformation("HR editing claim {ClaimId} for lecturer {LecturerId}",
+                    claimId, claim.LecturerId);
+
+                return View(viewModel);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading HR edit claim view for claim {ClaimId}", claimId);
+                TempData["ErrorMessage"] = "An error occurred while loading the claim for editing.";
+                return RedirectToAction("HRDashboard");
+            }
+        }
+
+        /// <summary>
+        /// HR Edit Claim - POST handler for saving HR edits
+        /// Part 3 POE requirement: HR can edit and update submissions
+        /// </summary>
+        /// <param name="model">Edited claim data</param>
+        /// <returns>Redirect to HR dashboard or error view</returns>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult HREditClaim(HREditClaimViewModel model)
+        {
+            try
+            {
+                // Validate authentication and authorization
+                if (HttpContext.Session.GetInt32("UserId") == null)
+                {
+                    _logger.LogWarning("Unauthorized POST attempt to HR edit claim");
+                    TempData["ErrorMessage"] = "Please log in to access HR features.";
+                    return RedirectToAction("Index", "Auth");
+                }
+
+                var userRole = HttpContext.Session.GetString("Role") ?? string.Empty;
+                if (userRole != UserRole.HumanResource.ToString())
+                {
+                    _logger.LogWarning("User {UserId} with role {Role} attempted to POST HR edit claim",
+                        HttpContext.Session.GetInt32("UserId"), userRole);
+                    TempData["ErrorMessage"] = "Access denied. HR edit features are only available for Human Resources.";
+                    return RedirectToAction("Index", "Home");
+                }
+
+                // Validate model state
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogWarning("HR edit claim model validation failed for claim {ClaimId}", model.ClaimId);
+                    return View(model);
+                }
+
+                // Retrieve original claim
+                var claim = _dataService.GetClaimById(model.ClaimId);
+                if (claim == null)
+                {
+                    _logger.LogWarning("Claim {ClaimId} not found during HR edit submission", model.ClaimId);
+                    TempData["ErrorMessage"] = $"Claim #{model.ClaimId} not found.";
+                    return RedirectToAction("HRDashboard");
+                }
+
+                // Update claim with HR edits
+                claim.HoursWorked = model.HoursWorked;
+                claim.HourlyRate = model.HourlyRate;
+                claim.Amount = model.Amount;
+                claim.SubmissionComments = model.SubmissionComments;
+                claim.ModifiedDate = DateTime.Now;
+
+                // Save updated claim
+                _dataService.SaveClaim(claim);
+
+                // Log HR edit activity
+                LogHREditActivity(claim, model);
+
+                _logger.LogInformation("HR successfully edited claim {ClaimId}. Changes: Hours {OldHours}->{NewHours}, Rate {OldRate}->{NewRate}, Amount {OldAmount}->{NewAmount}",
+                    model.ClaimId, model.OriginalHoursWorked, model.HoursWorked,
+                    model.OriginalHourlyRate, model.HourlyRate,
+                    model.OriginalAmount, model.Amount);
+
+                TempData["SuccessMessage"] = $"Claim #{model.ClaimId} has been successfully updated.";
+                return RedirectToAction("HRDashboard");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error processing HR edit claim for claim {ClaimId}", model.ClaimId);
+                ModelState.AddModelError("", "An error occurred while updating the claim. Please try again.");
+                return View(model);
+            }
+        }
+
+        /// <summary>
+        /// Generates PDF report for HR analytics
+        /// Part 3 POE requirement: PDF report generation with date and time
+        /// </summary>
+        /// <param name="reportType">Type of report to generate</param>
+        /// <returns>PDF file download</returns>
+        [HttpGet]
+        public IActionResult GenerateHRReport(string reportType = "comprehensive")
+        {
+            try
+            {
+                // Validate authentication and authorization
+                if (HttpContext.Session.GetInt32("UserId") == null)
+                {
+                    _logger.LogWarning("Unauthorized access attempt to generate HR report");
+                    TempData["ErrorMessage"] = "Please log in to access HR features.";
+                    return RedirectToAction("Index", "Auth");
+                }
+
+                var userRole = HttpContext.Session.GetString("Role") ?? string.Empty;
+                if (userRole != UserRole.HumanResource.ToString() && userRole != UserRole.AcademicManager.ToString())
+                {
+                    _logger.LogWarning("User {UserId} with role {Role} attempted to generate HR report",
+                        HttpContext.Session.GetInt32("UserId"), userRole);
+                    TempData["ErrorMessage"] = "Access denied. Report generation is only available for Human Resources and Academic Managers.";
+                    return RedirectToAction("Index", "Home");
+                }
+
+                // Generate report data
+                var reportData = GenerateReportData(reportType);
+
+                // Generate PDF content
+                var pdfContent = GeneratePdfReport(reportData);
+
+                // Return PDF file
+                var fileName = $"HR_Report_{DateTime.Now:yyyyMMdd_HHmmss}.pdf";
+                _logger.LogInformation("HR report generated successfully: {FileName}", fileName);
+
+                return File(Encoding.UTF8.GetBytes(pdfContent), "application/pdf", fileName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error generating HR report");
+                TempData["ErrorMessage"] = "An error occurred while generating the report. Please try again.";
+                return RedirectToAction("HRDashboard");
+            }
+        }
+
         #region Part 3 Automation Methods
 
         /// <summary>
@@ -830,6 +1022,204 @@ namespace contract_monthly_claim_system_cs.Controllers
                 })
                 .OrderBy(m => m.MonthYear)
                 .ToList();
+        }
+
+        #endregion
+
+        #region HR Edit and Report Generation Methods
+
+        /// <summary>
+        /// Logs HR edit activity for audit trail
+        /// Part 3 POE requirement: Audit trail for HR edits
+        /// </summary>
+        /// <param name="claim">Updated claim</param>
+        /// <param name="model">Edit view model with original values</param>
+        private void LogHREditActivity(Claim claim, HREditClaimViewModel model)
+        {
+            try
+            {
+                var editLog = new
+                {
+                    ClaimId = claim.ClaimId,
+                    EditedByUserId = HttpContext.Session.GetInt32("UserId"),
+                    EditedByRole = HttpContext.Session.GetString("Role"),
+                    EditTimestamp = DateTime.Now,
+                    Changes = new
+                    {
+                        HoursWorked = new { From = model.OriginalHoursWorked, To = model.HoursWorked },
+                        HourlyRate = new { From = model.OriginalHourlyRate, To = model.HourlyRate },
+                        Amount = new { From = model.OriginalAmount, To = model.Amount }
+                    }
+                };
+
+                // In a real system, this would be saved to an audit log
+                _logger.LogInformation("HR Edit Activity: {@EditLog}", editLog);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to log HR edit activity for claim {ClaimId}", claim.ClaimId);
+            }
+        }
+
+        /// <summary>
+        /// Generates comprehensive report data for PDF generation
+        /// Part 3 POE requirement: Comprehensive reporting data
+        /// </summary>
+        /// <param name="reportType">Type of report</param>
+        /// <returns>HR report view model</returns>
+        private HRReportViewModel GenerateReportData(string reportType)
+        {
+            var allClaims = _dataService.GetAllClaims();
+            var approvedClaims = allClaims.Where(c => c.Status == ClaimStatus.Approved).ToList();
+            var rejectedClaims = allClaims.Where(c => c.Status == ClaimStatus.Rejected).ToList();
+            var pendingClaims = allClaims.Where(c => c.Status == ClaimStatus.Submitted).ToList();
+            var paidClaims = allClaims.Where(c => c.Status == ClaimStatus.Paid).ToList();
+
+            var lecturers = _dataService.GetAllLecturers();
+            var departmentStats = lecturers.GroupBy(l => l.Department)
+                .Select(g => new DepartmentStatViewModel
+                {
+                    DepartmentName = g.Key,
+                    LecturerCount = g.Count(),
+                    TotalClaims = allClaims.Count(c => lecturers.Any(l => l.LecturerId == c.LecturerId && l.Department == g.Key)),
+                    TotalAmount = allClaims.Where(c => lecturers.Any(l => l.LecturerId == c.LecturerId && l.Department == g.Key))
+                                         .Sum(c => c.Amount)
+                })
+                .Where(d => d.TotalClaims > 0)
+                .ToList();
+
+            return new HRReportViewModel
+            {
+                ReportTitle = reportType == "comprehensive" ? "Comprehensive HR Analytics Report" : "HR Summary Report",
+                GeneratedAt = DateTime.Now,
+                ReportPeriod = DateTime.Now.ToString("MMMM yyyy"),
+                TotalClaims = allClaims.Count,
+                ApprovedClaims = approvedClaims.Count,
+                RejectedClaims = rejectedClaims.Count,
+                PendingClaims = pendingClaims.Count,
+                TotalAmountApproved = approvedClaims.Sum(c => c.Amount),
+                TotalAmountPaid = paidClaims.Sum(c => c.Amount),
+                ApprovalRate = allClaims.Count > 0 ? Math.Round((decimal)approvedClaims.Count / allClaims.Count * 100, 2) : 0,
+                TopLecturers = GetTopPerformingLecturers(approvedClaims),
+                MonthlyBreakdown = GetMonthlyClaimBreakdown(approvedClaims),
+                DepartmentStats = departmentStats
+            };
+        }
+
+        /// <summary>
+        /// Generates PDF report content using simple text-based PDF structure
+        /// Part 3 POE requirement: PDF document generation
+        /// </summary>
+        /// <param name="reportData">Report data to include</param>
+        /// <returns>PDF content as string</returns>
+        private string GeneratePdfReport(HRReportViewModel reportData)
+        {
+            var pdfContent = new StringBuilder();
+
+            // PDF header
+            pdfContent.AppendLine("%PDF-1.4");
+            pdfContent.AppendLine("1 0 obj");
+            pdfContent.AppendLine("<< /Type /Catalog /Pages 2 0 R >>");
+            pdfContent.AppendLine("endobj");
+
+            // PDF pages
+            pdfContent.AppendLine("2 0 obj");
+            pdfContent.AppendLine("<< /Type /Pages /Kids [3 0 R] /Count 1 >>");
+            pdfContent.AppendLine("endobj");
+
+            // PDF content
+            pdfContent.AppendLine("3 0 obj");
+            pdfContent.AppendLine("<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Contents 4 0 R >>");
+            pdfContent.AppendLine("endobj");
+
+            // PDF stream content
+            var content = GeneratePdfContent(reportData);
+            pdfContent.AppendLine("4 0 obj");
+            pdfContent.AppendLine("<< /Length " + content.Length + " >>");
+            pdfContent.AppendLine("stream");
+            pdfContent.AppendLine(content);
+            pdfContent.AppendLine("endstream");
+            pdfContent.AppendLine("endobj");
+
+            // PDF trailer
+            pdfContent.AppendLine("xref");
+            pdfContent.AppendLine("0 5");
+            pdfContent.AppendLine("0000000000 65535 f ");
+            pdfContent.AppendLine("0000000010 00000 n ");
+            pdfContent.AppendLine("0000000079 00000 n ");
+            pdfContent.AppendLine("0000000178 00000 n ");
+            pdfContent.AppendLine("0000000309 00000 n ");
+            pdfContent.AppendLine("trailer");
+            pdfContent.AppendLine("<< /Size 5 /Root 1 0 R >>");
+            pdfContent.AppendLine("startxref");
+            pdfContent.AppendLine("0");
+            pdfContent.AppendLine("%%EOF");
+
+            return pdfContent.ToString();
+        }
+
+        /// <summary>
+        /// Generates PDF content with report data
+        /// Part 3 POE requirement: Professional PDF formatting
+        /// </summary>
+        /// <param name="reportData">Report data to include</param>
+        /// <returns>Formatted PDF content</returns>
+        private string GeneratePdfContent(HRReportViewModel reportData)
+        {
+            var content = new StringBuilder();
+
+            // Simple PDF content generation
+            content.AppendLine("BT");
+            content.AppendLine("/F1 12 Tf");
+            content.AppendLine("50 750 Td");
+            content.AppendLine("(" + reportData.ReportTitle + ") Tj");
+            content.AppendLine("0 -20 Td");
+            content.AppendLine("(Generated: " + reportData.FormattedDate + ") Tj");
+            content.AppendLine("0 -20 Td");
+            content.AppendLine("(Report Period: " + reportData.ReportPeriod + ") Tj");
+            content.AppendLine("0 -40 Td");
+            content.AppendLine("(Summary Statistics:) Tj");
+            content.AppendLine("0 -20 Td");
+            content.AppendLine("(Total Claims: " + reportData.TotalClaims + ") Tj");
+            content.AppendLine("0 -20 Td");
+            content.AppendLine("(Approved Claims: " + reportData.ApprovedClaims + ") Tj");
+            content.AppendLine("0 -20 Td");
+            content.AppendLine("(Rejected Claims: " + reportData.RejectedClaims + ") Tj");
+            content.AppendLine("0 -20 Td");
+            content.AppendLine("(Pending Claims: " + reportData.PendingClaims + ") Tj");
+            content.AppendLine("0 -20 Td");
+            content.AppendLine("(Total Amount Approved: " + reportData.TotalAmountApproved.ToString("C") + ") Tj");
+            content.AppendLine("0 -20 Td");
+            content.AppendLine("(Total Amount Paid: " + reportData.TotalAmountPaid.ToString("C") + ") Tj");
+            content.AppendLine("0 -20 Td");
+            content.AppendLine("(Approval Rate: " + reportData.ApprovalRate + "%) Tj");
+            content.AppendLine("0 -40 Td");
+            content.AppendLine("(Top Performing Lecturers:) Tj");
+
+            // Add top lecturers
+            foreach (var lecturer in reportData.TopLecturers.Take(5))
+            {
+                content.AppendLine("0 -20 Td");
+                content.AppendLine("(" + lecturer.LecturerName + " - " + lecturer.TotalAmount.ToString("C") + " - " + lecturer.ClaimCount + " claims) Tj");
+            }
+
+            content.AppendLine("0 -40 Td");
+            content.AppendLine("(Department Statistics:) Tj");
+
+            // Add department stats
+            foreach (var dept in reportData.DepartmentStats)
+            {
+                content.AppendLine("0 -20 Td");
+                content.AppendLine("(" + dept.DepartmentName + ": " + dept.LecturerCount + " lecturers, " + dept.TotalClaims + " claims, " + dept.TotalAmount.ToString("C") + ") Tj");
+            }
+
+            content.AppendLine("0 -40 Td");
+            content.AppendLine("(Report generated by Contract Monthly Claim System) Tj");
+            content.AppendLine("0 -20 Td");
+            content.AppendLine("(Part 3 POE Automation - Human Resource Analytics) Tj");
+            content.AppendLine("ET");
+
+            return content.ToString();
         }
 
         #endregion
