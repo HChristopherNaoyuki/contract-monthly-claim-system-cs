@@ -5,7 +5,6 @@ using System.Linq;
 using System.Text.Json;
 using Microsoft.Extensions.Logging;
 using contract_monthly_claim_system_cs.Models.DataModels;
-using System.Diagnostics;
 
 namespace contract_monthly_claim_system_cs.Services
 {
@@ -272,7 +271,7 @@ namespace contract_monthly_claim_system_cs.Services
         /// </summary>
         /// <param name="userId">User ID to search for</param>
         /// <returns>User object or null if not found</returns>
-        public User? GetUserById(int userId)
+        public User GetUserById(int userId)
         {
             var users = GetAllUsers();
             return users.FirstOrDefault(u => u.UserId == userId);
@@ -283,7 +282,7 @@ namespace contract_monthly_claim_system_cs.Services
         /// </summary>
         /// <param name="username">Username to search for</param>
         /// <returns>User object or null if not found</returns>
-        public User? GetUserByUsername(string username)
+        public User GetUserByUsername(string username)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -336,7 +335,7 @@ namespace contract_monthly_claim_system_cs.Services
         /// </summary>
         /// <param name="lecturerId">Lecturer ID to search for</param>
         /// <returns>Lecturer object or null if not found</returns>
-        public Lecturer? GetLecturerById(int lecturerId)
+        public Lecturer GetLecturerById(int lecturerId)
         {
             var lecturers = GetAllLecturers();
             return lecturers.FirstOrDefault(l => l.LecturerId == lecturerId);
@@ -384,7 +383,7 @@ namespace contract_monthly_claim_system_cs.Services
         /// </summary>
         /// <param name="claimId">Claim ID to search for</param>
         /// <returns>Claim object or null if not found</returns>
-        public Claim? GetClaimById(int claimId)
+        public Claim GetClaimById(int claimId)
         {
             var claims = GetAllClaims();
             return claims.FirstOrDefault(c => c.ClaimId == claimId);
@@ -550,7 +549,7 @@ namespace contract_monthly_claim_system_cs.Services
                     PendingClaims = claims.Count(c => c.Status == ClaimStatus.Submitted),
                     TotalApprovals = approvals.Count,
                     AverageClaimAmount = claims.Any() ? claims.Average(c => c.Amount) : 0,
-                    SystemUptime = DateTime.Now - Process.GetCurrentProcess().StartTime,
+                    SystemUptime = DateTime.Now - System.Diagnostics.Process.GetCurrentProcess().StartTime,
                     DataSize = CalculateTotalDataSize(),
                     GeneratedAt = DateTime.Now
                 };
@@ -655,6 +654,18 @@ namespace contract_monthly_claim_system_cs.Services
                         Password = "coordinator123",
                         Role = UserRole.ProgrammeCoordinator,
                         Email = "sarah.johnson@university.com",
+                        IsActive = true,
+                        CreatedDate = DateTime.UtcNow
+                    },
+                    new User
+                    {
+                        UserId = 4,
+                        Name = "Michael",
+                        Surname = "Brown",
+                        Username = "hr",
+                        Password = "hr123",
+                        Role = UserRole.HumanResource,
+                        Email = "michael.brown@university.com",
                         IsActive = true,
                         CreatedDate = DateTime.UtcNow
                     }

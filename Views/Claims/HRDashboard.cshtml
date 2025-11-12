@@ -1,18 +1,18 @@
 ﻿@model contract_monthly_claim_system_cs.Models.ViewModels.HRDashboardViewModel
 @using contract_monthly_claim_system_cs.Models.DataModels
 @using contract_monthly_claim_system_cs.Services
-@inject TextFileDataService _dataService
+@inject TextFileDataService DataService
 @{
     ViewData["Title"] = "HR Dashboard - Automated Analytics";
 
     // Get recent claims for HR management section
-    var allClaims = _dataService.GetAllClaims();
+    var allClaims = DataService.GetAllClaims();
     var recentClaims = allClaims.OrderByDescending(c => c.ClaimDate).Take(10).ToList();
 
     // Helper function to get lecturer name
     string GetLecturerName(int lecturerId)
     {
-        var user = _dataService.GetUserById(lecturerId);
+        var user = DataService.GetUserById(lecturerId);
         return user != null ? $"{user.Name} {user.Surname}" : "Unknown Lecturer";
     }
 
@@ -305,15 +305,15 @@
             <div class="stats-grid">
                 <div class="stat-item">
                     <div class="stat-label">Total Lecturers</div>
-                    <div class="stat-value">@_dataService.GetAllLecturers().Count</div>
+                    <div class="stat-value">@DataService.GetAllLecturers().Count</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-label">Active Users</div>
-                    <div class="stat-value">@_dataService.GetAllUsers().Count(u => u.IsActive)</div>
+                    <div class="stat-value">@DataService.GetAllUsers().Count(u => u.IsActive)</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-label">Departments</div>
-                    <div class="stat-value">@_dataService.GetAllLecturers().Select(l => l.Department).Distinct().Count()</div>
+                    <div class="stat-value">@DataService.GetAllLecturers().Select(l => l.Department).Distinct().Count()</div>
                 </div>
                 <div class="stat-item">
                     <div class="stat-label">Avg Processing Time</div>
