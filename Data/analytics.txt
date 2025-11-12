@@ -4,1413 +4,2603 @@
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740619+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830228+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740741+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830337+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740764+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830356+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740781+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830369+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740796+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830381+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740832+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830403+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740847+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830416+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774086+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830427+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740873+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830438+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740889+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830453+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740903+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830464+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740915+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830474+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740928+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830483+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740942+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830492+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740956+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830502+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740969+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830515+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740982+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830528+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7740998+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830541+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741011+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830551+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741024+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830562+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741036+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830573+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774105+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830584+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741063+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830593+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741076+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830602+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741089+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830611+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741106+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830621+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741121+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830632+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741134+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830643+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741147+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830653+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774116+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830663+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741173+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830672+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741186+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830682+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741199+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830694+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741215+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830706+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741228+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830716+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741241+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830725+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741253+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830734+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741266+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830743+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741279+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830753+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741293+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830761+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741306+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683077+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774132+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683078+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741333+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830791+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741346+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830806+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741358+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830816+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741372+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830825+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741385+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830835+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741398+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830844+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741411+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830853+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741424+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830862+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741437+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830872+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774145+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830881+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741463+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683089+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741477+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830902+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774149+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830912+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741503+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830924+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741516+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830935+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741529+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830945+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741542+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830955+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7741555+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830964+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742376+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830972+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742417+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830981+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742433+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830989+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742449+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6830998+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742463+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831008+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742497+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831019+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742511+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831029+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742525+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831039+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742537+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831048+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774255+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831058+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742563+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831067+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742576+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831076+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742588+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831085+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742601+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831093+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742613+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831102+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742626+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831111+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742639+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683112+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742652+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831129+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742664+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831138+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742677+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831148+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774269+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683116+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742702+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683117+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742715+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831179+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742728+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683119+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742741+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.68312+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742753+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831209+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742766+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831221+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742779+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831232+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742791+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831242+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742807+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831254+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774282+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831265+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742833+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831274+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742846+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831287+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742858+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831297+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742871+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831306+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742884+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831316+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742896+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831325+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774291+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831336+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742922+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831348+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742935+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683136+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742948+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831369+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742961+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831378+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742973+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831389+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742986+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.68314+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7742999+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831412+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743012+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831424+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743025+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831434+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743038+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831442+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743051+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831453+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743065+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831465+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743078+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831475+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743092+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831486+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743106+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831495+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743119+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831505+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743831+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831588+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743868+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831604+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743881+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831612+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743895+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831621+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743907+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831631+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774392+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831639+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743933+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831647+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743946+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831656+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743959+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831665+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743972+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831674+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743984+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831683+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7743997+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831691+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744009+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.68317+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744022+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831708+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744035+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831717+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744063+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831728+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744076+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831736+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744089+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831745+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744102+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831755+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744115+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831765+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744128+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831774+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774414+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831783+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744153+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831793+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744166+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831801+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744178+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683181+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774419+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831819+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744203+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683183+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744216+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683184+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744228+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683185+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744241+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831858+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744253+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831867+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744266+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831876+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744279+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831884+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744293+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831892+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744306+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831902+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744319+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831911+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744331+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831919+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744344+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831928+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744357+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831939+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744369+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831949+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744382+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831958+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744395+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831969+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744408+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6831979+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744421+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683199+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744433+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744446+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832012+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744459+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832029+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744472+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832041+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744485+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832051+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744497+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832061+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774451+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832072+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744523+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832081+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744536+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683209+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744548+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.68321+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744561+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.683211+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744574+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832121+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744587+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832132+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744599+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832143+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744612+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832156+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744624+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832166+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744637+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832178+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774465+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832189+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744663+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832199+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744677+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832209+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774469+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832218+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744703+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832227+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744715+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832236+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744728+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832246+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744741+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832255+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744754+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832265+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744767+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832276+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774478+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832285+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744793+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832295+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744805+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832303+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744818+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832314+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744831+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832324+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744844+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832334+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744857+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832344+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.774487+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832353+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744882+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832364+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744895+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832373+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744908+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832382+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744922+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6832392+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744935+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6833159+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744948+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6833208+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744961+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6833228+02:00"
   },
   {
     "date": "",
     "dataType": "",
     "operationCount": 0,
     "recordCount": 0,
-    "lastUpdated": "2025-11-12T16:42:39.7744973+02:00"
+    "lastUpdated": "2025-11-12T16:50:32.6833242+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833255+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833273+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833289+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833302+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833316+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833331+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833345+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.683336+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833377+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833391+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833408+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833423+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833438+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833454+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.683347+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833487+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833502+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.683352+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833541+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833561+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833576+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833597+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833613+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833625+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833641+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833659+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833676+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833698+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833714+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833728+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833744+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833757+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833771+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833785+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833801+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833815+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833829+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833841+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833854+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833871+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6833885+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834069+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834093+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834111+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834128+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834144+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834159+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834173+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834189+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834206+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834221+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834238+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834254+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.683427+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834285+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.68343+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834335+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834352+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834367+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834384+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834399+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834414+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834428+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834446+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.683446+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834475+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.683449+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834505+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834519+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834536+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834552+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834568+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834583+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834599+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834614+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.683463+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834643+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834657+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834671+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834687+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834704+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.683472+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834737+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834752+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834768+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834784+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.68348+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834816+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.683483+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834845+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834859+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834873+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.683489+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834906+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834921+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834936+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834951+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834966+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834982+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6834998+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835014+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835031+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835049+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835065+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835082+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.68351+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835115+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835132+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835149+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835166+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835183+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835201+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835217+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835235+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835251+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835268+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835285+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835301+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835315+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835329+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835344+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835359+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835373+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835388+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835402+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835416+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.683552+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835543+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835563+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.683558+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835597+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835611+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835625+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835636+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835648+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835664+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835679+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835695+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835709+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835726+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835742+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835756+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835767+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835781+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835798+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835814+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835826+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835839+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835854+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835872+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835885+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835898+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835914+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835929+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835941+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835955+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835971+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835986+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6835998+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6836011+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6836028+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6836043+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6836055+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.683607+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6836087+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6836101+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6836114+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6836129+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6836146+02:00"
+  },
+  {
+    "date": "",
+    "dataType": "",
+    "operationCount": 0,
+    "recordCount": 0,
+    "lastUpdated": "2025-11-12T16:50:32.6836161+02:00"
   },
   {
     "date": "2025-11-12",
     "dataType": "analytics",
     "operationCount": 1,
-    "recordCount": 201,
-    "lastUpdated": "2025-11-12T16:42:39.7745668+02:00"
+    "recordCount": 371,
+    "lastUpdated": "2025-11-12T16:50:32.6836712+02:00"
   }
 ]
