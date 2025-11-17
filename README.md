@@ -1,282 +1,238 @@
-# Contract Monthly Claim System (CMCS)
+# Contract Monthly Claim System - Project Documentation
 
-## Overview
+**GITHUB LINK:** https://github.com/HChristopherNaoyuki/contract-monthly-claim-system-cs.git
 
-The Contract Monthly Claim System (CMCS) is a web application built with .NET that helps 
-manage monthly claims for contract lecturers. The system makes it easier to submit, 
-review, and approve claims through an automated process.
+## Table of Contents
+1. [Project Overview](#1-project-overview)
+2. [System Architecture](#2-system-architecture)
+3. [UML Class Diagram](#3-uml-class-diagram)
+4. [Project Timeline](#4-project-timeline)
+   - [Part 1: Core System & Prototype (4 Weeks)](#part-1-core-system--prototype-4-weeks)
+   - [Part 2: Feedback Implementation & Enhancement (3 Weeks)](#part-2-feedback-implementation--enhancement-3-weeks)
+   - [Part 3: Final Development, Deployment & Polish (3 Weeks)](#part-3-final-development-deployment--polish-3-weeks)
+5. [GUI Design Philosophy](#5-gui-design-philosophy)
+6. [Core Functionality](#6-core-functionality)
+7. [Technical Implementation Details](#7-technical-implementation-details)
+   - [Authentication System](#authentication-system)
+   - [Data Storage](#data-storage)
+   - [File Upload System](#file-upload-system)
+   - [Validation & Error Handling](#validation--error-handling)
+8. [Feedback Implementation](#8-feedback-implementation)
+9. [Features Summary](#9-features-summary)
+10. [Installation & Setup](#10-installation--setup)
+11. [Future Enhancements](#11-future-enhancements)
 
-## System Design
+## 1. Project Overview
+The Contract Monthly Claim System (CMCS) is a comprehensive web-based application 
+designed to streamline the monthly claim submission and approval process for 
+independent contractor lecturers. This initial 4-week phase focused on building a 
+functional prototype with core features, establishing a user-centric design, and 
+creating a scalable architecture to serve three distinct user roles: Lecturers, 
+Program Coordinators, and Academic Managers.
 
-### Main Components
-- ASP.NET Core MVC 8.0 - Web framework
-- Text File Storage - No database needed
-- Role-Based Access - Different access levels
-- Clean User Interface - Simple and easy to use
-- Testing Framework - xUnit for testing
+## 2. System Architecture
+The system is built on the **ASP.NET Core MVC** framework using **C#**, adhering to 
+the Model-View-Controller pattern for a clear separation of concerns. The initial 
+prototype utilized **session-based authentication** and **in-memory data storage**. 
+The frontend was developed with modern CSS features like Grid and Flexbox to ensure 
+a fully responsive design across all devices.
 
-### Project Layout
-```
-contract-monthly-claim-system-cs/
-├── Controllers/          # Application controllers
-├── Models/               # Data structures
-├── Views/                # Web pages
-├── Services/             # Business logic
-├── wwwroot/              # Website files
-├── Data/                 # File storage
-└── Tests/                # Test files
-```
+## 3. UML Class Diagram
 
-## Setup Instructions
+```mermaid
+classDiagram
+    %% Enumerations
+    <<enumeration>> UserRole
+    UserRole : Lecturer
+    UserRole : ProgrammeCoordinator
+    UserRole : AcademicManager
 
-### What You Need
-- .NET 8.0 SDK
-- Visual Studio 2022 or VS Code
-- Git
+    <<enumeration>> ClaimStatus
+    ClaimStatus : Pending
+    ClaimStatus : Approved
+    ClaimStatus : Rejected
 
-### Quick Setup
-1. **Get the Code**
-   ```bash
-   git clone https://github.com/HChristopherNaoyuki/contract-monthly-claim-system-cs.git
-   cd contract-monthly-claim-system-cs
-   ```
+    %% Main Classes
+    class User {
+        +int UserId
+        +string Name
+        +string Surname
+        +string Username
+        +string Password
+        +UserRole Role
+    }
 
-2. **Build the Project**
-   ```bash
-   dotnet build
-   ```
+    class Lecturer {
+        +int LecturerId
+        +string FirstName
+        +string LastName
+        +string Email
+        +double HourlyRate
+        +SubmitClaim()
+    }
 
-3. **Run the Application**
-   ```bash
-   dotnet run
-   ```
+    class Claim {
+        +int ClaimId
+        +int LecturerId
+        +DateTime ClaimDate
+        +decimal HoursWorked
+        +double Amount
+        +ClaimStatus Status
+        +CalculateAmount()
+        +UpdateStatus()
+    }
 
-4. **Open in Browser**
-   - Go to: `http://localhost:5000`
-   - Use test accounts below
+    class Document {
+        +int DocumentId
+        +int ClaimId
+        +string FileName
+        +string FilePath
+        +DateTime UploadDate
+        +ValidateFile()
+    }
 
-### Test Accounts
-| Role | Username | Password | What They Can Do |
-|------|----------|----------|------------------|
-| Lecturer | lecturer | lecturer123 | Submit and track claims |
-| Coordinator | coordinator | coordinator123 | Review and approve claims |
-| Manager | admin | admin123 | Final approval and reports |
-| HR | hr | hr123 | HR tasks and analytics |
+    class Approval {
+        +int ApprovalId
+        +int ClaimId
+        +string ApproverRole
+        +DateTime ApprovalDate
+        +bool IsApproved
+        +string Comments
+        +ProcessApproval()
+    }
 
-## How to Use
+    class ClaimSubmissionViewModel {
+        +decimal HoursWorked
+        +decimal HourlyRate
+        +decimal Amount
+        +string Comments
+        +List~IFormFile~ Documents
+        +Validate()
+    }
 
-### For Lecturers
-1. Login with lecturer account
-2. Fill out claim form
-3. Upload supporting files
-4. Check claim status
-5. View claim history
+    class ClaimApprovalViewModel {
+        +int ClaimId
+        +string LecturerName
+        +DateTime ClaimDate
+        +decimal HoursWorked
+        +decimal HourlyRate
+        +decimal Amount
+        +string Status
+        +List~string~ DocumentNames
+        +string SubmissionComments
+        +string ApprovalComments
+    }
 
-### For Coordinators
-1. Check pending claims
-2. Approve or reject claims
-3. Add comments
-4. Monitor progress
-
-### For Managers and HR
-1. View analytics dashboard
-2. Create PDF reports
-3. Edit claims if needed
-4. See performance data
-
-## Features
-
-### Automation Features
-
-#### Automatic Claim Processing
-- Automatic amount calculations
-- Real-time error checking
-- Multi-step approval system
-- File handling and storage
-
-#### Analytics Dashboard
-- Live statistics and metrics
-- Top performer tracking
-- Monthly trend analysis
-- Department comparisons
-
-#### User Experience
-- Clean, simple design
-- Works on all devices
-- Live status updates
-- Easy navigation
-
-#### Security
-- Four user roles
-- Secure login system
-- Data protection by role
-- Safe file uploads
-
-### Main System Features
-
-#### Claim Management
-- Automated claim submission
-- Multi-level approvals
-- File uploads
-- Status tracking
-- Activity history
-
-#### Reports and Analytics
-- PDF report creation
-- Performance tracking
-- Financial reports
-- Trend analysis
-- Data exports
-
-#### Admin Tools
-- User management
-- Claim editing (HR only)
-- System monitoring
-- Data export
-- Backup systems
-
-## Technology Used
-
-### Backend
-- ASP.NET Core 8.0
-- C# 12.0
-- Text File Storage
-- xUnit testing
-
-### Frontend
-- Razor Pages
-- Custom CSS
-- JavaScript
-- Mobile-friendly design
-
-### Development
-- Visual Studio 2022
-- Git
-- xUnit
-- Moq testing
-
-## Development Information
-
-### Design Choices
-
-#### System Structure
-- MVC pattern for organization
-- Service layer for business rules
-- Text files for data storage
-- Session-based login
-
-#### Automation Features
-- Automatic calculations with overtime
-- Data validation systems
-- Automated approval workflows
-- Analytics generation
-
-#### User Interface
-- Clean, simple design
-- Accessible for all users
-- Instant feedback
-- Consistent navigation
-
-### Testing Approach
-- Unit tests for controllers
-- Model validation tests
-- Workflow integration tests
-- Mock services for testing
-
-## Documentation
-
-### Main Controllers
-
-#### AuthController
-Handles user login, registration, and session management.
-
-#### ClaimsController
-Manages claim submission, approvals, analytics, and automation.
-
-#### HomeController
-Provides main pages and navigation.
-
-### Data Structures
-
-#### User Roles
-```csharp
-public enum UserRole
-{
-    Lecturer = 0,
-    ProgrammeCoordinator = 1,
-    AcademicManager = 2,
-    HumanResource = 3
-}
+    %% Relationships
+    User <|-- Lecturer : extends
+    Lecturer "1" --* "many" Claim : submits
+    Claim "1" --* "many" Document : has
+    Claim "1" --* "many" Approval : undergoes
 ```
 
-#### Claim Status
-```csharp
-public enum ClaimStatus
-{
-    Submitted = 0,
-    UnderReview = 1,
-    Approved = 2,
-    Rejected = 3,
-    Paid = 4
-}
-```
+## 4. Project Timeline
 
-### Services
+### Part 1: Core System & Prototype (4 Weeks)
+- **Week 1:** Requirements analysis and foundational UML class diagram design.
+- **Week 2:** Core ASP.NET MVC framework setup and basic session authentication.
+- **Week 3:** Development of the Claim Submission module with dynamic form validation and calculation logic.
+- **Week 4:** Implementation of the Review and Approval interface, followed by initial testing and prototype documentation.
 
-#### TextFileDataService
-Handles file storage with automated data management and reporting.
+### Part 2: Feedback Implementation & Enhancement (3 Weeks)
+- **Week 5:** Foundation & Text File Database implementation.
+- **Week 6:** Enhanced Authentication, Document Upload, and UI/UX improvements.
+- **Week 7:** Comprehensive Validation, Error Handling, Testing, and Final Polish.
 
-#### DatabaseService
-Provides connection testing for future database use.
+### Part 3: Final Development, Deployment & Polish (3 Weeks)
+- **Week 8:** Enhanced Features & Data Management
+- **Week 9:** Security & Performance Optimization
+- **Week 10:** Final Testing, Polish & Documentation
 
-## Important Notes
+## 5. GUI Design Philosophy
+The interface was designed with a minimalist philosophy, emphasizing:
+- Clean, uncluttered layouts with strategic use of white space.
+- Consistent typography and a clear visual hierarchy.
+- Intuitive navigation with distinct interactive elements.
+- A responsive design that works seamlessly on desktop and mobile.
 
-### Part 3 (POE): Requirements Completed
+## 6. Core Functionality
+- Role-based authentication and session management.
+- Dynamic claim submission form with real-time amount calculation.
+- File upload system with type and size validation.
+- Dual-comment system for submissions and approvals.
+- Status tracking with visual indicators for different claim states.
+- Responsive data tables for efficient information review.
 
-YES - Automated Claim Submission
-- Automatic calculations implemented
-- Data validation checks
-- Client-side calculations
+## 7. Technical Implementation Details
 
-YES - Automated Verification & Approval
-- Criteria checking system
-- Streamlined approval workflows
-- Multi-level approval process
+### Authentication System
+- Session-based authentication with custom session extensions
+- Role-based access control (Lecturer, Coordinator, Manager)
+- 30-minute idle timeout configuration
+- Secure password storage and anti-forgery protection
 
-YES - HR View Automation
-- Automated claim processing
-- Lecturer data management
-- Report generation
+### Data Storage
+- JSON-based text file storage system
+- Automatic file creation and initialization
+- Sample data population on first run
+- Files: users.txt, claims.txt, documents.txt, approvals.txt
 
-YES - Better User Experience
-- Clean, simple design
-- Easy-to-use interface
-- Live status tracking
+### File Upload System
+- Physical files stored in wwwroot/uploads directory
+- GUID-based file naming to prevent conflicts
+- Support for PDF, DOC, DOCX, JPG, PNG formats
+- 5MB file size limit per file
+- Client-side and server-side validation
 
-### Performance
-- Text file storage optimized
-- Efficient session management
-- Smart caching
-- Fast algorithms
+### Validation & Error Handling
+- Model validation with data annotations
+- Client-side validation using jQuery
+- Global exception handling middleware
+- Comprehensive error messages and user feedback
 
-### Security
-- Input validation on all forms
-- Safe file upload limits
-- Role-based access control
-- Session timeouts
+## 8. Feedback Implementation
+The system successfully addressed all Part 1 feedback:
+- ✅ **UML Diagram**: Updated to reflect actual implementation
+- ✅ **Database**: Replaced with text file storage system
+- ✅ **Document Upload**: Made fully functional with proper validation
+- ✅ **UI/UX**: Enhanced with Apple-like minimalist design
+- ✅ **Error Handling**: Implemented comprehensive validation
+- ✅ **Session Management**: Improved user state persistence
 
-## Legal Information
+## 9. Features Summary
+- **Core Functionality**
+  - Text file database system
+  - Document upload with file storage
+  - Enhanced authentication
+  - Role-based access control
+  - Comprehensive validation
 
-### Software Usage
-DO NOT PUT IMAGES OR EMOJIS DIRECTLY IN THE README FILE. ALL PICTURES, INCLUDING SCREENSHOTS AND 
-APPLICATION IMAGES, MUST BE KEPT IN A SEPARATE FOLDER WITHIN THE PROJECT. THIS FOLDER SHOULD BE 
-CLEARLY NAMED TO SHOW IT CONTAINS ALL VISUAL CONTENT FOR THE APPLICATION (FOR EXAMPLE, A FOLDER 
-CALLED IMAGES, SCREENSHOTS, OR MEDIA).
+- **User Experience**
+  - Minimalist design
+  - Responsive interface
+  - Real-time form calculations
+  - Interactive file upload
+  - Improved error messages
 
-### Responsibility Notice
-I AM NOT RESPONSIBLE FOR ANY PROBLEMS, ERRORS, OR ISSUES THAT HAPPEN WHEN COPYING, CHANGING, OR 
-USING THIS SOFTWARE. IF YOU FIND ANY BUGS OR ERRORS, PLEASE DO NOT TRY TO FIX THEM QUIETLY OR 
-OUTSIDE THIS PROJECT. INSTEAD, PLEASE SUBMIT A PULL REQUEST OR CREATE AN ISSUE ON THE GITHUB 
-REPOSITORY, SO IT CAN BE FIXED PROPERLY BY THE PROJECT MAINTAINERS.
+- **Technical Improvements**
+  - Custom session management
+  - File validation and handling
+  - JSON-based data storage
+  - Comprehensive testing
+  - Robust error handling
+
+## 10. Installation & Setup
+1. Clone the repository from GitHub
+2. Open solution in Visual Studio 2022+
+3. Build the solution to restore NuGet packages
+4. Run the application - text files will be auto-generated
+5. Use default credentials from auto-generated users.txt
+
+## 11. Future Enhancements
+- Advanced reporting dashboard with charts
+- Email notification system
+- BCrypt password hashing implementation
+- Docker containerization for deployment
+- Advanced filtering and export capabilities
 
 ---
