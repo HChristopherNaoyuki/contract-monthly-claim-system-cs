@@ -78,12 +78,25 @@
     "claims": []
   },
   {
+    "lecturerId": 0,
+    "employeeNumber": "",
+    "department": "",
+    "hourlyRate": 0,
+    "contractStartDate": null,
+    "contractEndDate": null,
+    "bankAccountNumber": "",
+    "bankName": "",
+    "taxNumber": "",
+    "user": null,
+    "claims": []
+  },
+  {
     "lecturerId": 1,
     "employeeNumber": "EMP001",
     "department": "General",
     "hourlyRate": 150.00,
-    "contractStartDate": "2025-11-17T15:20:13.763795+02:00",
-    "contractEndDate": "2026-11-17T15:20:13.7637966+02:00",
+    "contractStartDate": "2025-11-17T16:22:17.2086268+02:00",
+    "contractEndDate": "2026-11-17T16:22:17.213618+02:00",
     "bankAccountNumber": "",
     "bankName": "",
     "taxNumber": "",

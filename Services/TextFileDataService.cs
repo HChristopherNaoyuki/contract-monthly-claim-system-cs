@@ -45,7 +45,7 @@ namespace contract_monthly_claim_system_cs.Services
             try
             {
                 // Ensure all required data files exist with proper structure
-                var requiredFiles = new[] { "users", "claims", "documents", "approvals", "lecturers", "analytics" };
+                var requiredFiles = new[] { "users", "claims", "documents", "approvals", "lecturers" };
 
                 foreach (var file in requiredFiles)
                 {
@@ -181,9 +181,6 @@ namespace contract_monthly_claim_system_cs.Services
                 File.Move(tempFilePath, filePath, true);
 
                 _logger.LogDebug("Successfully wrote {Count} items to {FilePath}", data.Count, filePath);
-
-                // Update analytics after successful write - Part 3 requirement
-                UpdateAnalytics(dataType, data.Count);
             }
             catch (Exception ex)
             {
@@ -211,47 +208,6 @@ namespace contract_monthly_claim_system_cs.Services
             catch (Exception ex)
             {
                 _logger.LogWarning(ex, "Failed to create backup for {FilePath}", filePath);
-            }
-        }
-
-        /// <summary>
-        /// Updates automated analytics for data operations
-        /// Part 3 requirement for monitoring and reporting
-        /// </summary>
-        /// <param name="dataType">Type of data operation</param>
-        /// <param name="recordCount">Number of records processed</param>
-        private void UpdateAnalytics(string dataType, int recordCount)
-        {
-            try
-            {
-                var analytics = ReadData<DataAnalytics>("analytics");
-                var today = DateTime.Today.ToString("yyyy-MM-dd");
-
-                var dailyAnalytic = analytics.FirstOrDefault(a => a.Date == today && a.DataType == dataType);
-                if (dailyAnalytic == null)
-                {
-                    dailyAnalytic = new DataAnalytics
-                    {
-                        Date = today,
-                        DataType = dataType,
-                        OperationCount = 0,
-                        RecordCount = 0
-                    };
-                    analytics.Add(dailyAnalytic);
-                }
-
-                dailyAnalytic.OperationCount++;
-                dailyAnalytic.RecordCount += recordCount;
-                dailyAnalytic.LastUpdated = DateTime.Now;
-
-                WriteData("analytics", analytics);
-
-                _logger.LogDebug("Updated analytics for {DataType}: {Operations} operations, {Records} records",
-                    dataType, dailyAnalytic.OperationCount, dailyAnalytic.RecordCount);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Failed to update analytics for {DataType}", dataType);
             }
         }
 
@@ -525,60 +481,7 @@ namespace contract_monthly_claim_system_cs.Services
 
         #endregion
 
-        #region Analytics and System Operations
-
-        /// <summary>
-        /// Gets automated statistics for system monitoring
-        /// Part 3 requirement for system analytics
-        /// </summary>
-        /// <returns>System statistics with automated calculations</returns>
-        public SystemStatistics GetSystemStatistics()
-        {
-            try
-            {
-                var users = GetAllUsers();
-                var claims = GetAllClaims();
-                var approvals = GetAllApprovals();
-
-                return new SystemStatistics
-                {
-                    TotalUsers = users.Count,
-                    ActiveUsers = users.Count(u => u.IsActive),
-                    TotalClaims = claims.Count,
-                    ApprovedClaims = claims.Count(c => c.Status == ClaimStatus.Approved),
-                    PendingClaims = claims.Count(c => c.Status == ClaimStatus.Submitted),
-                    TotalApprovals = approvals.Count,
-                    AverageClaimAmount = claims.Any() ? claims.Average(c => c.Amount) : 0,
-                    SystemUptime = DateTime.Now - System.Diagnostics.Process.GetCurrentProcess().StartTime,
-                    DataSize = CalculateTotalDataSize(),
-                    GeneratedAt = DateTime.Now
-                };
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Failed to generate system statistics");
-                return new SystemStatistics();
-            }
-        }
-
-        /// <summary>
-        /// Calculates total data size for monitoring
-        /// Part 3 requirement for resource management
-        /// </summary>
-        /// <returns>Total data size in bytes</returns>
-        private long CalculateTotalDataSize()
-        {
-            try
-            {
-                var dataFiles = Directory.GetFiles(_dataDirectory, "*.txt");
-                return dataFiles.Sum(file => new FileInfo(file).Length);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Failed to calculate total data size");
-                return 0;
-            }
-        }
+        #region System Operations
 
         /// <summary>
         /// Gets the next available ID with automated sequence management
@@ -692,41 +595,27 @@ namespace contract_monthly_claim_system_cs.Services
 
                 SaveLecturer(lecturer);
 
+                // Create sample claims for Part 3 POE demonstration
+                var sampleClaim = new Claim
+                {
+                    ClaimId = 1,
+                    LecturerId = 2,
+                    MonthYear = DateTime.Now.ToString("yyyy-MM"),
+                    HoursWorked = 40,
+                    HourlyRate = 150.00m,
+                    Amount = 6000.00m,
+                    Status = ClaimStatus.Submitted,
+                    SubmissionComments = "Sample claim for Part 3 POE demonstration",
+                    CreatedDate = DateTime.Now,
+                    ModifiedDate = DateTime.Now
+                };
+
+                SaveClaim(sampleClaim);
+
                 _logger.LogInformation("Automated sample data initialization completed");
             }
         }
 
         #endregion
-    }
-
-    /// <summary>
-    /// Data structure for automated analytics
-    /// Part 3 requirement for system monitoring
-    /// </summary>
-    public class DataAnalytics
-    {
-        public string Date { get; set; } = string.Empty;
-        public string DataType { get; set; } = string.Empty;
-        public int OperationCount { get; set; }
-        public int RecordCount { get; set; }
-        public DateTime LastUpdated { get; set; } = DateTime.Now;
-    }
-
-    /// <summary>
-    /// Comprehensive system statistics
-    /// Part 3 requirement for monitoring and reporting
-    /// </summary>
-    public class SystemStatistics
-    {
-        public int TotalUsers { get; set; }
-        public int ActiveUsers { get; set; }
-        public int TotalClaims { get; set; }
-        public int ApprovedClaims { get; set; }
-        public int PendingClaims { get; set; }
-        public int TotalApprovals { get; set; }
-        public decimal AverageClaimAmount { get; set; }
-        public TimeSpan SystemUptime { get; set; }
-        public long DataSize { get; set; }
-        public DateTime GeneratedAt { get; set; } = DateTime.Now;
     }
 }

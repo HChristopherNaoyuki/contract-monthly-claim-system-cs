@@ -24,13 +24,34 @@
                 {
                     <div class="nav-center">
                         <a href="@Url.Action("Index", "Home")" class="nav-button">Home</a>
-                        <a href="@Url.Action("Submit", "Claims")" class="nav-button">Submit Claim</a>
-                        <a href="@Url.Action("Approve", "Claims")" class="nav-button">Review Claims</a>
-                        <a href="@Url.Action("Track", "Claims")" class="nav-button">Track Claims</a>
 
-                        <!-- Part 3 POE: HR Dashboard - Only visible to Academic Managers and Human Resources -->
-                        @if (role == UserRole.AcademicManager.ToString() || role == UserRole.HumanResource.ToString())
+                        <!-- Lecturer Navigation -->
+                        @if (role == UserRole.Lecturer.ToString())
                         {
+                            <a href="@Url.Action("Submit", "Claims")" class="nav-button">Submit Claim</a>
+                            <a href="@Url.Action("Track", "Claims")" class="nav-button">Track Claims</a>
+                        }
+
+                        <!-- Programme Coordinator Navigation -->
+                        @if (role == UserRole.ProgrammeCoordinator.ToString())
+                        {
+                            <a href="@Url.Action("Approve", "Claims")" class="nav-button">Review Claims</a>
+                            <a href="@Url.Action("Track", "Claims")" class="nav-button">Track Claims</a>
+                        }
+
+                        <!-- Academic Manager Navigation -->
+                        @if (role == UserRole.AcademicManager.ToString())
+                        {
+                            <a href="@Url.Action("Approve", "Claims")" class="nav-button">Review Claims</a>
+                            <a href="@Url.Action("Track", "Claims")" class="nav-button">Track Claims</a>
+                            <a href="@Url.Action("HRDashboard", "Claims")" class="nav-button">HR Analytics</a>
+                        }
+
+                        <!-- Human Resource Navigation -->
+                        @if (role == UserRole.HumanResource.ToString())
+                        {
+                            <a href="@Url.Action("Approve", "Claims")" class="nav-button">Review Claims</a>
+                            <a href="@Url.Action("Track", "Claims")" class="nav-button">Track Claims</a>
                             <a href="@Url.Action("HRDashboard", "Claims")" class="nav-button">HR Analytics</a>
                         }
 

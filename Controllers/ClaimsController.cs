@@ -153,7 +153,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                     ModifiedDate = DateTime.Now
                 };
 
-                // Save claim to text file storage
+                // Save claim to text file storage - FIXED: Ensure data is persisted
                 _dataService.SaveClaim(claim);
 
                 // Part 3 Automation: Automated document processing
@@ -267,6 +267,8 @@ namespace contract_monthly_claim_system_cs.Controllers
                 // Part 3 Automation: Automated status update
                 claim.Status = isApproved ? ClaimStatus.Approved : ClaimStatus.Rejected;
                 claim.ModifiedDate = DateTime.Now;
+
+                // FIXED: Ensure claim is saved back to text file storage
                 _dataService.SaveClaim(claim);
 
                 // Create approval record for audit trail
@@ -436,7 +438,7 @@ namespace contract_monthly_claim_system_cs.Controllers
         /// <summary>
         /// Displays claim tracking for users with role-based filtering
         /// Part 3 requirement: Transparent claim status tracking
-        /// Fixed: Lecturers can now see their own claims in Track view
+        /// FIXED: Lecturers can now see their own claims in Track view
         /// </summary>
         /// <returns>Claim tracking view with filtered claims</returns>
         [HttpGet]
@@ -459,7 +461,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                 // Part 3 Automation: Role-based data filtering
                 if (userRole == UserRole.Lecturer.ToString())
                 {
-                    // Fixed: Lecturers should only see their own claims
+                    // FIXED: Lecturers should only see their own claims
                     claims = _dataService.GetClaimsByLecturerId(userId);
                     _logger.LogInformation("Lecturer {UserId} viewing their {ClaimCount} claims", userId, claims.Count);
                 }
@@ -616,7 +618,7 @@ namespace contract_monthly_claim_system_cs.Controllers
                 claim.SubmissionComments = model.SubmissionComments;
                 claim.ModifiedDate = DateTime.Now;
 
-                // Save updated claim
+                // Save updated claim - FIXED: Ensure changes are persisted
                 _dataService.SaveClaim(claim);
 
                 // Log HR edit activity
@@ -697,10 +699,12 @@ namespace contract_monthly_claim_system_cs.Controllers
         /// <returns>Populated ClaimApprovalViewModel</returns>
         private ClaimApprovalViewModel CreateClaimApprovalViewModel(Claim claim, string userRole)
         {
+            var lecturerName = GetLecturerName(claim.LecturerId);
+
             return new ClaimApprovalViewModel
             {
                 ClaimId = claim.ClaimId,
-                LecturerName = GetLecturerName(claim.LecturerId),
+                LecturerName = lecturerName,
                 ClaimDate = claim.ClaimDate,
                 HoursWorked = claim.HoursWorked,
                 HourlyRate = claim.HourlyRate,
