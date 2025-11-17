@@ -31,8 +31,8 @@ creating a scalable architecture to serve three distinct user roles: Lecturers,
 Program Coordinators, and Academic Managers.
 
 ## 2. System Architecture
-The system is built on the **ASP.NET Core MVC** framework using **C#**, adhering to 
-the Model-View-Controller pattern for a clear separation of concerns. The initial 
+The system is built on the **ASP.NET Core MVC** framework using **C#**, adhering 
+to the Model-View-Controller pattern for a clear separation of concerns. The initial 
 prototype utilized **session-based authentication** and **in-memory data storage**. 
 The frontend was developed with modern CSS features like Grid and Flexbox to ensure 
 a fully responsive design across all devices.
@@ -41,18 +41,14 @@ a fully responsive design across all devices.
 
 ```mermaid
 classDiagram
-    %% Enumerations
-    <<enumeration>> UserRole
-    UserRole : Lecturer
-    UserRole : ProgrammeCoordinator
-    UserRole : AcademicManager
+    direction TB
+    
+    note for User "Base class for authentication"
+    note for Lecturer "Extends User with contract details"
+    note for Claim "Core claim entity"
+    note for Document "Manages file uploads"
+    note for Approval "Tracks review process"
 
-    <<enumeration>> ClaimStatus
-    ClaimStatus : Pending
-    ClaimStatus : Approved
-    ClaimStatus : Rejected
-
-    %% Main Classes
     class User {
         +int UserId
         +string Name
@@ -123,11 +119,31 @@ classDiagram
         +string ApprovalComments
     }
 
+    %% Define enumerations as classes
+    class UserRole {
+        <<enumeration>>
+        Lecturer
+        ProgrammeCoordinator
+        AcademicManager
+    }
+
+    class ClaimStatus {
+        <<enumeration>>
+        Pending
+        Approved
+        Rejected
+    }
+
     %% Relationships
-    User <|-- Lecturer : extends
-    Lecturer "1" --* "many" Claim : submits
-    Claim "1" --* "many" Document : has
-    Claim "1" --* "many" Approval : undergoes
+    User <|-- Lecturer
+    Lecturer ||--o{ Claim : submits
+    Claim ||--o{ Document : contains
+    Claim ||--o{ Approval : undergoes
+    
+    %% ViewModel relationships
+    ClaimSubmissionViewModel ..> Claim : maps to
+    ClaimApprovalViewModel ..> Claim : maps to
+    ClaimApprovalViewModel ..> Lecturer : maps to
 ```
 
 ## 4. Project Timeline
@@ -192,12 +208,12 @@ The interface was designed with a minimalist philosophy, emphasizing:
 
 ## 8. Feedback Implementation
 The system successfully addressed all Part 1 feedback:
-- ✅ **UML Diagram**: Updated to reflect actual implementation
-- ✅ **Database**: Replaced with text file storage system
-- ✅ **Document Upload**: Made fully functional with proper validation
-- ✅ **UI/UX**: Enhanced with Apple-like minimalist design
-- ✅ **Error Handling**: Implemented comprehensive validation
-- ✅ **Session Management**: Improved user state persistence
+- UML Diagram: Updated to reflect actual implementation
+- Database: Replaced with text file storage system
+- Document Upload: Made fully functional with proper validation
+- UI/UX: Enhanced with Apple-like minimalist design
+- Error Handling: Implemented comprehensive validation
+- Session Management: Improved user state persistence
 
 ## 9. Features Summary
 - **Core Functionality**
