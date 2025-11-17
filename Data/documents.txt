@@ -6,7 +6,7 @@
     "filePath": "",
     "fileSize": 0,
     "fileType": "",
-    "uploadDate": "2025-11-17T14:59:08.7960662+02:00",
+    "uploadDate": "2025-11-17T20:36:47.2229214+02:00",
     "isActive": true,
     "claim": null,
     "formattedFileSize": "0 B"
@@ -18,7 +18,7 @@
     "filePath": "",
     "fileSize": 0,
     "fileType": "",
-    "uploadDate": "2025-11-17T14:59:08.7960831+02:00",
+    "uploadDate": "2025-11-17T20:36:47.2229343+02:00",
     "isActive": true,
     "claim": null,
     "formattedFileSize": "0 B"
@@ -30,7 +30,7 @@
     "filePath": "",
     "fileSize": 0,
     "fileType": "",
-    "uploadDate": "2025-11-17T14:59:08.7960863+02:00",
+    "uploadDate": "2025-11-17T20:36:47.2229377+02:00",
     "isActive": true,
     "claim": null,
     "formattedFileSize": "0 B"
@@ -42,7 +42,7 @@
     "filePath": "",
     "fileSize": 0,
     "fileType": "",
-    "uploadDate": "2025-11-17T14:59:08.7960888+02:00",
+    "uploadDate": "2025-11-17T20:36:47.2229403+02:00",
     "isActive": true,
     "claim": null,
     "formattedFileSize": "0 B"
@@ -54,7 +54,7 @@
     "filePath": "",
     "fileSize": 0,
     "fileType": "",
-    "uploadDate": "2025-11-17T14:59:08.7960912+02:00",
+    "uploadDate": "2025-11-17T20:36:47.2229427+02:00",
     "isActive": true,
     "claim": null,
     "formattedFileSize": "0 B"
@@ -66,7 +66,7 @@
     "filePath": "",
     "fileSize": 0,
     "fileType": "",
-    "uploadDate": "2025-11-17T14:59:08.7960952+02:00",
+    "uploadDate": "2025-11-17T20:36:47.2229462+02:00",
     "isActive": true,
     "claim": null,
     "formattedFileSize": "0 B"
@@ -78,7 +78,7 @@
     "filePath": "",
     "fileSize": 0,
     "fileType": "",
-    "uploadDate": "2025-11-17T14:59:08.7960976+02:00",
+    "uploadDate": "2025-11-17T20:36:47.2229484+02:00",
     "isActive": true,
     "claim": null,
     "formattedFileSize": "0 B"
@@ -90,7 +90,7 @@
     "filePath": "",
     "fileSize": 0,
     "fileType": "",
-    "uploadDate": "2025-11-17T14:59:08.7960998+02:00",
+    "uploadDate": "2025-11-17T20:36:47.2229506+02:00",
     "isActive": true,
     "claim": null,
     "formattedFileSize": "0 B"
@@ -102,7 +102,19 @@
     "filePath": "",
     "fileSize": 0,
     "fileType": "",
-    "uploadDate": "2025-11-17T14:59:08.796102+02:00",
+    "uploadDate": "2025-11-17T20:36:47.2229527+02:00",
+    "isActive": true,
+    "claim": null,
+    "formattedFileSize": "0 B"
+  },
+  {
+    "documentId": 0,
+    "claimId": 0,
+    "fileName": "",
+    "filePath": "",
+    "fileSize": 0,
+    "fileType": "",
+    "uploadDate": "2025-11-17T20:36:47.2229552+02:00",
     "isActive": true,
     "claim": null,
     "formattedFileSize": "0 B"
@@ -111,10 +123,10 @@
     "documentId": 1,
     "claimId": 1,
     "fileName": "ABC.pdf",
-    "filePath": "/uploads/1_7b3adc3a-1a97-46be-b11c-d566cfedadfc_ABC.pdf",
+    "filePath": "/uploads/1_15ccb673-c0b0-405f-bed2-0b24e02bee2e_ABC.pdf",
     "fileSize": 3,
     "fileType": ".pdf",
-    "uploadDate": "2025-11-17T14:59:08.7888067+02:00",
+    "uploadDate": "2025-11-17T20:36:47.2066893+02:00",
     "isActive": true,
     "claim": null,
     "formattedFileSize": "3 B"
