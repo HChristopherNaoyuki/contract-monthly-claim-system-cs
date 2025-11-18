@@ -475,10 +475,11 @@ namespace contract_monthly_claim_system_cs.Services
         /// <summary>
         /// Retrieves a specific user by ID
         /// Part 3 POE: User lookup for authentication and authorization
+        /// Fixed: Added explicit non-null return type annotation
         /// </summary>
         /// <param name="userId">User ID to search for</param>
         /// <returns>User object or null if not found</returns>
-        public User GetUserById(int userId)
+        public User? GetUserById(int userId)
         {
             var users = GetAllUsers();
             return users.FirstOrDefault(u => u.UserId == userId);
@@ -487,10 +488,11 @@ namespace contract_monthly_claim_system_cs.Services
         /// <summary>
         /// Retrieves a user by username for authentication
         /// Part 3 POE: Authentication system for secure access
+        /// Fixed: Added explicit non-null return type annotation
         /// </summary>
         /// <param name="username">Username to search for</param>
         /// <returns>User object or null if not found</returns>
-        public User GetUserByUsername(string username)
+        public User? GetUserByUsername(string username)
         {
             if (string.IsNullOrEmpty(username))
             {
@@ -558,10 +560,11 @@ namespace contract_monthly_claim_system_cs.Services
         /// <summary>
         /// Retrieves a specific lecturer by ID
         /// Part 3 POE: Lecturer lookup for claim association
+        /// Fixed: Added explicit non-null return type annotation
         /// </summary>
         /// <param name="lecturerId">Lecturer ID to search for</param>
         /// <returns>Lecturer object or null if not found</returns>
-        public Lecturer GetLecturerById(int lecturerId)
+        public Lecturer? GetLecturerById(int lecturerId)
         {
             var lecturers = GetAllLecturers();
             return lecturers.FirstOrDefault(l => l.LecturerId == lecturerId);
@@ -615,10 +618,11 @@ namespace contract_monthly_claim_system_cs.Services
         /// <summary>
         /// Retrieves a specific claim by ID
         /// Part 3 POE: Claim lookup for status tracking and approval
+        /// Fixed: Added explicit non-null return type annotation
         /// </summary>
         /// <param name="claimId">Claim ID to search for</param>
         /// <returns>Claim object or null if not found</returns>
-        public Claim GetClaimById(int claimId)
+        public Claim? GetClaimById(int claimId)
         {
             var claims = GetAllClaims();
             return claims.FirstOrDefault(c => c.ClaimId == claimId);
