@@ -1,12 +1,15 @@
-﻿[
+[
   {
     "lecturerId": 0,
     "employeeNumber": "",
     "department": "",
     "hourlyRate": 0,
+    "contractStartDate": null,
+    "contractEndDate": null,
     "bankAccountNumber": "",
     "bankName": "",
     "taxNumber": "",
+    "user": null,
     "claims": []
   },
   {
@@ -14,9 +17,12 @@
     "employeeNumber": "",
     "department": "",
     "hourlyRate": 0,
+    "contractStartDate": null,
+    "contractEndDate": null,
     "bankAccountNumber": "",
     "bankName": "",
     "taxNumber": "",
+    "user": null,
     "claims": []
   },
   {
@@ -24,9 +30,12 @@
     "employeeNumber": "",
     "department": "",
     "hourlyRate": 0,
+    "contractStartDate": null,
+    "contractEndDate": null,
     "bankAccountNumber": "",
     "bankName": "",
     "taxNumber": "",
+    "user": null,
     "claims": []
   },
   {
@@ -34,9 +43,12 @@
     "employeeNumber": "",
     "department": "",
     "hourlyRate": 0,
+    "contractStartDate": null,
+    "contractEndDate": null,
     "bankAccountNumber": "",
     "bankName": "",
     "taxNumber": "",
+    "user": null,
     "claims": []
   },
   {
@@ -44,9 +56,12 @@
     "employeeNumber": "",
     "department": "",
     "hourlyRate": 0,
+    "contractStartDate": null,
+    "contractEndDate": null,
     "bankAccountNumber": "",
     "bankName": "",
     "taxNumber": "",
+    "user": null,
     "claims": []
   },
   {
@@ -54,9 +69,12 @@
     "employeeNumber": "",
     "department": "",
     "hourlyRate": 0,
+    "contractStartDate": null,
+    "contractEndDate": null,
     "bankAccountNumber": "",
     "bankName": "",
     "taxNumber": "",
+    "user": null,
     "claims": []
   },
   {
@@ -64,9 +82,12 @@
     "employeeNumber": "",
     "department": "",
     "hourlyRate": 0,
+    "contractStartDate": null,
+    "contractEndDate": null,
     "bankAccountNumber": "",
     "bankName": "",
     "taxNumber": "",
+    "user": null,
     "claims": []
   },
   {
@@ -74,9 +95,12 @@
     "employeeNumber": "",
     "department": "",
     "hourlyRate": 0,
+    "contractStartDate": null,
+    "contractEndDate": null,
     "bankAccountNumber": "",
     "bankName": "",
     "taxNumber": "",
+    "user": null,
     "claims": []
   },
   {
@@ -89,18 +113,7 @@
     "bankAccountNumber": "",
     "bankName": "",
     "taxNumber": "",
-    "claims": []
-  },
-  {
-    "lecturerId": 3,
-    "employeeNumber": "EMP003",
-    "department": "General",
-    "hourlyRate": 150.00,
-    "contractStartDate": "2025-11-18T14:39:00.9818937+02:00",
-    "contractEndDate": "2026-11-18T14:39:00.9821708+02:00",
-    "bankAccountNumber": "",
-    "bankName": "",
-    "taxNumber": "",
+    "user": null,
     "claims": []
   }
 ]

@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "userId": 0,
     "name": "",
@@ -10,6 +10,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722086Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -23,6 +24,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722189Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -36,6 +38,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722222Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -49,6 +52,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722242Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -62,6 +66,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.672226Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -75,6 +80,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722285Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -88,6 +94,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722302Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -101,6 +108,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722318Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -114,6 +122,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722335Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -127,6 +136,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722354Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -140,6 +150,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722371Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -153,6 +164,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722387Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -166,6 +178,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722404Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -179,6 +192,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722421Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -192,6 +206,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722444Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -205,6 +220,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722469Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -218,6 +234,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722495Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -231,6 +248,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722523Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -244,6 +262,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722549Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -257,6 +276,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722574Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -270,6 +290,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722598Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -283,6 +304,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722623Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -296,6 +318,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.672265Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -309,6 +332,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722677Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -322,6 +346,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722705Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -335,6 +360,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722741Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -348,6 +374,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722763Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -361,6 +388,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722785Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -374,6 +402,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722808Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -387,6 +416,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722831Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -400,6 +430,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722852Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -413,6 +444,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6722873Z",
+    "lastLoginDate": null,
     "fullName": " "
   },
   {
@@ -426,45 +458,7 @@
     "phoneNumber": "",
     "isActive": true,
     "createdDate": "2025-11-18T09:01:17.6706304Z",
+    "lastLoginDate": null,
     "fullName": "Michael Brown"
-  },
-  {
-    "userId": 2,
-    "name": "System",
-    "surname": "Administrator",
-    "username": "admin",
-    "password": "admin123",
-    "role": 2,
-    "email": "admin@cmcs.com",
-    "phoneNumber": "",
-    "isActive": true,
-    "createdDate": "2025-11-18T12:37:49.6154807Z",
-    "fullName": "System Administrator"
-  },
-  {
-    "userId": 3,
-    "name": "John",
-    "surname": "Smith",
-    "username": "lecturer",
-    "password": "lecturer123",
-    "role": 0,
-    "email": "lecturer@cmcs.com",
-    "phoneNumber": "",
-    "isActive": true,
-    "createdDate": "2025-11-18T12:39:00.7830318Z",
-    "fullName": "John Smith"
-  },
-  {
-    "userId": 4,
-    "name": "Sarah",
-    "surname": "Johnson",
-    "username": "coordinator",
-    "password": "coordinator123",
-    "role": 1,
-    "email": "coordinator@cmcs.com",
-    "phoneNumber": "",
-    "isActive": true,
-    "createdDate": "2025-11-18T12:39:38.4003869Z",
-    "fullName": "Sarah Johnson"
   }
 ]

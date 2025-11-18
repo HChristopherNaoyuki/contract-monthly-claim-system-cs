@@ -440,31 +440,5 @@
     "isActive": true,
     "createdDate": "2025-11-18T12:37:49.6154807Z",
     "fullName": "System Administrator"
-  },
-  {
-    "userId": 3,
-    "name": "John",
-    "surname": "Smith",
-    "username": "lecturer",
-    "password": "lecturer123",
-    "role": 0,
-    "email": "lecturer@cmcs.com",
-    "phoneNumber": "",
-    "isActive": true,
-    "createdDate": "2025-11-18T12:39:00.7830318Z",
-    "fullName": "John Smith"
-  },
-  {
-    "userId": 4,
-    "name": "Sarah",
-    "surname": "Johnson",
-    "username": "coordinator",
-    "password": "coordinator123",
-    "role": 1,
-    "email": "coordinator@cmcs.com",
-    "phoneNumber": "",
-    "isActive": true,
-    "createdDate": "2025-11-18T12:39:38.4003869Z",
-    "fullName": "Sarah Johnson"
   }
 ]
