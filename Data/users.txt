@@ -479,5 +479,18 @@
     "isActive": true,
     "createdDate": "2025-11-18T12:51:37.3855679Z",
     "fullName": "Steven Scotts"
+  },
+  {
+    "userId": 6,
+    "name": "Chris",
+    "surname": "Scotts",
+    "username": "ScottsChris",
+    "password": "Password1234",
+    "role": 2,
+    "email": "ScottsChris@cmcs.com",
+    "phoneNumber": "",
+    "isActive": true,
+    "createdDate": "2025-11-18T19:10:35.572514Z",
+    "fullName": "Chris Scotts"
   }
 ]

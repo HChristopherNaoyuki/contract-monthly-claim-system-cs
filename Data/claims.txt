@@ -274,13 +274,13 @@
     "lecturerId": 50331648,
     "claimDate": "2025-11-18T19:43:36.9013799+02:00",
     "monthYear": "2025-11",
-    "hoursWorked": 2,
-    "hourlyRate": 2,
-    "amount": 4,
+    "hoursWorked": 4,
+    "hourlyRate": 9,
+    "amount": 36.00,
     "status": 2,
     "submissionComments": "N/a",
     "createdDate": "2025-11-18T19:43:36.9013945+02:00",
-    "modifiedDate": "2025-11-18T19:44:18.1803196+02:00",
+    "modifiedDate": "2025-11-18T21:12:32.9439066+02:00",
     "documents": [],
     "approvals": []
   }
