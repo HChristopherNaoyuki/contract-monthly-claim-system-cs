@@ -30,6 +30,16 @@ functional prototype with core features, establishing a user-centric design, and
 creating a scalable architecture to serve three distinct user roles: Lecturers, 
 Program Coordinators, and Academic Managers.
 
+### Tips
+
+If you appreciate my work, feel free to support me with a tip!
+
+- **Bitcoin (BTC)**: `bc1qssyczsfm70qjglpjzhcxpyl5xdafwwlyhucn6u`  
+- **Ethereum (ETH)**: `0x23900f5681bC2f1696fd9Fa20dc187830CA3fB76`  
+- **Solana (SOL)**: `9HcJEr5bENuiyGofVsDwrAPXomxzGMmsCLXNPst4udLi`
+
+Thank you for your support!
+
 ## 2. System Architecture
 The system is built on the **ASP.NET Core MVC** framework using **C#**, adhering 
 to the Model-View-Controller pattern for a clear separation of concerns. The initial 
@@ -41,14 +51,6 @@ a fully responsive design across all devices.
 
 ```mermaid
 classDiagram
-    direction TB
-    
-    note for User "Base class for authentication"
-    note for Lecturer "Extends User with contract details"
-    note for Claim "Core claim entity"
-    note for Document "Manages file uploads"
-    note for Approval "Tracks review process"
-
     class User {
         +int UserId
         +string Name
@@ -56,26 +58,36 @@ classDiagram
         +string Username
         +string Password
         +UserRole Role
+        +string Email
+        +bool IsActive
+        +DateTime CreatedDate
+        +string FullName
     }
 
     class Lecturer {
         +int LecturerId
-        +string FirstName
-        +string LastName
-        +string Email
-        +double HourlyRate
-        +SubmitClaim()
+        +string EmployeeNumber
+        +string Department
+        +decimal HourlyRate
+        +DateTime? ContractStartDate
+        +DateTime? ContractEndDate
+        +string BankAccountNumber
+        +string BankName
+        +string TaxNumber
     }
 
     class Claim {
         +int ClaimId
         +int LecturerId
         +DateTime ClaimDate
+        +string MonthYear
         +decimal HoursWorked
-        +double Amount
+        +decimal HourlyRate
+        +decimal Amount
         +ClaimStatus Status
-        +CalculateAmount()
-        +UpdateStatus()
+        +string SubmissionComments
+        +DateTime CreatedDate
+        +DateTime ModifiedDate
     }
 
     class Document {
@@ -83,67 +95,46 @@ classDiagram
         +int ClaimId
         +string FileName
         +string FilePath
+        +long FileSize
+        +string FileType
         +DateTime UploadDate
-        +ValidateFile()
+        +bool IsActive
+        +string FormattedFileSize
     }
 
     class Approval {
         +int ApprovalId
         +int ClaimId
+        +int ApproverUserId
         +string ApproverRole
         +DateTime ApprovalDate
         +bool IsApproved
         +string Comments
-        +ProcessApproval()
+        +int ApprovalOrder
     }
 
-    class ClaimSubmissionViewModel {
-        +decimal HoursWorked
-        +decimal HourlyRate
-        +decimal Amount
-        +string Comments
-        +List~IFormFile~ Documents
-        +Validate()
-    }
-
-    class ClaimApprovalViewModel {
-        +int ClaimId
-        +string LecturerName
-        +DateTime ClaimDate
-        +decimal HoursWorked
-        +decimal HourlyRate
-        +decimal Amount
-        +string Status
-        +List~string~ DocumentNames
-        +string SubmissionComments
-        +string ApprovalComments
-    }
-
-    %% Define enumerations as classes
     class UserRole {
         <<enumeration>>
         Lecturer
         ProgrammeCoordinator
         AcademicManager
+        HumanResource
     }
 
     class ClaimStatus {
         <<enumeration>>
-        Pending
+        Submitted
+        UnderReview
         Approved
         Rejected
+        Paid
     }
 
-    %% Relationships
-    User <|-- Lecturer
-    Lecturer ||--o{ Claim : submits
-    Claim ||--o{ Document : contains
-    Claim ||--o{ Approval : undergoes
-    
-    %% ViewModel relationships
-    ClaimSubmissionViewModel ..> Claim : maps to
-    ClaimApprovalViewModel ..> Claim : maps to
-    ClaimApprovalViewModel ..> Lecturer : maps to
+    User "1" -- "1" Lecturer : extends
+    Lecturer "1" -- "*" Claim : submits
+    Claim "1" -- "*" Document : contains
+    Claim "1" -- "*" Approval : undergoes
+    User "1" -- "*" Approval : approves
 ```
 
 ## 4. Project Timeline
