@@ -30,8 +30,6 @@ functional prototype with core features, establishing a user-centric design, and
 creating a scalable architecture to serve three distinct user roles: Lecturers, 
 Program Coordinators, and Academic Managers.
 
-### Tips
-
 If you appreciate my work, feel free to support me with a tip!
 
 - **Bitcoin (BTC)**: `bc1qssyczsfm70qjglpjzhcxpyl5xdafwwlyhucn6u`  
