@@ -141,16 +141,5 @@
     "uploadDate": "2025-11-18T14:53:22.2676119+02:00",
     "isActive": true,
     "formattedFileSize": "1.19 KB"
-  },
-  {
-    "documentId": 4,
-    "claimId": 5,
-    "fileName": "HR_Report_20251118_175141.pdf",
-    "filePath": "/uploads/5_01fb6505-c370-44e9-9033-629d749271e3_HR_Report_20251118_175141.pdf",
-    "fileSize": 1260,
-    "fileType": ".pdf",
-    "uploadDate": "2025-11-18T19:43:37.5911221+02:00",
-    "isActive": true,
-    "formattedFileSize": "1.23 KB"
   }
 ]
