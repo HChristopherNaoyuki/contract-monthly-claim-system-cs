@@ -183,8 +183,67 @@
             }
         }
 
+        // Form submission validation and enhancement
+        document.getElementById('claimForm').addEventListener('submit', function(e)
+        {
+            const submitBtn = document.getElementById('submitBtn');
+            const hoursInput = document.getElementById('HoursWorked');
+            const rateInput = document.getElementById('HourlyRate');
+
+            // Validate required fields
+            if (!hoursInput.value || !rateInput.value)
+            {
+                e.preventDefault();
+                alert('Please fill in all required fields (Hours Worked and Hourly Rate).');
+                return;
+            }
+
+            const hours = parseFloat(hoursInput.value);
+            const rate = parseFloat(rateInput.value);
+
+            // Validate numeric values
+            if (isNaN(hours) || isNaN(rate))
+            {
+                e.preventDefault();
+                alert('Please enter valid numeric values for hours and rate.');
+                return;
+            }
+
+            // Validate reasonable values
+            if (hours <= 0 || hours > 744)
+            {
+                e.preventDefault();
+                alert('Hours worked must be between 1 and 744 hours per month.');
+                return;
+            }
+
+            if (rate <= 0 || rate > 1000)
+            {
+                e.preventDefault();
+                alert('Hourly rate must be between 1 and 1000.');
+                return;
+            }
+
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<span class="animate-spin">⏳</span> Submitting Claim...';
+
+            // Form will now submit successfully
+            console.log('Claim form submitted successfully');
+        });
+
         // Initialize calculation on page load
-        calculateAmount();
-        charCount.textContent = commentsTextarea.value.length;
+        document.addEventListener('DOMContentLoaded', function()
+        {
+            calculateAmount();
+            charCount.textContent = commentsTextarea.value.length;
+
+            // Ensure form is properly set up for submission
+            const form = document.getElementById('claimForm');
+            if (form)
+            {
+                console.log('Claim form initialized successfully');
+            }
+        });
     </script>
 }

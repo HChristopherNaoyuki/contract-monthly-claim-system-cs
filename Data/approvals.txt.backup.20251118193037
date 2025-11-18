@@ -146,16 +146,6 @@
     "approverRole": "HumanResource",
     "approvalDate": "2025-11-18T14:53:46.3279824+02:00",
     "isApproved": true,
-    "comments": "",
-    "approvalOrder": 1
-  },
-  {
-    "approvalId": 5,
-    "claimId": 4,
-    "approverUserId": 16777216,
-    "approverRole": "HumanResource",
-    "approvalDate": "2025-11-18T19:30:37.7262277+02:00",
-    "isApproved": false,
     "approvalOrder": 1
   }
 ]
