@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "claimId": 0,
     "lecturerId": 0,
@@ -231,10 +231,10 @@
     "hoursWorked": 12,
     "hourlyRate": 74.99,
     "amount": 899.88,
-    "status": 2,
+    "status": 0,
     "submissionComments": "N/A",
     "createdDate": "2025-11-17T20:36:46.9381979+02:00",
-    "modifiedDate": "2025-11-18T13:43:15.0574317+02:00",
+    "modifiedDate": "2025-11-17T20:36:46.9383276+02:00",
     "lecturer": null,
     "documents": [],
     "approvals": []

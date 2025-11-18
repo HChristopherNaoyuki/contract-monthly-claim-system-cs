@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "approvalId": 0,
     "claimId": 0,
@@ -140,18 +140,6 @@
     "isApproved": false,
     "comments": null,
     "approvalOrder": 12,
-    "claim": null,
-    "approverUser": null
-  },
-  {
-    "approvalId": 2,
-    "claimId": 1,
-    "approverUserId": 16777216,
-    "approverRole": "HumanResource",
-    "approvalDate": "2025-11-18T13:43:15.6687451+02:00",
-    "isApproved": true,
-    "comments": null,
-    "approvalOrder": 1,
     "claim": null,
     "approverUser": null
   }
