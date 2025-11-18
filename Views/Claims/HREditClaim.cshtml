@@ -43,8 +43,9 @@
                     <div class="form-group">
                         <label asp-for="HoursWorked" class="form-label">Hours Worked</label>
                         <input asp-for="HoursWorked" class="form-control"
+                               id="HoursWorked"
                                data-original="@Model.OriginalHoursWorked"
-                               onchange="calculateChanges()" />
+                               oninput="calculateAmount()" />
                         <span asp-validation-for="HoursWorked" class="validation-error"></span>
                         <div class="change-indicator" id="hoursChange"></div>
                     </div>
@@ -52,8 +53,9 @@
                     <div class="form-group">
                         <label asp-for="HourlyRate" class="form-label">Hourly Rate</label>
                         <input asp-for="HourlyRate" class="form-control"
+                               id="HourlyRate"
                                data-original="@Model.OriginalHourlyRate"
-                               onchange="calculateChanges()" />
+                               oninput="calculateAmount()" />
                         <span asp-validation-for="HourlyRate" class="validation-error"></span>
                         <div class="change-indicator" id="rateChange"></div>
                     </div>
@@ -61,8 +63,9 @@
                     <div class="form-group">
                         <label asp-for="Amount" class="form-label">Amount</label>
                         <input asp-for="Amount" class="form-control"
+                               id="Amount"
                                data-original="@Model.OriginalAmount"
-                               onchange="calculateChanges()" />
+                               readonly />
                         <span asp-validation-for="Amount" class="validation-error"></span>
                         <div class="change-indicator" id="amountChange"></div>
                     </div>
@@ -96,7 +99,7 @@
 
                 <!-- Action Buttons -->
                 <div class="form-actions">
-                    <a class="btn btn-outline" asp-controller="Claims" asp-action="HRDashboard">Cancel</a>
+                    <a class="btn btn-outline" asp-controller="Claims" asp-action="HRDashboard" id="cancelBtn">Cancel</a>
                     <button type="submit" class="btn btn-primary" id="submitBtn">Save Changes</button>
                 </div>
             </form>
@@ -106,7 +109,25 @@
 
 @section Scripts {
     <script>
-        function calculateChanges() {
+        // Automatic amount calculation function
+        function calculateAmount() {
+            const hoursInput = document.getElementById('HoursWorked');
+            const rateInput = document.getElementById('HourlyRate');
+            const amountInput = document.getElementById('Amount');
+
+            const hours = parseFloat(hoursInput.value) || 0;
+            const rate = parseFloat(rateInput.value) || 0;
+
+            // Calculate new amount
+            const newAmount = hours * rate;
+            amountInput.value = newAmount.toFixed(2);
+
+            // Update change indicators
+            updateChangeIndicators();
+        }
+
+        // Update change indicators and summary
+        function updateChangeIndicators() {
             const hoursInput = document.getElementById('HoursWorked');
             const rateInput = document.getElementById('HourlyRate');
             const amountInput = document.getElementById('Amount');
@@ -135,8 +156,14 @@
             // Show/hide summary section
             const hasChanges = hoursDiff !== 0 || rateDiff !== 0 || amountDiff !== 0;
             document.getElementById('changeSummary').style.display = hasChanges ? 'block' : 'none';
+
+            // Enable/disable submit button based on changes
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = !hasChanges &&
+                                document.getElementById('SubmissionComments').value === '@Model.SubmissionComments';
         }
 
+        // Update individual change indicator
         function updateChangeIndicator(elementId, difference, type, originalValue = 0) {
             const element = document.getElementById(elementId);
             if (difference === 0) {
@@ -153,7 +180,7 @@
             if (type === 'hours') {
                 text = `${arrow} ${isPositive ? '+' : ''}${difference.toFixed(1)} hours`;
             } else if (type === 'currency') {
-                const percentage = originalValue > 0 ? (difference / originalValue * 100) : 0;
+                const percentage = originalValue > 0 ? (Math.abs(difference) / originalValue * 100) : 0;
                 text = `${arrow} ${isPositive ? '+' : ''}${difference.toFixed(2)} (${percentage.toFixed(1)}%)`;
             }
 
@@ -161,6 +188,7 @@
             element.className = `change-indicator ${colorClass}`;
         }
 
+        // Update change summary section
         function updateChangeSummary(hoursDiff, rateDiff, amountDiff) {
             document.getElementById('summaryHours').textContent =
                 `${hoursDiff > 0 ? '+' : ''}${hoursDiff.toFixed(1)} hours`;
@@ -178,9 +206,116 @@
                 amountDiff > 0 ? 'positive' : amountDiff < 0 ? 'negative' : '';
         }
 
+        // Cancel button confirmation
+        document.getElementById('cancelBtn').addEventListener('click', function(e) {
+            if (hasUnsavedChanges()) {
+                const confirmCancel = confirm('You have unsaved changes. Are you sure you want to cancel?');
+                if (!confirmCancel) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Check for unsaved changes
+        function hasUnsavedChanges() {
+            const hoursInput = document.getElementById('HoursWorked');
+            const rateInput = document.getElementById('HourlyRate');
+            const commentsInput = document.getElementById('SubmissionComments');
+
+            const originalHours = parseFloat(hoursInput.getAttribute('data-original')) || 0;
+            const originalRate = parseFloat(rateInput.getAttribute('data-original')) || 0;
+
+            const currentHours = parseFloat(hoursInput.value) || 0;
+            const currentRate = parseFloat(rateInput.value) || 0;
+
+            return currentHours !== originalHours ||
+                   currentRate !== originalRate ||
+                   commentsInput.value !== '@Model.SubmissionComments';
+        }
+
+        // Form submission validation
+        document.getElementById('hrEditForm').addEventListener('submit', function(e) {
+            const hoursInput = document.getElementById('HoursWorked');
+            const rateInput = document.getElementById('HourlyRate');
+
+            const hours = parseFloat(hoursInput.value) || 0;
+            const rate = parseFloat(rateInput.value) || 0;
+
+            // Validate hours (0-744 hours per month)
+            if (hours < 0 || hours > 744) {
+                alert('Hours worked must be between 0 and 744 hours per month.');
+                e.preventDefault();
+                return;
+            }
+
+            // Validate rate (reasonable hourly rate)
+            if (rate < 0 || rate > 1000) {
+                alert('Hourly rate must be between 0 and 1000.');
+                e.preventDefault();
+                return;
+            }
+
+            // Show confirmation for significant changes
+            if (hasSignificantChanges()) {
+                const confirmSave = confirm('You are making significant changes to this claim. Are you sure you want to save these changes?');
+                if (!confirmSave) {
+                    e.preventDefault();
+                }
+            }
+        });
+
+        // Check for significant changes
+        function hasSignificantChanges() {
+            const hoursInput = document.getElementById('HoursWorked');
+            const rateInput = document.getElementById('HourlyRate');
+
+            const originalHours = parseFloat(hoursInput.getAttribute('data-original')) || 0;
+            const originalRate = parseFloat(rateInput.getAttribute('data-original')) || 0;
+
+            const currentHours = parseFloat(hoursInput.value) || 0;
+            const currentRate = parseFloat(rateInput.value) || 0;
+
+            const hoursChange = Math.abs((currentHours - originalHours) / originalHours * 100);
+            const rateChange = Math.abs((currentRate - originalRate) / originalRate * 100);
+
+            return hoursChange > 20 || rateChange > 20; // More than 20% change
+        }
+
         // Initialize on page load
         document.addEventListener('DOMContentLoaded', function() {
-            calculateChanges();
+            // Set initial values and calculate amount
+            calculateAmount();
+
+            // Add input event listeners for real-time validation
+            document.getElementById('HoursWorked').addEventListener('input', function() {
+                const value = parseFloat(this.value) || 0;
+                if (value < 0 || value > 744) {
+                    this.style.borderColor = 'var(--system-red)';
+                } else {
+                    this.style.borderColor = 'var(--system-gray-4)';
+                }
+            });
+
+            document.getElementById('HourlyRate').addEventListener('input', function() {
+                const value = parseFloat(this.value) || 0;
+                if (value < 0 || value > 1000) {
+                    this.style.borderColor = 'var(--system-red)';
+                } else {
+                    this.style.borderColor = 'var(--system-gray-4)';
+                }
+            });
+
+            // Comments change tracking
+            document.getElementById('SubmissionComments').addEventListener('input', updateChangeIndicators);
+        });
+
+        // Prevent accidental navigation away with unsaved changes
+        window.addEventListener('beforeunload', function(e) {
+            if (hasUnsavedChanges()) {
+                e.preventDefault();
+                e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+                return 'You have unsaved changes. Are you sure you want to leave?';
+            }
         });
     </script>
 
@@ -226,15 +361,15 @@
             display: inline-block;
         }
 
-        .change-indicator.positive {
-            background-color: rgba(52, 199, 89, 0.1);
-            color: var(--system-green);
-        }
+            .change-indicator.positive {
+                background-color: rgba(52, 199, 89, 0.1);
+                color: var(--system-green);
+            }
 
-        .change-indicator.negative {
-            background-color: rgba(255, 59, 48, 0.1);
-            color: var(--system-red);
-        }
+            .change-indicator.negative {
+                background-color: rgba(255, 59, 48, 0.1);
+                color: var(--system-red);
+            }
 
         .change-summary {
             background-color: var(--system-background-primary);
@@ -250,9 +385,9 @@
             margin-bottom: var(--spacing-sm);
         }
 
-        .summary-item:last-child {
-            margin-bottom: 0;
-        }
+            .summary-item:last-child {
+                margin-bottom: 0;
+            }
 
         .positive {
             color: var(--system-green);
@@ -269,6 +404,42 @@
             gap: var(--spacing-md);
             justify-content: flex-end;
             margin-top: var(--spacing-lg);
+        }
+
+        /* Enhanced input styling for better UX */
+        .form-control:read-only {
+            background-color: var(--system-gray-6);
+            color: var(--system-text-secondary);
+        }
+
+        .form-control:invalid {
+            border-color: var(--system-red);
+        }
+
+        /* Responsive design improvements */
+        @@media (max-width: 768px) {
+            .form-actions {
+                flex-direction: column;
+            }
+
+                .form-actions .btn {
+                    width: 100%;
+                }
+
+            .value-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: var(--spacing-xs);
+            }
+        }
+
+        /* Animation for changes */
+        .change-indicator {
+            transition: all 0.3s ease;
+        }
+
+        .form-control {
+            transition: border-color 0.3s ease;
         }
     </style>
 }
