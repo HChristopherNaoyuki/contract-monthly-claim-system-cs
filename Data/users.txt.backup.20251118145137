@@ -466,18 +466,5 @@
     "isActive": true,
     "createdDate": "2025-11-18T12:39:38.4003869Z",
     "fullName": "Sarah Johnson"
-  },
-  {
-    "userId": 5,
-    "name": "Steven",
-    "surname": "Scotts",
-    "username": "ScottsSteven",
-    "password": "Password123",
-    "role": 0,
-    "email": "ScottsSteven@cmcs.com",
-    "phoneNumber": "",
-    "isActive": true,
-    "createdDate": "2025-11-18T12:51:37.3855679Z",
-    "fullName": "Steven Scotts"
   }
 ]

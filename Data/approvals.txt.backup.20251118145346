@@ -116,7 +116,6 @@
     "approverRole": "AcademicManager",
     "approvalDate": "2025-11-17T14:56:25.397982+02:00",
     "isApproved": false,
-    "comments": "",
     "approvalOrder": 12
   },
   {
@@ -126,7 +125,6 @@
     "approverRole": "HumanResource",
     "approvalDate": "2025-11-18T13:43:15.6687451+02:00",
     "isApproved": true,
-    "comments": "",
     "approvalOrder": 1
   },
   {
@@ -136,16 +134,6 @@
     "approverRole": "AcademicManager",
     "approvalDate": "2025-11-18T14:44:53.7599106+02:00",
     "isApproved": false,
-    "comments": "",
-    "approvalOrder": 1
-  },
-  {
-    "approvalId": 4,
-    "claimId": 3,
-    "approverUserId": 16777216,
-    "approverRole": "HumanResource",
-    "approvalDate": "2025-11-18T14:53:46.3279824+02:00",
-    "isApproved": true,
     "approvalOrder": 1
   }
 ]

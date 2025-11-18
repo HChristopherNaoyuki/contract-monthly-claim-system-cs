@@ -7,7 +7,9 @@
     "approvalDate": "2025-11-17T14:56:25.4094269+02:00",
     "isApproved": false,
     "comments": "",
-    "approvalOrder": 1
+    "approvalOrder": 1,
+    "claim": null,
+    "approverUser": null
   },
   {
     "approvalId": 0,
@@ -17,7 +19,9 @@
     "approvalDate": "2025-11-17T14:56:25.4094463+02:00",
     "isApproved": false,
     "comments": "",
-    "approvalOrder": 1
+    "approvalOrder": 1,
+    "claim": null,
+    "approverUser": null
   },
   {
     "approvalId": 0,
@@ -27,7 +31,9 @@
     "approvalDate": "2025-11-17T14:56:25.4094504+02:00",
     "isApproved": false,
     "comments": "",
-    "approvalOrder": 1
+    "approvalOrder": 1,
+    "claim": null,
+    "approverUser": null
   },
   {
     "approvalId": 0,
@@ -37,7 +43,9 @@
     "approvalDate": "2025-11-17T14:56:25.4094537+02:00",
     "isApproved": false,
     "comments": "",
-    "approvalOrder": 1
+    "approvalOrder": 1,
+    "claim": null,
+    "approverUser": null
   },
   {
     "approvalId": 0,
@@ -47,7 +55,9 @@
     "approvalDate": "2025-11-17T14:56:25.4094568+02:00",
     "isApproved": false,
     "comments": "",
-    "approvalOrder": 1
+    "approvalOrder": 1,
+    "claim": null,
+    "approverUser": null
   },
   {
     "approvalId": 0,
@@ -57,7 +67,9 @@
     "approvalDate": "2025-11-17T14:56:25.4094615+02:00",
     "isApproved": false,
     "comments": "",
-    "approvalOrder": 1
+    "approvalOrder": 1,
+    "claim": null,
+    "approverUser": null
   },
   {
     "approvalId": 0,
@@ -67,7 +79,9 @@
     "approvalDate": "2025-11-17T14:56:25.4094644+02:00",
     "isApproved": false,
     "comments": "",
-    "approvalOrder": 1
+    "approvalOrder": 1,
+    "claim": null,
+    "approverUser": null
   },
   {
     "approvalId": 0,
@@ -77,7 +91,9 @@
     "approvalDate": "2025-11-17T14:56:25.4094674+02:00",
     "isApproved": false,
     "comments": "",
-    "approvalOrder": 1
+    "approvalOrder": 1,
+    "claim": null,
+    "approverUser": null
   },
   {
     "approvalId": 0,
@@ -87,7 +103,9 @@
     "approvalDate": "2025-11-17T14:56:25.4094703+02:00",
     "isApproved": false,
     "comments": "",
-    "approvalOrder": 1
+    "approvalOrder": 1,
+    "claim": null,
+    "approverUser": null
   },
   {
     "approvalId": 0,
@@ -97,7 +115,9 @@
     "approvalDate": "2025-11-17T14:56:25.4094736+02:00",
     "isApproved": false,
     "comments": "",
-    "approvalOrder": 1
+    "approvalOrder": 1,
+    "claim": null,
+    "approverUser": null
   },
   {
     "approvalId": 0,
@@ -107,7 +127,9 @@
     "approvalDate": "2025-11-17T14:56:25.4094766+02:00",
     "isApproved": false,
     "comments": "",
-    "approvalOrder": 1
+    "approvalOrder": 1,
+    "claim": null,
+    "approverUser": null
   },
   {
     "approvalId": 1,
@@ -116,8 +138,10 @@
     "approverRole": "AcademicManager",
     "approvalDate": "2025-11-17T14:56:25.397982+02:00",
     "isApproved": false,
-    "comments": "",
-    "approvalOrder": 12
+    "comments": null,
+    "approvalOrder": 12,
+    "claim": null,
+    "approverUser": null
   },
   {
     "approvalId": 2,
@@ -126,26 +150,9 @@
     "approverRole": "HumanResource",
     "approvalDate": "2025-11-18T13:43:15.6687451+02:00",
     "isApproved": true,
-    "comments": "",
-    "approvalOrder": 1
-  },
-  {
-    "approvalId": 3,
-    "claimId": 2,
-    "approverUserId": 33554432,
-    "approverRole": "AcademicManager",
-    "approvalDate": "2025-11-18T14:44:53.7599106+02:00",
-    "isApproved": false,
-    "comments": "",
-    "approvalOrder": 1
-  },
-  {
-    "approvalId": 4,
-    "claimId": 3,
-    "approverUserId": 16777216,
-    "approverRole": "HumanResource",
-    "approvalDate": "2025-11-18T14:53:46.3279824+02:00",
-    "isApproved": true,
-    "approvalOrder": 1
+    "comments": null,
+    "approvalOrder": 1,
+    "claim": null,
+    "approverUser": null
   }
 ]

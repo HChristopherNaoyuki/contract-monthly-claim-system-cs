@@ -1,4 +1,4 @@
-﻿[
+[
   {
     "documentId": 0,
     "claimId": 0,
@@ -8,6 +8,7 @@
     "fileType": "",
     "uploadDate": "2025-11-17T20:36:47.2229214+02:00",
     "isActive": true,
+    "claim": null,
     "formattedFileSize": "0 B"
   },
   {
@@ -19,6 +20,7 @@
     "fileType": "",
     "uploadDate": "2025-11-17T20:36:47.2229343+02:00",
     "isActive": true,
+    "claim": null,
     "formattedFileSize": "0 B"
   },
   {
@@ -30,6 +32,7 @@
     "fileType": "",
     "uploadDate": "2025-11-17T20:36:47.2229377+02:00",
     "isActive": true,
+    "claim": null,
     "formattedFileSize": "0 B"
   },
   {
@@ -41,6 +44,7 @@
     "fileType": "",
     "uploadDate": "2025-11-17T20:36:47.2229403+02:00",
     "isActive": true,
+    "claim": null,
     "formattedFileSize": "0 B"
   },
   {
@@ -52,6 +56,7 @@
     "fileType": "",
     "uploadDate": "2025-11-17T20:36:47.2229427+02:00",
     "isActive": true,
+    "claim": null,
     "formattedFileSize": "0 B"
   },
   {
@@ -63,6 +68,7 @@
     "fileType": "",
     "uploadDate": "2025-11-17T20:36:47.2229462+02:00",
     "isActive": true,
+    "claim": null,
     "formattedFileSize": "0 B"
   },
   {
@@ -74,6 +80,7 @@
     "fileType": "",
     "uploadDate": "2025-11-17T20:36:47.2229484+02:00",
     "isActive": true,
+    "claim": null,
     "formattedFileSize": "0 B"
   },
   {
@@ -85,6 +92,7 @@
     "fileType": "",
     "uploadDate": "2025-11-17T20:36:47.2229506+02:00",
     "isActive": true,
+    "claim": null,
     "formattedFileSize": "0 B"
   },
   {
@@ -96,6 +104,7 @@
     "fileType": "",
     "uploadDate": "2025-11-17T20:36:47.2229527+02:00",
     "isActive": true,
+    "claim": null,
     "formattedFileSize": "0 B"
   },
   {
@@ -107,6 +116,7 @@
     "fileType": "",
     "uploadDate": "2025-11-17T20:36:47.2229552+02:00",
     "isActive": true,
+    "claim": null,
     "formattedFileSize": "0 B"
   },
   {
@@ -118,28 +128,7 @@
     "fileType": ".pdf",
     "uploadDate": "2025-11-17T20:36:47.2066893+02:00",
     "isActive": true,
+    "claim": null,
     "formattedFileSize": "3 B"
-  },
-  {
-    "documentId": 2,
-    "claimId": 2,
-    "fileName": "ABC.pdf",
-    "filePath": "/uploads/2_19c9c4b6-916e-42e5-86a2-559460a6371d_ABC.pdf",
-    "fileSize": 3,
-    "fileType": ".pdf",
-    "uploadDate": "2025-11-18T14:44:12.938958+02:00",
-    "isActive": true,
-    "formattedFileSize": "3 B"
-  },
-  {
-    "documentId": 3,
-    "claimId": 3,
-    "fileName": "HR_Report_20251118_144748.pdf",
-    "filePath": "/uploads/3_88eac0de-0bc3-4adc-b4ac-8663529e7be3_HR_Report_20251118_144748.pdf",
-    "fileSize": 1217,
-    "fileType": ".pdf",
-    "uploadDate": "2025-11-18T14:53:22.2676119+02:00",
-    "isActive": true,
-    "formattedFileSize": "1.19 KB"
   }
 ]

@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "claimId": 0,
     "lecturerId": 0,
@@ -11,7 +11,6 @@
     "submissionComments": "",
     "createdDate": "2025-11-17T20:36:46.9389301+02:00",
     "modifiedDate": "2025-11-17T20:36:46.9389303+02:00",
-    "lecturer": null,
     "documents": [],
     "approvals": []
   },
@@ -27,7 +26,6 @@
     "submissionComments": "",
     "createdDate": "2025-11-17T20:36:46.9389435+02:00",
     "modifiedDate": "2025-11-17T20:36:46.9389436+02:00",
-    "lecturer": null,
     "documents": [],
     "approvals": []
   },
@@ -43,7 +41,6 @@
     "submissionComments": "",
     "createdDate": "2025-11-17T20:36:46.9389489+02:00",
     "modifiedDate": "2025-11-17T20:36:46.9389489+02:00",
-    "lecturer": null,
     "documents": [],
     "approvals": []
   },
@@ -59,7 +56,6 @@
     "submissionComments": "",
     "createdDate": "2025-11-17T20:36:46.938953+02:00",
     "modifiedDate": "2025-11-17T20:36:46.9389532+02:00",
-    "lecturer": null,
     "documents": [],
     "approvals": []
   },
@@ -75,7 +71,6 @@
     "submissionComments": "",
     "createdDate": "2025-11-17T20:36:46.9389569+02:00",
     "modifiedDate": "2025-11-17T20:36:46.938957+02:00",
-    "lecturer": null,
     "documents": [],
     "approvals": []
   },
@@ -91,7 +86,6 @@
     "submissionComments": "",
     "createdDate": "2025-11-17T20:36:46.9389617+02:00",
     "modifiedDate": "2025-11-17T20:36:46.9389618+02:00",
-    "lecturer": null,
     "documents": [],
     "approvals": []
   },
@@ -107,7 +101,6 @@
     "submissionComments": "",
     "createdDate": "2025-11-17T20:36:46.9389655+02:00",
     "modifiedDate": "2025-11-17T20:36:46.9389656+02:00",
-    "lecturer": null,
     "documents": [],
     "approvals": []
   },
@@ -123,7 +116,6 @@
     "submissionComments": "",
     "createdDate": "2025-11-17T20:36:46.9389699+02:00",
     "modifiedDate": "2025-11-17T20:36:46.9389699+02:00",
-    "lecturer": null,
     "documents": [],
     "approvals": []
   },
@@ -139,7 +131,6 @@
     "submissionComments": "",
     "createdDate": "2025-11-17T20:36:46.9389736+02:00",
     "modifiedDate": "2025-11-17T20:36:46.9389737+02:00",
-    "lecturer": null,
     "documents": [],
     "approvals": []
   },
@@ -155,7 +146,6 @@
     "submissionComments": "",
     "createdDate": "2025-11-17T20:36:46.9389776+02:00",
     "modifiedDate": "2025-11-17T20:36:46.9389778+02:00",
-    "lecturer": null,
     "documents": [],
     "approvals": []
   },
@@ -171,7 +161,6 @@
     "submissionComments": "",
     "createdDate": "2025-11-17T20:36:46.9389819+02:00",
     "modifiedDate": "2025-11-17T20:36:46.938982+02:00",
-    "lecturer": null,
     "documents": [],
     "approvals": []
   },
@@ -187,7 +176,6 @@
     "submissionComments": "",
     "createdDate": "2025-11-17T20:36:46.9389856+02:00",
     "modifiedDate": "2025-11-17T20:36:46.9389857+02:00",
-    "lecturer": null,
     "documents": [],
     "approvals": []
   },
@@ -203,7 +191,6 @@
     "submissionComments": "",
     "createdDate": "2025-11-17T20:36:46.9389896+02:00",
     "modifiedDate": "2025-11-17T20:36:46.9389897+02:00",
-    "lecturer": null,
     "documents": [],
     "approvals": []
   },
@@ -219,7 +206,6 @@
     "submissionComments": "",
     "createdDate": "2025-11-17T20:36:46.9389935+02:00",
     "modifiedDate": "2025-11-17T20:36:46.9389936+02:00",
-    "lecturer": null,
     "documents": [],
     "approvals": []
   },
@@ -231,11 +217,25 @@
     "hoursWorked": 12,
     "hourlyRate": 74.99,
     "amount": 899.88,
-    "status": 0,
+    "status": 2,
     "submissionComments": "N/A",
     "createdDate": "2025-11-17T20:36:46.9381979+02:00",
-    "modifiedDate": "2025-11-17T20:36:46.9383276+02:00",
-    "lecturer": null,
+    "modifiedDate": "2025-11-18T13:43:15.0574317+02:00",
+    "documents": [],
+    "approvals": []
+  },
+  {
+    "claimId": 2,
+    "lecturerId": 50331648,
+    "claimDate": "2025-11-18T14:44:12.4759291+02:00",
+    "monthYear": "2025-11",
+    "hoursWorked": 99,
+    "hourlyRate": 12.32,
+    "amount": 1219.68,
+    "status": 0,
+    "submissionComments": "NOTE: Need it update ASAP.",
+    "createdDate": "2025-11-18T14:44:12.4771376+02:00",
+    "modifiedDate": "2025-11-18T14:44:12.4771404+02:00",
     "documents": [],
     "approvals": []
   }
