@@ -28,7 +28,7 @@ namespace contract_monthly_claim_system_cs
         {
             try
             {
-                Console.WriteLine("Starting Contract Monthly Claim System - Part 3 POE...");
+                Console.WriteLine("Starting Contract Monthly Claim System: Part 3 POE");
 
                 var builder = CreateWebHostBuilder(args);
                 var app = builder.Build();
@@ -500,7 +500,7 @@ namespace contract_monthly_claim_system_cs
         /// <param name="logger">Logger instance</param>
         private static void LogStartupInformation(WebApplication app, ILogger<Program> logger)
         {
-            logger.LogInformation("Contract Monthly Claim System - Part 3 POE Starting Up");
+            logger.LogInformation("Contract Monthly Claim System: Part 3 POE Starting Up");
             logger.LogInformation("Environment: {Environment}", app.Environment.EnvironmentName);
             logger.LogInformation("Content Root: {ContentRoot}", app.Environment.ContentRootPath);
             logger.LogInformation("Web Root: {WebRoot}", app.Environment.WebRootPath);
@@ -529,26 +529,26 @@ namespace contract_monthly_claim_system_cs
             Console.WriteLine("║                     Part 3 POE Automation                      ║");
             Console.WriteLine("╚════════════════════════════════════════════════════════════════╝");
             Console.WriteLine();
-            Console.WriteLine("🚀 Application Started Successfully!");
+            Console.WriteLine("Application Started Successfully!");
             Console.WriteLine("======================================");
             Console.WriteLine("Environment: {0}", app.Environment.EnvironmentName);
             Console.WriteLine("Framework: {0}", Environment.Version);
             Console.WriteLine("OS: {0}", Environment.OSVersion);
             Console.WriteLine("Storage: Text Files (No Database)");
             Console.WriteLine();
-            Console.WriteLine("🌐 Available URLs:");
+            Console.WriteLine("> Available URLs:");
             foreach (var url in app.Urls)
             {
                 Console.WriteLine("   • {0}", url);
             }
             Console.WriteLine();
-            Console.WriteLine("🔐 Demo Accounts:");
+            Console.WriteLine("> Demo Accounts:");
             Console.WriteLine("   • Lecturer:     lecturer / lecturer123");
             Console.WriteLine("   • Coordinator:  coordinator / coordinator123");
             Console.WriteLine("   • Manager:      admin / admin123");
             Console.WriteLine("   • HR:           hr / hr123");
             Console.WriteLine();
-            Console.WriteLine("📊 Part 3 POE Features:");
+            Console.WriteLine("> Part 3 POE Features:");
             Console.WriteLine("   • Automated Claim Calculations");
             Console.WriteLine("   • HR Analytics Dashboard");
             Console.WriteLine("   • Multi-level Approval Workflow");
@@ -568,7 +568,7 @@ namespace contract_monthly_claim_system_cs
         private static void HandleStartupException(Exception ex)
         {
             Console.WriteLine();
-            Console.WriteLine("❌ Application failed to start!");
+            Console.WriteLine("> Application failed to start!");
             Console.WriteLine("======================================");
             Console.WriteLine("Error: {0}", ex.Message);
             Console.WriteLine("Type: {0}", ex.GetType().Name);
@@ -577,7 +577,7 @@ namespace contract_monthly_claim_system_cs
             if (ex is System.Net.Sockets.SocketException)
             {
                 Console.WriteLine();
-                Console.WriteLine("🔧 Port Conflict Detected!");
+                Console.WriteLine("> Port Conflict Detected!");
                 Console.WriteLine("Possible solutions:");
                 Console.WriteLine("1. Change ports in launchSettings.json");
                 Console.WriteLine("2. Run: netstat -ano | findstr :5000 (check port usage)");
@@ -587,7 +587,7 @@ namespace contract_monthly_claim_system_cs
             else if (ex is UnauthorizedAccessException)
             {
                 Console.WriteLine();
-                Console.WriteLine("🔒 Permission Issue Detected!");
+                Console.WriteLine("> Permission Issue Detected!");
                 Console.WriteLine("Possible solutions:");
                 Console.WriteLine("1. Run Visual Studio as Administrator");
                 Console.WriteLine("2. Check file permissions in project directory");
@@ -595,7 +595,7 @@ namespace contract_monthly_claim_system_cs
             }
 
             Console.WriteLine();
-            Console.WriteLine("📋 Full error details:");
+            Console.WriteLine("> Full error details:");
             Console.WriteLine(ex.ToString());
             Console.WriteLine();
             Console.WriteLine("Press any key to exit...");
