@@ -492,5 +492,18 @@
     "isActive": true,
     "createdDate": "2025-11-18T19:10:35.572514Z",
     "fullName": "Chris Scotts"
+  },
+  {
+    "userId": 7,
+    "name": "Luis",
+    "surname": "Davis",
+    "username": "DavisLuis",
+    "password": "Password",
+    "role": 0,
+    "email": "DavisLuis@cmcs.com",
+    "phoneNumber": "",
+    "isActive": true,
+    "createdDate": "2025-11-19T12:36:56.5178228Z",
+    "fullName": "Luis Davis"
   }
 ]

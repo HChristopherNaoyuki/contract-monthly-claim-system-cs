@@ -114,17 +114,5 @@
     "bankName": "",
     "taxNumber": "",
     "claims": []
-  },
-  {
-    "lecturerId": 7,
-    "employeeNumber": "EMP007",
-    "department": "General",
-    "hourlyRate": 150.00,
-    "contractStartDate": "2025-11-19T14:36:57.95249+02:00",
-    "contractEndDate": "2026-11-19T14:36:57.9889831+02:00",
-    "bankAccountNumber": "",
-    "bankName": "",
-    "taxNumber": "",
-    "claims": []
   }
 ]

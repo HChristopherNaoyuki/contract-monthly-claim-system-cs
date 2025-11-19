@@ -283,5 +283,20 @@
     "modifiedDate": "2025-11-18T21:12:32.9439066+02:00",
     "documents": [],
     "approvals": []
+  },
+  {
+    "claimId": 6,
+    "lecturerId": 117440512,
+    "claimDate": "2025-11-19T14:38:21.0927363+02:00",
+    "monthYear": "2025-11",
+    "hoursWorked": 12.88,
+    "hourlyRate": 150.00,
+    "amount": 1932.00,
+    "status": 2,
+    "submissionComments": "N/A",
+    "createdDate": "2025-11-19T14:38:21.0951969+02:00",
+    "modifiedDate": "2025-11-19T14:39:31.4683459+02:00",
+    "documents": [],
+    "approvals": []
   }
 ]
