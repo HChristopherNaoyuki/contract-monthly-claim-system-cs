@@ -1,6 +1,6 @@
 # Contract Monthly Claim System - Project Documentation
 
-**GITHUB LINK:** https://github.com/HChristopherNaoyuki/contract-monthly-claim-system-cs.git
+**GITHUB LINK:** https://github.com/HChristopherNaoyuki/contract_monthly_claim_system_cs.git
 
 ## Table of Contents
 1. [Project Overview](#1-project-overview)
