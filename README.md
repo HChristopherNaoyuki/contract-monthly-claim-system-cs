@@ -1,10 +1,5 @@
 # Contract Monthly Claim System - Final Documentation
 
-**GITHUB LINK:** https://github.com/HChristopherNaoyuki/contract_monthly_claim_system_cs.git
-
-> ⚠️ **Repository Archive Notice**: As of January 25, 2026, this repository will be archived and placed in read-only mode.
-> The Contract Monthly Claim System has reached its final development state, and no further updates or maintenance will be provided.
-
 ## Table of Contents
 1. [Project Vision & Philosophy](#1-project-vision--philosophy)
 2. [Architecture Overview](#2-architecture-overview)
