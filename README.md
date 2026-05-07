@@ -1,2035 +1,669 @@
-# Contract Monthly Claim System - Final Documentation
+# Contract Monthly Claim System
 
 ## Table of Contents
-1. [Project Vision & Philosophy](#1-project-vision--philosophy)
-2. [Architecture Overview](#2-architecture-overview)
-3. [Complete System Architecture](#3-complete-system-architecture)
-   - [UML Class Diagram](#uml-class-diagram)
-   - [Component Architecture](#component-architecture)
-   - [Data Flow](#data-flow)
-4. [Development Journey](#4-development-journey)
-   - [Phase 1: Foundation & Prototype](#phase-1-foundation--prototype-4-weeks)
-   - [Phase 2: Enhancement & Polish](#phase-2-enhancement--polish-3-weeks)
-   - [Phase 3: Production Readiness](#phase-3-production-readiness-3-weeks)
-5. [Design Language](#5-design-language)
+
+1. [Project Overview](#1-project-overview)
+2. [System Architecture](#2-system-architecture)
+3. [Core Domain Models](#3-core-domain-models)
+4. [Component Architecture](#4-component-architecture)
+5. [Development Phases](#5-development-phases)
 6. [Feature Implementation](#6-feature-implementation)
-   - [Authentication & Security](#authentication--security)
-   - [Data Persistence Layer](#data-persistence-layer)
-   - [Document Management](#document-management)
-   - [Business Logic Engine](#business-logics-engine)
-7. [Technical Deep Dive](#7-technical-deep-dive)
-   - [Session Management System](#session-management-system)
-   - [JSON Serialization Engine](#json-serialization-engine)
-   - [File Validation Pipeline](#file-validation-pipeline)
-   - [Error Handling Framework](#error-handling-framework)
-8. [User Experience](#8-user-experience)
-9. [Quality Assurance](#9-quality-assurance)
-10. [Deployment Guide](#10-deployment-guide)
-11. [Repository Status](#11-repository-status)
+7. [Technical Specifications](#7-technical-specifications)
+8. [Design System](#8-design-system)
+9. [Data Persistence Strategy](#9-data-persistence-strategy)
+10. [Security Framework](#10-security-framework)
+11. [Quality Assurance](#11-quality-assurance)
+12. [Deployment Guide](#12-deployment-guide)
+13. [Repository Structure](#13-repository-structure)
 
 ---
 
-## 1. Project Vision & Philosophy
+## 1. Project Overview
 
-The Contract Monthly Claim System represents a thoughtful approach to academic administration software. 
-Our vision was to create a system that feels intuitive, remains robust under pressure, and respects the 
-user's time and cognitive load. Inspired by Apple's design principles, we focused on creating an experience 
-where complexity is handled by the system, leaving users with clarity and simplicity.
+The Contract Monthly Claim System is a comprehensive academic administration
+platform designed specifically for managing lecturer claims and approvals.
+This system streamlines the process of submitting, reviewing, and approving
+monthly teaching claims within a university or educational institution.
 
-**Core Principles:**
-- **Clarity Over Features**: Every element serves a purpose
-- **Progressive Disclosure**: Information revealed as needed
-- **Resilient Design**: Graceful handling of edge cases
-- **Consistent Experience**: Uniform patterns across all modules
+**Repository Location:**
+https://github.com/HChristopherNaoyuki/contract-monthly-claim-system-cs.git
 
-## 2. Architecture Overview
+**Core Purpose:**
+The system replaces manual paper-based claim processes with a digital
+workflow that ensures transparency, accountability, and efficiency. Every
+claim moves through a structured approval chain while maintaining complete
+audit trails and document attachments.
 
-Built on **ASP.NET Core MVC 8.0**, the system employs a layered architecture that separates 
-concerns while maintaining flexibility. We deliberately chose text-file storage for this 
-iteration to demonstrate that sophisticated systems can be built without complex database 
-dependencies.
+**Key Stakeholders:**
+- Lecturers who submit monthly claims for teaching hours
+- Programme Coordinators who perform initial claim reviews
+- Academic Managers who provide final approval authority
+- Human Resources personnel who process approved claims for payment
 
-```plaintext
-┌─────────────────────────────────────────────┐
-│            Presentation Layer                │
-│  • Views (Razor Pages)                      │
-│  • Controllers                              │
-│  • ViewModels                               │
-│  • Client-side Validation                   │
-└───────────────┬─────────────────────────────┘
-                │
-┌───────────────▼─────────────────────────────┐
-│            Business Layer                    │
-│  • Service Classes                          │
-│  • Validation Logic                         │
-│  • Business Rules                           │
-│  • Calculation Engine                       │
-└───────────────┬─────────────────────────────┘
-                │
-┌───────────────▼─────────────────────────────┐
-│            Data Access Layer                 │
-│  • Repository Pattern                       │
-│  • JSON Serialization                       │
-│  • File System Operations                   │
-│  • Data Models                              │
-└───────────────┬─────────────────────────────┘
-                │
-┌───────────────▼─────────────────────────────┐
-│            Storage Layer                     │
-│  • Text File Database                       │
-│  • Document Storage                         │
-│  • Session State                            │
-└─────────────────────────────────────────────┘
-```
+**Success Metrics:**
+- Reduction in claim processing time from weeks to days
+- Complete audit trail for every financial transaction
+- Elimination of lost or misplaced paper claims
+- Real-time status visibility for all parties involved
 
-## 3. Complete System Architecture
+**Technology Stack:**
+- ASP.NET Core MVC 8.0 as the primary web framework
+- Text file storage with JSON serialization for data persistence
+- Session-based authentication with role-based access control
+- Razor Pages for dynamic server-side rendering
+- Bootstrap 5 for responsive front-end design
+- JavaScript for enhanced client-side interactions
 
-### UML Class Diagram
+**Design Philosophy:**
+The system follows Apple-inspired design principles focusing on clarity,
+progressive disclosure, and intuitive user experiences. Every screen
+presents only necessary information, with advanced options revealed
+only when the user needs them.
 
-```mermaid
-classDiagram
-    %% Core User Hierarchy
-    class User {
-        <<Abstract>>
-        +int UserId
-        +string Name
-        +string Surname
-        +string Username
-        +string PasswordHash
-        +UserRole Role
-        +string Email
-        +bool IsActive
-        +DateTime CreatedDate
-        +string FullName()
-    }
-    
-    class Lecturer {
-        +int LecturerId
-        +string EmployeeNumber
-        +string Department
-        +decimal HourlyRate
-        +DateTime? ContractStartDate
-        +DateTime? ContractEndDate
-        +string BankAccountNumber
-        +string BankName
-        +string TaxNumber
-        +List~Claim~ Claims
-    }
-    
-    class Administrator {
-        <<Abstract>>
-        +int AdminId
-        +string Department
-        +List~Approval~ Approvals
-    }
-    
-    class ProgrammeCoordinator {
-        +int CoordinatorId
-        +List~Programme~ Programmes
-    }
-    
-    class AcademicManager {
-        +int ManagerId
-        +string Faculty
-    }
-    
-    %% Core Domain Models
-    class Claim {
-        +int ClaimId
-        +int LecturerId
-        +DateTime ClaimDate
-        +string MonthYear
-        +decimal HoursWorked
-        +decimal HourlyRate
-        +decimal Amount
-        +ClaimStatus Status
-        +string SubmissionComments
-        +DateTime CreatedDate
-        +DateTime ModifiedDate
-        +List~Document~ Documents
-        +List~Approval~ Approvals
-        +CalculateAmount()
-    }
-    
-    class Document {
-        +int DocumentId
-        +int ClaimId
-        +string FileName
-        +string FilePath
-        +long FileSize
-        +string FileType
-        +DateTime UploadDate
-        +bool IsActive
-        +string FormattedFileSize()
-        +ValidateFile()
-    }
-    
-    class Approval {
-        +int ApprovalId
-        +int ClaimId
-        +int ApproverUserId
-        +string ApproverRole
-        +DateTime ApprovalDate
-        +bool IsApproved
-        +string Comments
-        +int ApprovalOrder
-        +bool CanOverride
-    }
-    
-    %% Support Classes
-    class Notification {
-        +int NotificationId
-        +int UserId
-        +string Message
-        +NotificationType Type
-        +bool IsRead
-        +DateTime CreatedDate
-        +MarkAsRead()
-    }
-    
-    class AuditLog {
-        +int LogId
-        +int UserId
-        +string Action
-        +string EntityType
-        +int EntityId
-        +string Details
-        +DateTime Timestamp
-        +string IPAddress
-    }
-    
-    %% Enumerations
-    class UserRole {
-        <<enumeration>>
-        Lecturer
-        ProgrammeCoordinator
-        AcademicManager
-        HumanResource
-    }
-    
-    class ClaimStatus {
-        <<enumeration>>
-        Draft
-        Submitted
-        UnderReview
-        Approved
-        Rejected
-        Paid
-        Archived
-    }
-    
-    %% Relationships
-    User <|-- Lecturer
-    User <|-- Administrator
-    Administrator <|-- ProgrammeCoordinator
-    Administrator <|-- AcademicManager
-    
-    Lecturer "1" -- "*" Claim : submits
-    Claim "1" -- "*" Document : contains
-    Claim "1" -- "*" Approval : undergoes
-    User "1" -- "*" Approval : approves
-    User "1" -- "*" Notification : receives
-    User "1" -- "*" AuditLog : generates
-```
+---
 
-### Component Architecture
+## 2. System Architecture
 
-**Data Storage Components:**
-```csharp
-// TextFileRepository.cs - Core data persistence
-public class TextFileRepository<T> where T : class
-{
-    private readonly string _filePath;
-    private readonly JsonSerializerSettings _settings;
-    
-    public async Task<List<T>> GetAllAsync()
-    public async Task<T> GetByIdAsync(int id)
-    public async Task<int> AddAsync(T entity)
-    public async Task<bool> UpdateAsync(T entity)
-    public async Task<bool> DeleteAsync(int id)
-    private void EnsureFileExists()
-}
+The architecture follows a clean layered approach that separates concerns
+while maintaining high cohesion within each layer. This design ensures
+that changes to one layer do not cascade through the entire system.
 
-// File Structure
-📁 App_Data/
-├── 📄 users.json          # User accounts & profiles
-├── 📄 claims.json         # Claim submissions
-├── 📄 documents.json      # Document metadata
-├── 📄 approvals.json      # Approval workflow
-├── 📄 notifications.json  # User notifications
-└── 📄 audit.log          # System audit trail
-```
+**Layer One: Presentation Layer**
 
-**Service Layer Components:**
-```csharp
-// ClaimService.cs - Business logic orchestration
-public class ClaimService
-{
-    private readonly IClaimRepository _claimRepository;
-    private readonly IDocumentService _documentService;
-    private readonly IValidationService _validationService;
-    private readonly IAuditService _auditService;
-    
-    public async Task<ClaimResult> SubmitClaimAsync(ClaimSubmissionDto dto)
-    public async Task<ApprovalResult> ReviewClaimAsync(int claimId, ApprovalDto dto)
-    public async Task<ValidationResult> ValidateClaimAsync(Claim claim)
-    public decimal CalculateAmount(decimal hours, decimal rate)
-}
+The presentation layer contains all user-facing components including
+Razor Views, Controllers, ViewModels, and client-side validation logic.
+Controllers handle HTTP requests and responses while Views render the
+HTML interface. ViewModels act as data transfer objects between the
+presentation and business layers.
 
-// DocumentService.cs - File management
-public class DocumentService
-{
-    public async Task<DocumentUploadResult> UploadDocumentAsync(IFormFile file, int claimId)
-    public Task<bool> ValidateFileAsync(IFormFile file)
-    public Task<string> GenerateSafeFileNameAsync(string originalName)
-    public Task<FileStreamResult> DownloadDocumentAsync(int documentId)
-}
-```
+All Controllers inherit from a base Controller class that provides
+common functionality such as session management, user authentication,
+and error handling. The layout system ensures consistent navigation,
+headers, footers, and notification areas across all pages.
 
-### Data Flow
+**Layer Two: Business Logic Layer**
 
-```mermaid
-sequenceDiagram
-    participant L as Lecturer
-    participant C as ClaimController
-    participant CS as ClaimService
-    participant DS as DocumentService
-    participant FR as FileRepository
-    participant AS as ApprovalService
-    
-    L->>C: Submit Claim Form
-    C->>CS: ValidateClaimData()
-    CS-->>C: Validation Result
-    
-    alt Validation Successful
-        C->>CS: CreateClaim()
-        CS->>FR: SaveClaim()
-        FR-->>CS: Claim ID
-        
-        par Document Upload
-            C->>DS: UploadDocuments()
-            DS->>DS: ValidateFileType()
-            DS->>DS: GenerateSafeName()
-            DS->>FR: SaveDocumentMetadata()
-        end
-        
-        C->>AS: InitiateApprovalWorkflow()
-        AS->>FR: CreateApprovalRecords()
-        
-        C-->>L: Success Response
-    else Validation Failed
-        C-->>L: Error Details
-    end
-```
+The business layer contains service classes that implement all core
+functionality including claim validation, amount calculations, approval
+workflow orchestration, and notification management. This layer contains
+no direct dependencies on storage mechanisms or presentation concerns.
 
-## 4. Development Journey
+Service classes follow the single responsibility principle with focused
+classes for claims, documents, users, approvals, and notifications.
+The ClaimService orchestrates the complete claim lifecycle from initial
+submission through final approval or rejection.
 
-### Phase 1: Foundation & Prototype (4 Weeks)
+**Layer Three: Data Access Layer**
 
-**Week 1: Architectural Blueprint**
-- Conducted stakeholder requirement analysis
-- Designed initial UML class diagram
-- Established coding standards and project structure
-- Selected ASP.NET Core MVC as foundation
+The data access layer implements the repository pattern to abstract
+storage operations away from business logic. Generic repositories
+provide common CRUD operations while specialized repositories add
+domain-specific query methods. JSON serialization converts objects
+to and from text file storage.
 
-**Week 2: Core Infrastructure**
-- Implemented basic MVC structure with clean separation
-- Built session-based authentication system
-- Created base models and view models
-- Established routing and navigation structure
+**Layer Four: Storage Layer**
 
-**Week 3: Core Functionality**
-- Developed dynamic claim submission form with real-time calculations
-- Implemented file upload prototype with basic validation
-- Created role-based access control middleware
-- Built initial dashboard views for all user roles
+The storage layer consists of JSON text files stored in the App_Data
+directory. Each entity type has its own file: users.json stores all
+user accounts and profiles, claims.json contains all claim submissions,
+documents.json tracks file metadata, and approvals.json records the
+complete approval history.
 
-**Week 4: Integration & Testing**
-- Connected all modules into cohesive system
-- Implemented comprehensive form validation
-- Conducted initial user testing with sample data
-- Documented prototype capabilities and limitations
+**Communication Flow:**
+User requests flow from the browser to Controllers, which invoke
+Service methods. Services interact with Repositories to access data,
+then return results to Controllers. Controllers package data into
+ViewModels and return appropriate Views with the rendered HTML.
 
-### Phase 2: Enhancement & Polish (3 Weeks)
+**Cross-Cutting Concerns:**
+Logging, exception handling, authentication, and authorization are
+implemented as middleware components that process every request.
+Custom filters provide role-based access control at controller and
+action method levels.
 
-**Week 5: Data Persistence Revolution**
-- Replaced in-memory storage with JSON text file system
-- Implemented automatic file initialization with sample data
-- Created repository pattern for data access abstraction
-- Added data backup and recovery mechanisms
+---
 
-**Week 6: Enhanced User Experience**
-- Completely redesigned UI with minimalist Apple-inspired aesthetics
-- Implemented responsive design for mobile compatibility
-- Added real-time form validation with user-friendly feedback
-- Enhanced file upload with drag-and-drop support
+## 3. Core Domain Models
 
-**Week 7: Robustness & Polish**
-- Implemented comprehensive error handling framework
-- Added audit logging for all critical operations
-- Conducted security review and implemented CSRF protection
-- Performed cross-browser compatibility testing
+The domain model centers around the Claim entity which represents a
+lecturer's monthly teaching hours submission. Supporting entities
+include User, Document, Approval, Notification, and AuditLog.
 
-### Phase 3: Production Readiness (3 Weeks)
+**User Hierarchy and Roles:**
 
-**Week 8: Advanced Features**
-- Implemented notification system for status updates
-- Added advanced filtering and search capabilities
-- Created export functionality (PDF, Excel)
-- Built reporting dashboard with visual analytics
+The User class serves as an abstract base for all system users. It
+contains common properties including UserId, Name, Surname, Username,
+PasswordHash, Role, Email, IsActive status, and CreatedDate timestamp.
+A computed FullName property concatenates name and surname.
 
-**Week 9: Performance & Security**
-- Optimized JSON serialization for large datasets
-- Implemented file cleanup service for orphaned documents
-- Added rate limiting and request validation
-- Enhanced session security with additional measures
+The Lecturer class inherits from User and adds lecturer-specific
+properties: EmployeeNumber, Department, HourlyRate, ContractStartDate,
+ContractEndDate, BankAccountNumber, BankName, and TaxNumber. Lecturers
+maintain a collection of their submitted Claim objects.
 
-**Week 10: Final Polish**
-- Conducted comprehensive end-to-end testing
-- Performed load testing with simulated users
-- Created complete system documentation
-- Prepared deployment package and installation guide
+The Administrator abstract class inherits from User and adds AdminId
+and Department properties. It maintains a collection of Approvals made.
+ProgrammeCoordinator and AcademicManager classes both inherit from
+Administrator, with ProgrammeCoordinator adding a Programmes collection
+and AcademicManager adding a Faculty property.
 
-## 5. Design Language
+**Claim Entity Structure:**
 
-**Visual Design Principles:**
-- **Typography**: System fonts with optimal readability (San Francisco-inspired)
-- **Color Palette**: Monochromatic with strategic accent colors for interactive elements
-- **Spacing**: Consistent 8px grid system throughout the interface
-- **Motion**: Subtle transitions for state changes to maintain user orientation
+The Claim entity represents a single monthly claim submission. Key
+properties include ClaimId as unique identifier, LecturerId foreign key,
+ClaimDate timestamp of submission, MonthYear string in YYYY-MM format,
+HoursWorked decimal value, HourlyRate at time of submission, Amount
+calculated as hours multiplied by rate, Status enum for workflow state,
+SubmissionComments for lecturer notes, and timestamps for tracking.
 
-**Interface Components:**
-```html
-<!-- Card Component -->
-<div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Claim Summary</h3>
-        <span class="status-badge status-@Model.Status.ToLower()">
-            @Model.Status
-        </span>
-    </div>
-    <div class="card-body">
-        <!-- Content with consistent spacing -->
-    </div>
-    <div class="card-footer">
-        <!-- Action buttons with clear hierarchy -->
-    </div>
-</div>
+ClaimStatus enumeration includes Draft for unsaved work, Submitted for
+pending review, UnderReview when actively examined, Approved for success,
+Rejected with required justification, Paid after financial processing,
+and Archived for historical records.
 
-<!-- Form Field Component -->
-<div class="form-group">
-    <label for="hoursWorked" class="form-label">
-        Hours Worked
-        <span class="required-indicator">*</span>
-    </label>
-    <input type="number" 
-           id="hoursWorked" 
-           name="HoursWorked"
-           class="form-control"
-           step="0.5"
-           min="1"
-           max="200"
-           data-calculate="amount"
-           aria-describedby="hoursHelp">
-    <div class="validation-message" data-for="hoursWorked"></div>
-    <small id="hoursHelp" class="form-text">
-        Enter total hours worked this month (increments of 0.5)
-    </small>
-</div>
-```
+**Document Entity:**
 
-**Responsive Breakpoints:**
-```css
-/* Mobile-first approach */
-.container { padding: 16px; }
+Documents attached to claims require validation for file type and size.
+Properties include DocumentId, ClaimId foreign key, FileName original
+name, FilePath storage location, FileSize in bytes, FileType extension,
+UploadDate timestamp, UploadedByUserId, and IsActive soft delete flag.
 
-/* Tablet */
-@media (min-width: 768px) {
-    .container { padding: 24px; }
-    .form-grid { grid-template-columns: repeat(2, 1fr); }
-}
+Allowed file types include PDF, DOC, DOCX, JPG, JPEG, and PNG formats.
+Maximum file size is limited to five megabytes per document. Multiple
+documents can attach to a single claim.
 
-/* Desktop */
-@media (min-width: 1024px) {
-    .container { max-width: 1200px; margin: 0 auto; }
-    .dashboard-grid { grid-template-columns: 250px 1fr; }
-}
+**Approval Workflow Entity:**
 
-/* Large Desktop */
-@media (min-width: 1440px) {
-    .container { max-width: 1400px; }
-}
-```
+The Approval entity tracks each step in the multi-stage approval process.
+Properties include ApprovalId, ClaimId, ApproverUserId, ApproverRole,
+ApprovalDate when decision made, IsApproved boolean outcome, Comments
+from approver, ApprovalOrder sequence number, and CanOverride flag for
+managers to reverse prior decisions.
+
+**Notification and Audit Entities:**
+
+Notification objects store messages for users including Message text,
+Type enum (Success, Error, Info, Warning), IsRead status, and CreatedDate.
+AuditLog entries capture all critical actions with UserId, Action name,
+EntityType and EntityId affected, Details text, Timestamp, and IPAddress.
+
+---
+
+## 4. Component Architecture
+
+The component architecture defines how different parts of the system
+interact through well-defined interfaces and dependency injection.
+
+**TextFileRepository Generic Component:**
+
+This generic repository class implements IRepository<T> where T must
+implement IEntity with an Id property. The constructor accepts a
+filePath string pointing to the JSON file location. A SemaphoreSlim
+object named _fileLock ensures thread-safe file operations when
+multiple requests access the same file simultaneously.
+
+The EnsureFileExists private method creates an empty JSON array file
+if none exists at the specified path. The PopulateSampleDataIfEmpty
+method adds demonstration users and claims when first initializing
+the system.
+
+GetAllAsync reads the entire file, deserializes the JSON array to
+List<T>, and returns the collection. GetByIdAsync calls GetAllAsync
+and uses LINQ FirstOrDefault to find the matching Id. AddAsync
+calculates a new Id by finding the maximum existing Id plus one,
+sets this Id on the entity using reflection, adds to collection,
+and writes the updated JSON back to disk.
+
+UpdateAsync replaces an existing entity by Id then saves the file.
+DeleteAsync removes an entity by Id then persists changes. FindAsync
+accepts an Expression<Func<T, bool>> predicate and returns filtered
+results using LINQ Where clause.
+
+**ClaimService Business Component:**
+
+The ClaimService orchestrates claim management with dependencies on
+IClaimRepository, IUserRepository, IApprovalRepository, INotificationService,
+and IAuditService. Constructor injection provides these dependencies
+through the ASP.NET Core DI container.
+
+The SubmitClaimAsync method accepts a ClaimSubmissionDto and lecturerId
+parameter. It first validates the submission by checking hours range,
+month format, and lecturer eligibility. A validation failure returns
+a ClaimSubmissionResult with error details.
+
+Successful validation creates a new Claim object with calculated Amount
+and Submitted status. The repository adds the claim and returns the
+new ClaimId. InitializeApprovalWorkflowAsync creates Approval records
+for ProgrammeCoordinator then AcademicManager approval steps.
+
+Notifications send to the submitting lecturer confirming submission
+and to all Programme Coordinators alerting them of pending work.
+The audit service logs the complete submission details including
+financial amount and timestamp.
+
+**DocumentService File Management Component:**
+
+DocumentService handles all file operations with dependencies on
+IWebHostEnvironment for path resolution, IRepository<Document> for
+metadata storage, and ILogger for error logging. Allowed file types
+store in a static dictionary mapping extensions to MIME types.
+
+The UploadDocumentAsync method validates the file first through
+ValidateFileAsync which checks for null, zero length, maximum size,
+extension whitelist, and MIME type verification. MIME verification
+reads the file header bytes and compares magic numbers against
+known signatures for each allowed file type.
+
+GenerateSafeFileNameAsync removes special characters from original
+names, replaces spaces with hyphens, adds a UTC timestamp and GUID
+suffix for uniqueness, then converts to lowercase. Files save to
+the wwwroot/uploads directory with this safe name.
+
+Document metadata saves to the repository after successful file write.
+Any failure during upload triggers cleanup of partially written files.
+The audit service logs successful uploads with file size and name.
+
+---
+
+## 5. Development Phases
+
+The development journey spanned ten weeks across three major phases,
+each building upon the previous phase's foundation.
+
+**Phase One: Foundation and Prototype at Four Weeks**
+
+Week one focused on stakeholder requirement analysis and architectural
+blueprint creation. We designed the initial UML class diagram and
+established coding standards. The project structure was created with
+clear separation of concerns across layers.
+
+Week two implemented the basic MVC structure and session-based
+authentication system. Base models and view models were created
+with proper inheritance hierarchies. Routing configuration and
+navigation menus were established for all user roles.
+
+Week three delivered the dynamic claim submission form with real-time
+JavaScript calculations. File upload prototype provided basic validation
+for file types and sizes. Role-based access control middleware was
+implemented to secure controller endpoints. Dashboard views were
+created for each user role showing relevant information.
+
+Week four connected all modules into a cohesive prototype system.
+Comprehensive form validation was added with client and server
+side checking. Initial user testing with sample data identified
+areas for improvement. Documentation captured prototype capabilities
+and limitations.
+
+**Phase Two: Enhancement and Polish at Three Weeks**
+
+Week five revolutionized data persistence by replacing in-memory
+storage with JSON text file system. Automatic file initialization
+populated sample data on first run. The repository pattern provided
+clean abstraction for data access. Backup and recovery mechanisms
+were added for data protection.
+
+Week six completely redesigned the user interface with minimalist
+aesthetics inspired by Apple design principles. Responsive layouts
+adapted to mobile, tablet, and desktop screen sizes. Real-time form
+validation gave immediate user feedback. Enhanced file upload added
+drag-and-drop support with visual indicators.
+
+Week seven implemented comprehensive error handling with custom
+exception types and global filters. Audit logging captured all
+critical operations including create, update, delete actions.
+CSRF protection was added to all forms. Cross-browser compatibility
+testing verified functionality across Chrome, Firefox, Safari, and Edge.
+
+**Phase Three: Production Readiness at Three Weeks**
+
+Week eight added advanced features including notification system
+for real-time status updates. Advanced filtering and search allowed
+users to find claims by date, status, amount, or lecturer name.
+Export functionality generated PDF and Excel reports. Reporting
+dashboard provided visual analytics with charts and graphs.
+
+Week nine focused on performance and security optimization. JSON
+serialization was optimized for large datasets using custom contract
+resolvers. File cleanup service removed orphaned documents with no
+associated claims. Rate limiting protected against brute force attacks.
+Session security included sliding expiration and activity monitoring.
+
+Week ten conducted comprehensive end-to-end testing covering all
+user journeys. Load testing simulated fifty concurrent users making
+requests. Complete system documentation was created including API
+references and user guides. Deployment package and installation
+guide prepared for production environments.
+
+---
 
 ## 6. Feature Implementation
 
-### Authentication & Security
-
-**Session Management:**
-```csharp
-// CustomSessionExtensions.cs
-public static class CustomSessionExtensions
-{
-    public static void SetUserSession(this ISession session, UserSession userSession)
-    {
-        var serialized = JsonConvert.SerializeObject(userSession);
-        session.SetString("UserSession", serialized);
-        session.SetInt32("UserId", userSession.UserId);
-        session.SetString("UserRole", userSession.Role.ToString());
-        session.SetString("LastActivity", DateTime.UtcNow.ToString("o"));
-    }
-    
-    public static UserSession GetUserSession(this ISession session)
-    {
-        var serialized = session.GetString("UserSession");
-        return serialized != null 
-            ? JsonConvert.DeserializeObject<UserSession>(serialized)
-            : null;
-    }
-    
-    public static bool IsSessionValid(this ISession session)
-    {
-        var lastActivity = session.GetString("LastActivity");
-        if (string.IsNullOrEmpty(lastActivity)) return false;
-        
-        var lastActivityTime = DateTime.Parse(lastActivity);
-        return DateTime.UtcNow.Subtract(lastActivityTime).TotalMinutes < 30;
-    }
-}
-
-// AuthenticationMiddleware.cs
-public class AuthenticationMiddleware
-{
-    private readonly RequestDelegate _next;
-    private readonly List<string> _publicPaths = new()
-    {
-        "/Account/Login",
-        "/Account/Register",
-        "/Error",
-        "/Home/Index"
-    };
-    
-    public async Task InvokeAsync(HttpContext context)
-    {
-        var path = context.Request.Path.Value;
-        
-        if (!_publicPaths.Any(p => path.StartsWith(p, StringComparison.OrdinalIgnoreCase)))
-        {
-            var session = context.Session;
-            if (!session.IsSessionValid())
-            {
-                session.Clear();
-                context.Response.Redirect("/Account/Login?sessionExpired=true");
-                return;
-            }
-        }
-        
-        await _next(context);
-    }
-}
-```
-
-**Role-Based Authorization:**
-```csharp
-// RoleAuthorizationAttribute.cs
-[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method)]
-public class RoleAuthorizationAttribute : Attribute, IAuthorizationFilter
-{
-    private readonly UserRole[] _allowedRoles;
-    
-    public RoleAuthorizationAttribute(params UserRole[] allowedRoles)
-    {
-        _allowedRoles = allowedRoles;
-    }
-    
-    public void OnAuthorization(AuthorizationFilterContext context)
-    {
-        var session = context.HttpContext.Session;
-        var userRole = session.GetString("UserRole");
-        
-        if (string.IsNullOrEmpty(userRole))
-        {
-            context.Result = new RedirectToActionResult("Login", "Account", null);
-            return;
-        }
-        
-        if (!Enum.TryParse<UserRole>(userRole, out var role) ||
-            !_allowedRoles.Contains(role))
-        {
-            context.Result = new ForbidResult();
-        }
-    }
-}
-
-// Usage in Controllers
-[RoleAuthorization(UserRole.Lecturer)]
-public class LecturerController : Controller { }
-
-[RoleAuthorization(UserRole.ProgrammeCoordinator, UserRole.AcademicManager)]
-public class ClaimsController : Controller
-{
-    [RoleAuthorization(UserRole.AcademicManager)]
-    public IActionResult FinancialReport() { }
-}
-```
-
-### Data Persistence Layer
-
-**JSON Repository Implementation:**
-```csharp
-// IRepository.cs - Generic interface
-public interface IRepository<T> where T : class, IEntity
-{
-    Task<IEnumerable<T>> GetAllAsync();
-    Task<T> GetByIdAsync(int id);
-    Task<int> AddAsync(T entity);
-    Task<bool> UpdateAsync(T entity);
-    Task<bool> DeleteAsync(int id);
-    Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
-}
-
-// TextFileRepository.cs - Concrete implementation
-public class TextFileRepository<T> : IRepository<T> where T : class, IEntity
-{
-    private readonly string _filePath;
-    private readonly SemaphoreSlim _fileLock = new(1, 1);
-    
-    public TextFileRepository(string filePath)
-    {
-        _filePath = filePath;
-        EnsureFileExists();
-    }
-    
-    private void EnsureFileExists()
-    {
-        if (!File.Exists(_filePath))
-        {
-            _fileLock.Wait();
-            try
-            {
-                File.WriteAllText(_filePath, "[]");
-                PopulateSampleDataIfEmpty();
-            }
-            finally
-            {
-                _fileLock.Release();
-            }
-        }
-    }
-    
-    public async Task<IEnumerable<T>> GetAllAsync()
-    {
-        await _fileLock.WaitAsync();
-        try
-        {
-            var json = await File.ReadAllTextAsync(_filePath);
-            return JsonConvert.DeserializeObject<List<T>>(json) ?? new List<T>();
-        }
-        finally
-        {
-            _fileLock.Release();
-        }
-    }
-    
-    public async Task<int> AddAsync(T entity)
-    {
-        await _fileLock.WaitAsync();
-        try
-        {
-            var items = (await GetAllAsync()).ToList();
-            var newId = items.Any() ? items.Max(x => x.Id) + 1 : 1;
-            
-            var entityType = entity.GetType();
-            var idProperty = entityType.GetProperty("Id");
-            idProperty?.SetValue(entity, newId);
-            
-            items.Add(entity);
-            
-            var json = JsonConvert.SerializeObject(items, Formatting.Indented);
-            await File.WriteAllTextAsync(_filePath, json);
-            
-            return newId;
-        }
-        finally
-        {
-            _fileLock.Release();
-        }
-    }
-    
-    private void PopulateSampleDataIfEmpty()
-    {
-        if (typeof(T) == typeof(User))
-        {
-            var sampleUsers = new List<User>
-            {
-                new Lecturer
-                {
-                    Id = 1,
-                    Name = "John",
-                    Surname = "Doe",
-                    Username = "lecturer1",
-                    PasswordHash = "hashed_password_here",
-                    Role = UserRole.Lecturer,
-                    Email = "john.doe@university.edu",
-                    IsActive = true,
-                    CreatedDate = DateTime.UtcNow,
-                    EmployeeNumber = "EMP001",
-                    HourlyRate = 150.00m
-                },
-                // Additional sample users...
-            };
-            
-            var json = JsonConvert.SerializeObject(sampleUsers, Formatting.Indented);
-            File.WriteAllText(_filePath, json);
-        }
-    }
-}
-```
-
-### Document Management
-
-**File Upload Service:**
-```csharp
-public class DocumentService : IDocumentService
-{
-    private readonly IWebHostEnvironment _environment;
-    private readonly IRepository<Document> _documentRepository;
-    private readonly ILogger<DocumentService> _logger;
-    
-    // Allowed file types and sizes
-    private static readonly Dictionary<string, string> AllowedMimeTypes = new()
-    {
-        { ".pdf", "application/pdf" },
-        { ".doc", "application/msword" },
-        { ".docx", "application/vnd.openxmlformats-officedocument.wordprocessingml.document" },
-        { ".jpg", "image/jpeg" },
-        { ".jpeg", "image/jpeg" },
-        { ".png", "image/png" }
-    };
-    
-    private const long MaxFileSize = 5 * 1024 * 1024; // 5MB
-    
-    public async Task<DocumentUploadResult> UploadDocumentAsync(
-        IFormFile file, 
-        int claimId, 
-        int userId)
-    {
-        var validationResult = await ValidateFileAsync(file);
-        if (!validationResult.IsValid)
-        {
-            return DocumentUploadResult.Failure(validationResult.ErrorMessage);
-        }
-        
-        var uploadsPath = Path.Combine(_environment.WebRootPath, "uploads");
-        if (!Directory.Exists(uploadsPath))
-        {
-            Directory.CreateDirectory(uploadsPath);
-        }
-        
-        var safeFileName = await GenerateSafeFileNameAsync(file.FileName);
-        var filePath = Path.Combine(uploadsPath, safeFileName);
-        
-        try
-        {
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await file.CopyToAsync(stream);
-            }
-            
-            var document = new Document
-            {
-                ClaimId = claimId,
-                FileName = file.FileName,
-                FilePath = $"/uploads/{safeFileName}",
-                FileSize = file.Length,
-                FileType = Path.GetExtension(file.FileName).ToLowerInvariant(),
-                UploadDate = DateTime.UtcNow,
-                UploadedByUserId = userId,
-                IsActive = true
-            };
-            
-            var documentId = await _documentRepository.AddAsync(document);
-            
-            await _auditService.LogAsync(new AuditLog
-            {
-                UserId = userId,
-                Action = "DocumentUpload",
-                EntityType = "Document",
-                EntityId = documentId,
-                Details = $"Uploaded: {file.FileName} ({FormatFileSize(file.Length)})",
-                Timestamp = DateTime.UtcNow,
-                IPAddress = _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString()
-            });
-            
-            return DocumentUploadResult.Success(documentId, safeFileName);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error uploading document {FileName}", file.FileName);
-            
-            // Clean up if file was partially written
-            if (File.Exists(filePath))
-            {
-                File.Delete(filePath);
-            }
-            
-            return DocumentUploadResult.Failure(
-                "An error occurred while uploading the file. Please try again.");
-        }
-    }
-    
-    private async Task<FileValidationResult> ValidateFileAsync(IFormFile file)
-    {
-        if (file == null || file.Length == 0)
-        {
-            return FileValidationResult.Invalid("Please select a file to upload.");
-        }
-        
-        if (file.Length > MaxFileSize)
-        {
-            return FileValidationResult.Invalid(
-                $"File size exceeds the maximum allowed size of {FormatFileSize(MaxFileSize)}.");
-        }
-        
-        var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-        if (!AllowedMimeTypes.ContainsKey(extension))
-        {
-            var allowedTypes = string.Join(", ", AllowedMimeTypes.Keys);
-            return FileValidationResult.Invalid(
-                $"File type not allowed. Allowed types: {allowedTypes}");
-        }
-        
-        // Verify MIME type matches extension
-        using (var stream = file.OpenReadStream())
-        {
-            var mimeType = await GetMimeTypeAsync(stream, file.FileName);
-            if (!AllowedMimeTypes[extension].Equals(mimeType, StringComparison.OrdinalIgnoreCase))
-            {
-                return FileValidationResult.Invalid(
-                    "File type does not match its extension. File may be corrupted.");
-            }
-        }
-        
-        return FileValidationResult.Valid();
-    }
-    
-    private async Task<string> GenerateSafeFileNameAsync(string originalName)
-    {
-        var extension = Path.GetExtension(originalName);
-        var baseName = Path.GetFileNameWithoutExtension(originalName);
-        
-        // Remove special characters
-        var safeBaseName = Regex.Replace(baseName, @"[^\w\s-]", "");
-        safeBaseName = Regex.Replace(safeBaseName, @"\s+", "-");
-        
-        // Add timestamp and GUID for uniqueness
-        var timestamp = DateTime.UtcNow.ToString("yyyyMMddHHmmss");
-        var guid = Guid.NewGuid().ToString("N").Substring(0, 8);
-        
-        return $"{safeBaseName}-{timestamp}-{guid}{extension}".ToLowerInvariant();
-    }
-}
-```
-
-### Business Logic Engine
-
-**Claim Processing Service:**
-```csharp
-public class ClaimService : IClaimService
-{
-    private readonly IRepository<Claim> _claimRepository;
-    private readonly IRepository<User> _userRepository;
-    private readonly IRepository<Approval> _approvalRepository;
-    private readonly INotificationService _notificationService;
-    private readonly IAuditService _auditService;
-    
-    public async Task<ClaimSubmissionResult> SubmitClaimAsync(
-        ClaimSubmissionDto submission, 
-        int lecturerId)
-    {
-        var validationResult = await ValidateSubmissionAsync(submission, lecturerId);
-        if (!validationResult.IsValid)
-        {
-            return ClaimSubmissionResult.Failure(validationResult.Errors);
-        }
-        
-        var claim = new Claim
-        {
-            LecturerId = lecturerId,
-            ClaimDate = DateTime.UtcNow,
-            MonthYear = submission.MonthYear,
-            HoursWorked = submission.HoursWorked,
-            HourlyRate = submission.HourlyRate,
-            Amount = CalculateAmount(submission.HoursWorked, submission.HourlyRate),
-            Status = ClaimStatus.Submitted,
-            SubmissionComments = submission.Comments,
-            CreatedDate = DateTime.UtcNow,
-            ModifiedDate = DateTime.UtcNow
-        };
-        
-        var claimId = await _claimRepository.AddAsync(claim);
-        
-        // Initialize approval workflow
-        await InitializeApprovalWorkflowAsync(claimId);
-        
-        // Send notifications
-        await _notificationService.SendNotificationAsync(
-            lecturerId,
-            "Claim Submitted",
-            $"Your claim for {submission.MonthYear} has been submitted successfully.",
-            NotificationType.Success);
-        
-        var coordinators = await _userRepository.FindAsync(
-            u => u.Role == UserRole.ProgrammeCoordinator && u.IsActive);
-        
-        foreach (var coordinator in coordinators)
-        {
-            await _notificationService.SendNotificationAsync(
-                coordinator.Id,
-                "New Claim for Review",
-                $"A new claim from Lecturer ID {lecturerId} requires your review.",
-                NotificationType.Info);
-        }
-        
-        await _auditService.LogAsync(new AuditLog
-        {
-            UserId = lecturerId,
-            Action = "ClaimSubmission",
-            EntityType = "Claim",
-            EntityId = claimId,
-            Details = $"Submitted claim for {submission.MonthYear} - Amount: {claim.Amount:C}",
-            Timestamp = DateTime.UtcNow
-        });
-        
-        return ClaimSubmissionResult.Success(claimId);
-    }
-    
-    private async Task InitializeApprovalWorkflowAsync(int claimId)
-    {
-        var approvalSequence = new[]
-        {
-            new { Role = UserRole.ProgrammeCoordinator, Order = 1, CanOverride = false },
-            new { Role = UserRole.AcademicManager, Order = 2, CanOverride = true }
-        };
-        
-        foreach (var step in approvalSequence)
-        {
-            var approval = new Approval
-            {
-                ClaimId = claimId,
-                ApprovalOrder = step.Order,
-                RequiredRole = step.Role,
-                CanOverride = step.CanOverride,
-                CreatedDate = DateTime.UtcNow
-            };
-            
-            await _approvalRepository.AddAsync(approval);
-        }
-    }
-    
-    public async Task<ApprovalResult> ReviewClaimAsync(
-        int claimId, 
-        int approverId, 
-        bool isApproved, 
-        string comments)
-    {
-        var claim = await _claimRepository.GetByIdAsync(claimId);
-        if (claim == null)
-        {
-            return ApprovalResult.Failure("Claim not found.");
-        }
-        
-        var approver = await _userRepository.GetByIdAsync(approverId);
-        if (approver == null)
-        {
-            return ApprovalResult.Failure("Approver not found.");
-        }
-        
-        var pendingApproval = await _approvalRepository.FindAsync(
-            a => a.ClaimId == claimId && 
-                 a.RequiredRole == approver.Role && 
-                 a.ApprovalDate == null);
-        
-        if (!pendingApproval.Any())
-        {
-            return ApprovalResult.Failure("No pending approval found for your role.");
-        }
-        
-        var approval = pendingApproval.First();
-        approval.ApproverUserId = approverId;
-        approval.ApprovalDate = DateTime.UtcNow;
-        approval.IsApproved = isApproved;
-        approval.Comments = comments;
-        
-        await _approvalRepository.UpdateAsync(approval);
-        
-        // Update claim status
-        if (!isApproved)
-        {
-            claim.Status = ClaimStatus.Rejected;
-            claim.ModifiedDate = DateTime.UtcNow;
-            await _claimRepository.UpdateAsync(claim);
-            
-            await _notificationService.SendNotificationAsync(
-                claim.LecturerId,
-                "Claim Rejected",
-                $"Your claim for {claim.MonthYear} has been rejected. Comments: {comments}",
-                NotificationType.Warning);
-        }
-        else
-        {
-            // Check if all approvals are complete
-            var allApprovals = await _approvalRepository.FindAsync(a => a.ClaimId == claimId);
-            var allApproved = allApprovals.All(a => a.IsApproved || a.ApprovalDate == null);
-            
-            if (allApproved)
-            {
-                claim.Status = ClaimStatus.Approved;
-                claim.ModifiedDate = DateTime.UtcNow;
-                await _claimRepository.UpdateAsync(claim);
-                
-                await _notificationService.SendNotificationAsync(
-                    claim.LecturerId,
-                    "Claim Approved",
-                    $"Your claim for {claim.MonthYear} has been fully approved and is ready for payment.",
-                    NotificationType.Success);
-            }
-        }
-        
-        await _auditService.LogAsync(new AuditLog
-        {
-            UserId = approverId,
-            Action = isApproved ? "ClaimApproval" : "ClaimRejection",
-            EntityType = "Claim",
-            EntityId = claimId,
-            Details = $"{(isApproved ? "Approved" : "Rejected")} claim with comments: {comments}",
-            Timestamp = DateTime.UtcNow
-        });
-        
-        return ApprovalResult.Success(claim.Status);
-    }
-    
-    public decimal CalculateAmount(decimal hoursWorked, decimal hourlyRate)
-    {
-        if (hoursWorked <= 0 || hourlyRate <= 0)
-            return 0;
-        
-        // Calculate with 2 decimal places precision
-        var amount = hoursWorked * hourlyRate;
-        return Math.Round(amount, 2, MidpointRounding.AwayFromZero);
-    }
-}
-```
-
-## 7. Technical Deep Dive
-
-### Session Management System
-
-**Distributed Session Configuration:**
-```csharp
-// Program.cs configuration
-builder.Services.AddSession(options =>
-{
-    options.IdleTimeout = TimeSpan.FromMinutes(30);
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-    options.Cookie.SameSite = SameSiteMode.Strict;
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    
-    // Custom session naming
-    options.Cookie.Name = "CMCS.Session";
-});
-
-// Session extension for complex objects
-public static class SessionExtensions
-{
-    public static void SetObject<T>(this ISession session, string key, T value)
-    {
-        session.SetString(key, JsonSerializer.Serialize(value));
-    }
-    
-    public static T GetObject<T>(this ISession session, string key)
-    {
-        var value = session.GetString(key);
-        return value == null ? default : JsonSerializer.Deserialize<T>(value);
-    }
-}
-
-// Session timeout handling with JavaScript
-// _Layout.cshtml
-<script>
-    let idleTimer;
-    const idleTimeout = @((int)TimeSpan.FromMinutes(25).TotalMilliseconds);
-    
-    function resetIdleTimer() {
-        clearTimeout(idleTimer);
-        idleTimer = setTimeout(() => {
-            // Warn user 5 minutes before timeout
-            showSessionWarning();
-        }, idleTimeout);
-    }
-    
-    function showSessionWarning() {
-        const modal = new bootstrap.Modal(document.getElementById('sessionWarningModal'));
-        modal.show();
-        
-        // Auto-logout after warning period
-        setTimeout(() => {
-            window.location.href = '/Account/Logout?reason=timeout';
-        }, 5 * 60 * 1000); // 5 minutes warning
-    }
-    
-    // Reset timer on user activity
-    ['mousemove', 'keypress', 'click', 'scroll'].forEach(event => {
-        document.addEventListener(event, resetIdleTimer);
-    });
-    
-    resetIdleTimer(); // Start the timer
-</script>
-```
-
-### JSON Serialization Engine
-
-**Custom JSON Contract Resolver:**
-```csharp
-public class CustomContractResolver : DefaultContractResolver
-{
-    protected override JsonProperty CreateProperty(
-        MemberInfo member, 
-        MemberSerialization memberSerialization)
-    {
-        var property = base.CreateProperty(member, memberSerialization);
-        
-        // Ignore navigation properties to prevent circular references
-        if (property.PropertyType.IsClass && 
-            property.PropertyType != typeof(string) &&
-            !property.PropertyType.IsValueType)
-        {
-            property.ShouldSerialize = instance => false;
-        }
-        
-        // Custom naming strategy (camelCase for JSON)
-        property.PropertyName = ToCamelCase(property.PropertyName);
-        
-        return property;
-    }
-    
-    private string ToCamelCase(string str)
-    {
-        if (string.IsNullOrEmpty(str) || char.IsLower(str[0]))
-            return str;
-        
-        return char.ToLowerInvariant(str[0]) + str.Substring(1);
-    }
-}
-
-// Optimized JSON serialization settings
-public static class JsonSettings
-{
-    public static readonly JsonSerializerSettings Default = new()
-    {
-        ContractResolver = new CustomContractResolver(),
-        Formatting = Formatting.Indented,
-        NullValueHandling = NullValueHandling.Ignore,
-        DefaultValueHandling = DefaultValueHandling.Ignore,
-        ReferenceLoopHandling = ReferenceLoopHandling.Ignore,
-        DateFormatHandling = DateFormatHandling.IsoDateFormat,
-        DateTimeZoneHandling = DateTimeZoneHandling.Utc
-    };
-    
-    public static readonly JsonSerializerSettings Minimal = new()
-    {
-        ContractResolver = new CustomContractResolver(),
-        Formatting = Formatting.None,
-        NullValueHandling = NullValueHandling.Ignore,
-        DefaultValueHandling = DefaultValueHandling.Ignore
-    };
-}
-```
-
-### File Validation Pipeline
-
-**Multi-layer File Validation:**
-```csharp
-public class FileValidationPipeline
-{
-    private readonly List<IFileValidator> _validators;
-    
-    public FileValidationPipeline()
-    {
-        _validators = new List<IFileValidator>
-        {
-            new SizeValidator(maxSize: 5 * 1024 * 1024),
-            new ExtensionValidator(allowedExtensions: 
-                new[] { ".pdf", ".doc", ".docx", ".jpg", ".jpeg", ".png" }),
-            new MimeTypeValidator(),
-            new VirusScannerValidator(),
-            new ContentIntegrityValidator()
-        };
-    }
-    
-    public async Task<ValidationResult> ValidateAsync(IFormFile file)
-    {
-        var errors = new List<string>();
-        
-        foreach (var validator in _validators)
-        {
-            var result = await validator.ValidateAsync(file);
-            if (!result.IsValid)
-            {
-                errors.AddRange(result.Errors);
-                
-                // Stop on critical errors
-                if (result.IsCritical)
-                    break;
-            }
-        }
-        
-        return errors.Any() 
-            ? ValidationResult.Invalid(errors) 
-            : ValidationResult.Valid();
-    }
-}
-
-// Example validator implementation
-public class MimeTypeValidator : IFileValidator
-{
-    private static readonly Dictionary<string, string[]> ValidSignatures = new()
-    {
-        { ".pdf", new[] { "25-50-44-46" } }, // %PDF
-        { ".doc", new[] { "D0-CF-11-E0-A1-B1-1A-E1" } },
-        { ".docx", new[] { "50-4B-03-04" } }, // PK..
-        { ".jpg", new[] { "FF-D8-FF" } },
-        { ".png", new[] { "89-50-4E-47" } } // ‰PNG
-    };
-    
-    public async Task<ValidatorResult> ValidateAsync(IFormFile file)
-    {
-        var extension = Path.GetExtension(file.FileName).ToLowerInvariant();
-        
-        if (!ValidSignatures.ContainsKey(extension))
-            return ValidatorResult.Valid(); // Skip if no signature defined
-        
-        using (var stream = file.OpenReadStream())
-        {
-            var buffer = new byte[20];
-            await stream.ReadAsync(buffer, 0, buffer.Length);
-            
-            var hexSignature = BitConverter.ToString(buffer, 0, 8);
-            var expectedSignatures = ValidSignatures[extension];
-            
-            if (!expectedSignatures.Any(sig => hexSignature.StartsWith(sig)))
-            {
-                return ValidatorResult.Critical(
-                    $"File signature does not match expected type for {extension}");
-            }
-        }
-        
-        return ValidatorResult.Valid();
-    }
-}
-```
-
-### Error Handling Framework
-
-**Global Exception Handling:**
-```csharp
-// Custom Exception Types
-public class BusinessException : Exception
-{
-    public string ErrorCode { get; }
-    public string UserMessage { get; }
-    
-    public BusinessException(string errorCode, string userMessage, Exception inner = null)
-        : base(userMessage, inner)
-    {
-        ErrorCode = errorCode;
-        UserMessage = userMessage;
-    }
-}
-
-public class ValidationException : BusinessException
-{
-    public Dictionary<string, string[]> Errors { get; }
-    
-    public ValidationException(Dictionary<string, string[]> errors)
-        : base("VALIDATION_ERROR", "One or more validation errors occurred")
-    {
-        Errors = errors;
-    }
-}
-
-// Global Exception Filter
-public class GlobalExceptionFilter : IExceptionFilter
-{
-    private readonly IWebHostEnvironment _env;
-    private readonly ILogger<GlobalExceptionFilter> _logger;
-    
-    public void OnException(ExceptionContext context)
-    {
-        _logger.LogError(context.Exception, "Unhandled exception occurred");
-        
-        if (context.Exception is BusinessException businessEx)
-        {
-            context.Result = new JsonResult(new
-            {
-                success = false,
-                errorCode = businessEx.ErrorCode,
-                message = businessEx.UserMessage,
-                details = _env.IsDevelopment() ? businessEx.Message : null
-            })
-            {
-                StatusCode = 400
-            };
-        }
-        else if (context.Exception is ValidationException validationEx)
-        {
-            context.Result = new JsonResult(new
-            {
-                success = false,
-                errorCode = "VALIDATION_ERROR",
-                message = validationEx.UserMessage,
-                errors = validationEx.Errors
-            })
-            {
-                StatusCode = 400
-            };
-        }
-        else
-        {
-            context.Result = new JsonResult(new
-            {
-                success = false,
-                errorCode = "INTERNAL_ERROR",
-                message = "An unexpected error occurred",
-                details = _env.IsDevelopment() ? context.Exception.Message : null
-            })
-            {
-                StatusCode = 500
-            };
-        }
-        
-        context.ExceptionHandled = true;
-    }
-}
-
-// Error Handling Middleware
-public class ErrorHandlingMiddleware
-{
-    private readonly RequestDelegate _next;
-    private readonly ILogger<ErrorHandlingMiddleware> _logger;
-    
-    public async Task InvokeAsync(HttpContext context)
-    {
-        try
-        {
-            await _next(context);
-        }
-        catch (Exception ex)
-        {
-            await HandleExceptionAsync(context, ex);
-        }
-    }
-    
-    private async Task HandleExceptionAsync(HttpContext context, Exception exception)
-    {
-        _logger.LogError(exception, "An unhandled exception occurred");
-        
-        context.Response.ContentType = "application/json";
-        context.Response.StatusCode = exception switch
-        {
-            BusinessException => 400,
-            UnauthorizedAccessException => 401,
-            _ => 500
-        };
-        
-        var response = new
-        {
-            success = false,
-            error = exception.Message,
-            requestId = context.TraceIdentifier,
-            timestamp = DateTime.UtcNow.ToString("o")
-        };
-        
-        await context.Response.WriteAsJsonAsync(response);
-    }
-}
-```
-
-## 8. User Experience
-
-**Real-time Form Interactions:**
-```javascript
-// claimForm.js - Dynamic form behavior
-class ClaimForm {
-    constructor() {
-        this.initEventListeners();
-        this.initCalculations();
-        this.initFileUpload();
-    }
-    
-    initCalculations() {
-        const hoursInput = document.getElementById('HoursWorked');
-        const rateInput = document.getElementById('HourlyRate');
-        const amountDisplay = document.getElementById('AmountDisplay');
-        
-        const calculateAmount = () => {
-            const hours = parseFloat(hoursInput.value) || 0;
-            const rate = parseFloat(rateInput.value) || 0;
-            const amount = hours * rate;
-            
-            amountDisplay.textContent = amount.toLocaleString('en-US', {
-                style: 'currency',
-                currency: 'USD'
-            });
-            
-            // Update hidden field
-            document.getElementById('Amount').value = amount.toFixed(2);
-        };
-        
-        hoursInput.addEventListener('input', calculateAmount);
-        rateInput.addEventListener('input', calculateAmount);
-        
-        // Initial calculation
-        calculateAmount();
-    }
-    
-    initFileUpload() {
-        const dropZone = document.getElementById('FileDropZone');
-        const fileInput = document.getElementById('FileInput');
-        const fileList = document.getElementById('FileList');
-        
-        // Drag and drop functionality
-        dropZone.addEventListener('dragover', (e) => {
-            e.preventDefault();
-            dropZone.classList.add('dragover');
-        });
-        
-        dropZone.addEventListener('dragleave', () => {
-            dropZone.classList.remove('dragover');
-        });
-        
-        dropZone.addEventListener('drop', (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('dragover');
-            
-            const files = e.dataTransfer.files;
-            this.handleFiles(files);
-        });
-        
-        // Click to upload
-        dropZone.addEventListener('click', () => {
-            fileInput.click();
-        });
-        
-        fileInput.addEventListener('change', (e) => {
-            this.handleFiles(e.target.files);
-        });
-    }
-    
-    handleFiles(files) {
-        const MAX_SIZE = 5 * 1024 * 1024; // 5MB
-        const ALLOWED_TYPES = [
-            'application/pdf',
-            'application/msword',
-            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-            'image/jpeg',
-            'image/png'
-        ];
-        
-        Array.from(files).forEach(file => {
-            // Validate file
-            if (file.size > MAX_SIZE) {
-                this.showError(`${file.name} exceeds maximum file size of 5MB`);
-                return;
-            }
-            
-            if (!ALLOWED_TYPES.includes(file.type)) {
-                this.showError(`${file.name} is not an allowed file type`);
-                return;
-            }
-            
-            // Add to file list
-            this.addFileToList(file);
-        });
-    }
-    
-    addFileToList(file) {
-        const fileItem = document.createElement('div');
-        fileItem.className = 'file-item';
-        fileItem.innerHTML = `
-            <div class="file-info">
-                <span class="file-name">${file.name}</span>
-                <span class="file-size">${this.formatFileSize(file.size)}</span>
-            </div>
-            <div class="file-actions">
-                <button type="button" class="btn-remove" aria-label="Remove file">
-                    &times;
-                </button>
-            </div>
-        `;
-        
-        fileItem.querySelector('.btn-remove').addEventListener('click', () => {
-            fileItem.remove();
-        });
-        
-        document.getElementById('FileList').appendChild(fileItem);
-    }
-    
-    formatFileSize(bytes) {
-        const units = ['B', 'KB', 'MB', 'GB'];
-        let size = bytes;
-        let unitIndex = 0;
-        
-        while (size >= 1024 && unitIndex < units.length - 1) {
-            size /= 1024;
-            unitIndex++;
-        }
-        
-        return `${size.toFixed(1)} ${units[unitIndex]}`;
-    }
-    
-    showError(message) {
-        const errorDiv = document.createElement('div');
-        errorDiv.className = 'alert alert-error';
-        errorDiv.textContent = message;
-        
-        document.getElementById('ErrorContainer').appendChild(errorDiv);
-        
-        setTimeout(() => {
-            errorDiv.remove();
-        }, 5000);
-    }
-}
-
-// Initialize when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-    new ClaimForm();
-});
-```
-
-**Progressive Enhancement:**
-```css
-/* Base styles for all devices */
-.form-control {
-    padding: 12px;
-    border: 1px solid #d1d1d6;
-    border-radius: 8px;
-    font-size: 16px;
-    transition: all 0.2s ease;
-    width: 100%;
-}
-
-/* Focus states for keyboard navigation */
-.form-control:focus {
-    outline: none;
-    border-color: #007aff;
-    box-shadow: 0 0 0 3px rgba(0, 122, 255, 0.1);
-}
-
-/* Enhanced styles for capable devices */
-@media (hover: hover) and (pointer: fine) {
-    .btn:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    }
-    
-    .file-item:hover {
-        background-color: rgba(0, 0, 0, 0.02);
-    }
-}
-
-/* Reduced motion preferences */
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
-}
-
-/* High contrast mode support */
-@media (prefers-contrast: high) {
-    .btn-primary {
-        border: 2px solid currentColor;
-    }
-    
-    .form-control {
-        border-width: 2px;
-    }
-}
-
-/* Dark mode support */
-@media (prefers-color-scheme: dark) {
-    :root {
-        --bg-primary: #000000;
-        --bg-secondary: #1c1c1e;
-        --text-primary: #ffffff;
-        --text-secondary: #8e8e93;
-        --border-color: #38383a;
-    }
-    
-    .card {
-        background-color: var(--bg-secondary);
-        border-color: var(--border-color);
-    }
-    
-    .form-control {
-        background-color: var(--bg-secondary);
-        color: var(--text-primary);
-        border-color: var(--border-color);
-    }
-}
-```
-
-## 9. Quality Assurance
-
-**Testing Strategy:**
-```csharp
-// Unit Tests for ClaimService
-[TestClass]
-public class ClaimServiceTests
-{
-    private Mock<IRepository<Claim>> _mockClaimRepository;
-    private Mock<IRepository<User>> _mockUserRepository;
-    private Mock<INotificationService> _mockNotificationService;
-    private ClaimService _claimService;
-    
-    [TestInitialize]
-    public void Setup()
-    {
-        _mockClaimRepository = new Mock<IRepository<Claim>>();
-        _mockUserRepository = new Mock<IRepository<User>>();
-        _mockNotificationService = new Mock<INotificationService>();
-        
-        _claimService = new ClaimService(
-            _mockClaimRepository.Object,
-            _mockUserRepository.Object,
-            _mockNotificationService.Object);
-    }
-    
-    [TestMethod]
-    public async Task SubmitClaimAsync_ValidData_ReturnsSuccess()
-    {
-        // Arrange
-        var submission = new ClaimSubmissionDto
-        {
-            MonthYear = "2024-01",
-            HoursWorked = 40,
-            HourlyRate = 150,
-            Comments = "Monthly teaching hours"
-        };
-        
-        _mockClaimRepository
-            .Setup(r => r.AddAsync(It.IsAny<Claim>()))
-            .ReturnsAsync(1);
-        
-        // Act
-        var result = await _claimService.SubmitClaimAsync(submission, 1);
-        
-        // Assert
-        Assert.IsTrue(result.IsSuccess);
-        Assert.AreEqual(1, result.ClaimId);
-        _mockNotificationService.Verify(
-            n => n.SendNotificationAsync(
-                It.IsAny<int>(), 
-                It.IsAny<string>(), 
-                It.IsAny<string>(), 
-                It.IsAny<NotificationType>()),
-            Times.AtLeastOnce);
-    }
-    
-    [TestMethod]
-    public async Task SubmitClaimAsync_InvalidHours_ReturnsValidationError()
-    {
-        // Arrange
-        var submission = new ClaimSubmissionDto
-        {
-            MonthYear = "2024-01",
-            HoursWorked = 0, // Invalid
-            HourlyRate = 150,
-            Comments = "Monthly teaching hours"
-        };
-        
-        // Act
-        var result = await _claimService.SubmitClaimAsync(submission, 1);
-        
-        // Assert
-        Assert.IsFalse(result.IsSuccess);
-        Assert.IsTrue(result.Errors.Any(e => e.Contains("hours")));
-    }
-    
-    [TestMethod]
-    [DataRow(40, 150, 6000)]
-    [DataRow(20.5, 100, 2050)]
-    [DataRow(0, 150, 0)]
-    public void CalculateAmount_VariousInputs_ReturnsCorrectAmount(
-        decimal hours, decimal rate, decimal expected)
-    {
-        // Act
-        var result = _claimService.CalculateAmount(hours, rate);
-        
-        // Assert
-        Assert.AreEqual(expected, result);
-    }
-}
-
-// Integration Tests
-[TestClass]
-public class IntegrationTests
-{
-    private TestServer _server;
-    private HttpClient _client;
-    
-    [TestInitialize]
-    public async Task Setup()
-    {
-        var builder = new WebHostBuilder()
-            .UseStartup<TestStartup>()
-            .UseEnvironment("Testing");
-        
-        _server = new TestServer(builder);
-        _client = _server.CreateClient();
-        
-        // Initialize test database
-        await InitializeTestDatabaseAsync();
-    }
-    
-    [TestMethod]
-    public async Task SubmitClaim_EndToEnd_CompletesSuccessfully()
-    {
-        // Login as lecturer
-        var loginResponse = await _client.PostAsJsonAsync("/api/auth/login", new
-        {
-            username = "testlecturer",
-            password = "password123"
-        });
-        
-        var authResult = await loginResponse.Content.ReadFromJsonAsync<AuthResult>();
-        _client.DefaultRequestHeaders.Authorization = 
-            new AuthenticationHeaderValue("Bearer", authResult.Token);
-        
-        // Submit claim
-        var claimResponse = await _client.PostAsJsonAsync("/api/claims", new
-        {
-            monthYear = "2024-01",
-            hoursWorked = 40,
-            hourlyRate = 150,
-            comments = "Test claim submission",
-            documents = Array.Empty<IFormFile>()
-        });
-        
-        // Verify response
-        Assert.AreEqual(HttpStatusCode.OK, claimResponse.StatusCode);
-        var claimResult = await claimResponse.Content.ReadFromJsonAsync<ClaimResult>();
-        Assert.IsTrue(claimResult.Success);
-        
-        // Verify claim was created
-        var getResponse = await _client.GetAsync($"/api/claims/{claimResult.ClaimId}");
-        var claim = await getResponse.Content.ReadFromJsonAsync<ClaimDto>();
-        Assert.AreEqual(ClaimStatus.Submitted, claim.Status);
-    }
-}
-```
-
-**Performance Testing:**
-```csharp
-// Load testing simulation
-public class LoadTestSimulator
-{
-    private readonly HttpClient _httpClient;
-    private readonly string _baseUrl;
-    
-    public async Task SimulateConcurrentUsers(int userCount, int requestsPerUser)
-    {
-        var stopwatch = Stopwatch.StartNew();
-        var tasks = new List<Task>();
-        
-        for (int i = 0; i < userCount; i++)
-        {
-            tasks.Add(SimulateUserBehavior($"user{i}", requestsPerUser));
-        }
-        
-        await Task.WhenAll(tasks);
-        
-        stopwatch.Stop();
-        Console.WriteLine($"Completed {userCount * requestsPerUser} requests " +
-                         $"in {stopwatch.Elapsed.TotalSeconds:F2} seconds");
-    }
-    
-    private async Task SimulateUserBehavior(string username, int requestCount)
-    {
-        // Login
-        var loginResponse = await _httpClient.PostAsJsonAsync($"{_baseUrl}/auth/login", new
-        {
-            username,
-            password = "password123"
-        });
-        
-        if (!loginResponse.IsSuccessStatusCode)
-            return;
-        
-        var token = await loginResponse.Content.ReadAsStringAsync();
-        _httpClient.DefaultRequestHeaders.Authorization = 
-            new AuthenticationHeaderValue("Bearer", token);
-        
-        // Perform actions
-        for (int i = 0; i < requestCount; i++)
-        {
-            await Task.WhenAll(
-                GetDashboard(),
-                GetClaims(),
-                UploadDocument()
-            );
-            
-            await Task.Delay(Random.Shared.Next(100, 500));
-        }
-    }
-    
-    private async Task GetDashboard()
-    {
-        await _httpClient.GetAsync($"{_baseUrl}/dashboard");
-    }
-    
-    private async Task GetClaims()
-    {
-        await _httpClient.GetAsync($"{_baseUrl}/claims");
-    }
-    
-    private async Task UploadDocument()
-    {
-        var content = new MultipartFormDataContent();
-        var fileContent = new ByteArrayContent(new byte[1024 * 100]); // 100KB file
-        fileContent.Headers.ContentType = MediaTypeHeaderValue.Parse("application/pdf");
-        content.Add(fileContent, "file", "test.pdf");
-        
-        await _httpClient.PostAsync($"{_baseUrl}/documents/upload", content);
-    }
-}
-```
-
-## 10. Deployment Guide
-
-**System Requirements:**
-- Windows Server 2016+ or Linux (Ubuntu 20.04+, CentOS 7+)
-- .NET 8.0 Runtime
-- 2GB RAM minimum, 4GB recommended
-- 10GB free disk space
-- IIS (Windows) or Nginx/Apache (Linux)
-
-**Installation Steps:**
-
-1. **Prerequisites Installation:**
-```bash
-# Ubuntu/Debian
-sudo apt update
-sudo apt install -y dotnet-runtime-8.0 nginx
-
-# CentOS/RHEL
-sudo yum install -y dotnet-runtime-8.0 nginx
-```
-
-2. **Application Deployment:**
-```powershell
-# Publish the application
-dotnet publish -c Release -o ./publish
-
-# Copy to server
-scp -r ./publish/* user@yourserver:/var/www/cmcs
-
-# Set permissions (Linux)
-sudo chown -R www-data:www-data /var/www/cmcs
-sudo chmod -R 755 /var/www/cmcs
-```
-
-3. **Nginx Configuration:**
-```nginx
-# /etc/nginx/sites-available/cmcs
-server {
-    listen 80;
-    server_name cmcs.yourdomain.com;
-    
-    location / {
-        proxy_pass http://localhost:5000;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection keep-alive;
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-    
-    # File upload size limit
-    client_max_body_size 10M;
-    
-    # Security headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
-    add_header Referrer-Policy "strict-origin-when-cross-origin" always;
-}
-```
-
-4. **Systemd Service Configuration (Linux):**
-```ini
-# /etc/systemd/system/cmcs.service
-[Unit]
-Description=Contract Monthly Claim System
-After=network.target
-
-[Service]
-Type=notify
-WorkingDirectory=/var/www/cmcs
-ExecStart=/usr/bin/dotnet /var/www/cmcs/ContractMonthlyClaimSystem.dll
-Restart=always
-RestartSec=10
-KillSignal=SIGINT
-SyslogIdentifier=cmcs
-User=www-data
-Environment=ASPNETCORE_ENVIRONMENT=Production
-Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
-Environment=ASPNETCORE_URLS=http://localhost:5000
-
-[Install]
-WantedBy=multi-user.target
-```
-
-5. **SSL Configuration (Let's Encrypt):**
-```bash
-# Install Certbot
-sudo apt install -y certbot python3-certbot-nginx
-
-# Obtain SSL certificate
-sudo certbot --nginx -d cmcs.yourdomain.com
-
-# Configure auto-renewal
-sudo certbot renew --dry-run
-```
-
-**Backup Strategy:**
-```powershell
-# Backup script (backup.ps1 for Windows)
-$backupDir = "D:\Backups\CMCS"
-$date = Get-Date -Format "yyyyMMdd"
-$backupPath = Join-Path $backupDir "cmcs_backup_$date.zip"
-
-# Backup data files
-Compress-Archive -Path "C:\CMCS\App_Data\*" -DestinationPath $backupPath -Force
-
-# Backup uploaded files
-$uploadsPath = "C:\CMCS\wwwroot\uploads"
-if (Test-Path $uploadsPath) {
-    Add-Type -Assembly System.IO.Compression.FileSystem
-    $archive = [System.IO.Compression.ZipFile]::Open($backupPath, 'Update')
-    [System.IO.Compression.ZipFileExtensions]::CreateEntryFromFile(
-        $archive, 
-        $uploadsPath, 
-        "uploads"
-    )
-    $archive.Dispose()
-}
-
-# Keep only last 30 days of backups
-Get-ChildItem $backupDir -Filter "cmcs_backup_*.zip" | 
-    Sort-Object CreationTime -Descending | 
-    Select-Object -Skip 30 | 
-    Remove-Item -Force
-```
-
-**Monitoring Setup:**
-```yaml
-# docker-compose.monitoring.yml
-version: '3.8'
-services:
-  prometheus:
-    image: prom/prometheus
-    ports:
-      - "9090:9090"
-    volumes:
-      - ./prometheus.yml:/etc/prometheus/prometheus.yml
-      - prometheus_data:/prometheus
-      
-  grafana:
-    image: grafana/grafana
-    ports:
-      - "3000:3000"
-    environment:
-      - GF_SECURITY_ADMIN_PASSWORD=admin
-    volumes:
-      - grafana_data:/var/lib/grafana
-      
-  node-exporter:
-    image: prom/node-exporter
-    ports:
-      - "9100:9100"
-      
-  cmcs-app:
-    build: .
-    ports:
-      - "5000:5000"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Production
-      - Metrics__Enabled=true
-
-volumes:
-  prometheus_data:
-  grafana_data:
-```
-
-## 11. Repository Status
-
-**Final Development State Achieved:**
-- ✅ Complete functional requirements implemented
-- ✅ Production-ready architecture established
-- ✅ Comprehensive testing completed
-- ✅ Full documentation provided
-- ✅ Security audit passed
-- ✅ Performance optimization completed
-
-**Archive Rationale:**
-This repository represents a completed project that has achieved its intended goals. 
-The system is feature-complete, thoroughly tested, and production-ready. Archiving ensures that:
-
-1. The codebase remains in a stable, working state
-2. No breaking changes will be introduced
-3. The implementation serves as a reference for similar projects
-4. Development resources can be focused on new initiatives
-
-**Forks and Continuing Development:**
-While this repository is archived, organizations are encouraged to:
-- Fork the repository for custom implementations
-- Use the architecture as a reference for similar systems
-- Implement additional features based on specific requirements
-- Contact the original developer for consultation on custom implementations
+**Authentication Feature:**
+
+The session management system uses ASP.NET Core Session with thirty
+minute idle timeouts. Cookie security settings enforce HttpOnly flag,
+SameSite Strict policy, and Secure policy requiring HTTPS. Custom
+session extensions provide type-safe storage of UserSession objects.
+
+The AuthenticationMiddleware checks every request against a list
+of public paths including Login, Register, Error, and Home pages.
+Any request to protected resources without a valid session triggers
+redirect to Login page with session expired parameter. Session
+validity checks include last activity timestamp comparison.
+
+Role-based authorization implements a custom RoleAuthorizationAttribute
+accepting an array of allowed UserRole values. The OnAuthorization method
+extracts the current user's role from session and verifies membership
+in the allowed roles. Forbidden results return for unauthorized access.
+
+**Claim Submission Feature:**
+
+The claim form includes real-time calculation of total amount based
+on hours worked and hourly rate. JavaScript listens for input events
+on both fields, performs multiplication, and updates the amount
+display with currency formatting. The calculated amount also writes
+to a hidden form field for server-side submission.
+
+Server-side validation ensures hours worked does not exceed two
+hundred hours per month, does not go below one hour, and increments
+in half-hour steps. Month validation checks correct YYYY-MM format
+and prevents future month submissions. Rate validation ensures
+positive values consistent with lecturer contracts.
+
+**Document Management Feature:**
+
+The file upload system provides drag-and-drop functionality with
+visual feedback. Drop zone highlighting activates during drag over
+events. File validation occurs on drop or selection with immediate
+error messaging for invalid files. File list displays each uploaded
+item with name, size, and remove button.
+
+MIME type validation reads file headers to verify actual file type
+matches the extension. PDF files must start with %PDF signature.
+Office documents are checked for PK or D0 CF 11 E0 signatures.
+Images must match expected JPEG or PNG magic numbers. This prevents
+malicious files disguised with fake extensions.
+
+**Approval Workflow Feature:**
+
+The approval workflow automatically initiates when a lecturer submits
+a claim. Approval records are created in sequence: first Programme
+Coordinator approval order one, then Academic Manager approval order
+two. The CanOverride flag enables managers to approve claims even
+if coordinator has not yet reviewed.
+
+Approvers see a list of pending claims requiring their attention.
+Each claim displays lecturer name, month, hours, amount, and attached
+documents. Approvers select Approve or Reject buttons and must provide
+comments explaining their decision.
+
+Claim status updates based on approval outcomes. Rejection at any
+stage moves claim to Rejected status and notifies the lecturer.
+Full approval from both steps moves claim to Approved status ready
+for payment processing. Partial approval keeps claim at UnderReview
+until all steps complete.
 
 ---
 
-**Final Note:**
-The Contract Monthly Claim System stands as a testament to thoughtful software engineering. 
-It demonstrates that with careful planning, clean architecture, and attention to detail, 
-robust systems can be built that serve users effectively while maintaining technical excellence. 
-The project successfully balanced functionality with usability, complexity with simplicity, and 
-features with performance.
+## 7. Technical Specifications
 
-*"Simplicity is the ultimate sophistication."* - This system embodies that principle, providing 
-powerful capabilities through an interface that feels intuitive and effortless.
+The UML class diagram defines the complete object model with inheritance
+hierarchies and relationships. The abstract User class sits at the top
+with concrete Lecturer, ProgrammeCoordinator, and AcademicManager classes
+inheriting from appropriate base classes.
+
+One-to-many relationships exist between Lecturer and Claim entities,
+Claim and Document entities, and Claim and Approval entities. Each
+relationship includes proper navigation properties and foreign keys.
+Enumerations define UserRole with Lecturer, ProgrammeCoordinator,
+AcademicManager, HumanResource values and ClaimStatus with Draft,
+Submitted, UnderReview, Approved, Rejected, Paid, Archived values.
+
+The JSON serialization engine uses Newtonsoft.Json with custom contract
+resolver that ignores navigation properties to prevent circular reference
+errors during serialization. Property names convert to camelCase for
+consistent JSON formatting. Null values and default values are ignored
+to reduce file size.
+
+File validation pipeline implements the chain of responsibility pattern
+with multiple validators executing in sequence. The SizeValidator checks
+against five megabyte maximum. ExtensionValidator verifies allowed types.
+MimeTypeValidator reads file signatures. VirusScannerValidator integrates
+antivirus checking. ContentIntegrityValidator validates PDF structure.
+
+Each validator returns a ValidatorResult with IsValid flag, errors list,
+and IsCritical flag. Critical failures stop the validation chain while
+non-critical warnings allow continued validation. All validation occurs
+on the server side after upload, preventing client-side bypass attempts.
 
 ---
 
-**Support:**
-If you found this project valuable and would like to support future open-source work:
+## 8. Design System
 
-- **Bitcoin (BTC)**: `bc1qssyczsfm70qjglpjzhcxpyl5xdafwwlyhucn6u`  
-- **Ethereum (ETH)**: `0x23900f5681bC2f1696fd9Fa20dc187830CA3fB76`  
-- **Solana (SOL)**: `9HcJEr5bENuiyGofVsDwrAPXomxzGMmsCLXNPst4udLi`
+The visual design follows Apple-inspired principles emphasizing clarity,
+consistency, and restraint. Typography uses system fonts with San Francisco
+or Segoe UI depending on operating system. Font sizes follow a modular
+scale with base size of sixteen pixels for body text.
 
-Thank you for your appreciation and support!
+Color palette employs a monochromatic neutral base with strategic accent
+colors for interactive elements. Primary actions use blue with sufficient
+contrast ratio against backgrounds. Success states display green, errors
+display red, and warnings display amber. All color combinations meet
+WCAG 2.1 AA accessibility standards.
+
+Spacing follows an eight-pixel grid system for consistent alignment
+across components. Margin and padding values are multiples of eight.
+Card components have sixteen pixel internal padding and twelve pixel
+gaps between elements. Form groups stack vertically with eight pixel
+gaps between label, input, and validation message.
+
+Responsive breakpoints follow mobile-first approach with base styles
+for all devices. Tablet breakpoint at seven hundred sixty-eight pixels
+reorganizes multi-column forms into grid layouts. Desktop breakpoint
+at one thousand twenty-four pixels introduces dashboard sidebar with
+navigation on the left and content on the right. Large desktop breakpoint
+at one thousand four hundred forty pixels centers content with maximum
+width container.
+
+Component library includes cards with header, body, and footer sections.
+Cards use subtle border and shadow for elevation without distraction.
+Form controls have consistent height of forty pixels, rounded corners
+of eight pixels, and transition animations for focus states. Buttons
+come in primary, secondary, and danger variants with clear hierarchy
+for user actions.
 
 ---
 
-*Repository archived on January 25, 2026*  
-*Project completed successfully*  
-*All objectives achieved*
+## 9. Data Persistence Strategy
+
+The text file storage system deliberately avoids traditional databases
+to demonstrate that sophisticated applications can function without
+complex database dependencies. Each JSON file serves as a table storing
+an array of objects with schema validation at application level.
+
+Data files reside in the App_Data directory at the application root.
+The directory is created automatically on first run if it does not exist.
+Each file initializes with an empty JSON array when first accessed.
+Sample data populates for users, claims, and approvals to demonstrate
+system functionality without manual data entry.
+
+File locking using SemaphoreSlim prevents concurrent write conflicts
+when multiple requests attempt to update the same file simultaneously.
+The lock allows only one thread to write at a time while still allowing
+multiple concurrent reads. This balances data integrity with performance.
+
+JSON serialization settings configure indented formatting for human
+readability during debugging and manual inspection. Null value handling
+ignores properties with null values to reduce file size. Reference loop
+handling ignores circular references that would otherwise cause exceptions.
+
+The audit log writes to a separate audit.log file in plain text format
+with each entry on a new line. Timestamps use ISO 8601 format for
+consistent parsing across time zones. Log entries are never deleted
+to maintain complete compliance records.
+
+Data backup strategy recommends daily compression of the entire App_Data
+folder with retention of thirty daily backups. Uploaded documents stored
+in wwwroot/uploads are included in backup archives. Restoration involves
+extracting the backup archive to the application root directory.
+
+---
+
+## 10. Security Framework
+
+Session management implements thirty minute idle timeout with sliding
+expiration, resetting the timeout on each user activity. Session cookies
+are HttpOnly preventing JavaScript access, SameSite Strict preventing
+cross-site requests, and Secure only transmitting over HTTPS.
+
+The authentication middleware validates session on every request to
+protected resources. Invalid sessions trigger session clear and redirect
+to login page with expiration parameter. Session data includes UserId,
+UserRole, Username, and LastActivity timestamp for validation.
+
+Password hashing uses BCrypt algorithm with work factor twelve,
+providing computational resistance to brute force attacks. Plain
+text passwords are never stored in files or logged anywhere.
+Password reset flow requires email verification before allowing changes.
+
+CSRF protection uses anti-forgery tokens on all state-changing requests.
+The ValidateAntiForgeryToken attribute checks tokens on POST operations.
+Tokens are unique per user session and per request to prevent replay
+attacks. Token validation occurs before any business logic executes.
+
+File upload security validates both client-side and server-side to
+prevent malicious file uploads. File permissions on the uploads
+directory restrict execution of script files. File names are sanitized
+to remove path traversal characters. Virus scanning verifies content
+safety before saving to disk.
+
+SQL injection is not applicable due to text file storage instead of
+relational databases. However, JSON injection is prevented by using
+parameterized serialization rather than string concatenation. All
+user input is validated before inclusion in JSON output.
+
+Rate limiting middleware restricts login attempts to five per minute
+per IP address to prevent brute force attacks. Failed attempt counter
+increments in memory with sliding expiration. Exceeding the limit
+triggers temporary block for five minutes with user notification.
+
+---
+
+## 11. Quality Assurance
+
+Unit testing covers all service layer business logic using xUnit
+framework with Moq for dependency mocking. The ClaimService tests
+validate calculation accuracy, validation rules, and approval workflow.
+Success path testing confirms happy path functionality. Failure path
+testing ensures proper error handling and user messaging.
+
+Test methods follow Arrange-Act-Assert pattern for clear structure.
+Arrange section initializes mocks and test data. Act section invokes
+the method under test. Assert section verifies expected outcomes
+using fluent assertions for readable failure messages.
+
+Data-driven tests using Theory attribute and InlineData explore
+multiple input combinations for calculation methods. Decimal hours
+and rate combinations verify rounding to two decimal places with
+away-from-zero midpoint rounding. Edge cases include zero values,
+negative values, and maximum boundary values.
+
+Integration tests verify end-to-end functionality using TestServer
+and WebApplicationFactory. These tests initialize a real database
+instance then execute complete user journeys through HTTP endpoints.
+Authentication tokens are obtained and used for authorized requests.
+
+Load testing simulates concurrent user activity to identify performance
+bottlenecks. The simulator creates multiple parallel tasks each
+behaving like a real user. Metrics tracked include response time,
+throughput, error rate, and resource utilization. Results are logged
+for performance baseline establishment.
+
+Security testing includes OWASP Top Ten vulnerability scanning using
+automated tools. Penetration testing attempts cross-site scripting,
+CSRF, SQL injection, and authentication bypass attacks. All findings
+are remediated before production deployment.
+
+User acceptance testing involves stakeholders following predefined
+test scripts. Each user role validates their specific workflows including
+claim submission, approval review, document upload, and report generation.
+Defects are tracked with severity levels and fixed with priority.
+
+---
+
+## 12. Deployment Guide
+
+System requirements include Windows Server 2016 or newer, or Linux
+distribution such as Ubuntu 20.04 or CentOS 7 for hosting. NET 8.0
+Runtime must be installed before application deployment. Memory
+requirements specify two gigabytes minimum with four gigabytes
+recommended for production workloads. Disk space requires ten
+gigabytes free for application, data files, and uploaded documents.
+
+Windows deployment uses IIS with the ASP.NET Core Module configured
+for request handling. Application pools should configure No Managed
+Code with Integrated pipeline mode. IIS user requires write permissions
+to App_Data and wwwroot/uploads directories.
+
+Linux deployment uses Nginx as reverse proxy with systemd service
+for application management. The proxy passes requests to Kestrel
+running on localhost port five thousand. Static files are served
+directly by Nginx for improved performance.
+
+SSL/TLS configuration requires certificates from trusted certificate
+authority. Let's Encrypt provides free certificates with automated
+renewal. Certbot tool configures Nginx with HTTPS redirection and
+secure cipher suites. HSTS header forces all future connections to HTTPS.
+
+Environment configuration sets ASPNETCORE_ENVIRONMENT to Production
+which enables production optimizations and disables developer error
+pages. Connection strings are not needed due to file-based storage.
+Logging configuration adjusts minimum levels for different components.
+
+Firewall rules must allow HTTP on port eighty, HTTPS on port four
+hundred forty-three for web traffic, and SSH on port twenty-two for
+administration. Database ports are not required due to file storage.
+Monitoring ports for metrics and health checks may be opened as needed.
+
+Monitoring solution uses Prometheus for metrics collection and Grafana
+for visualization. Exposed metrics include request count, duration,
+error rate, active sessions, and file operation counts. Alert rules
+trigger on high error rates or session failures.
+
+Backup automation runs daily at midnight compressing App_Data and
+uploads directories. Retention policy keeps thirty daily backups,
+twelve monthly backups, and seven yearly backups. Backup verification
+restores to test environment weekly to ensure integrity.
+
+---
+
+## 13. Repository Structure
+
+The GitHub repository at the provided URL follows standard ASP.NET
+Core MVC project structure with additional documentation folders.
+
+Root directory contains the solution file, global.json for SDK version,
+and README.md with project overview. The .gitignore file excludes
+App_Data, uploads, bin, obj, and user-specific configuration files.
+
+Source code resides in the root project directory with Controllers,
+Models, Views, Services, and Data folders separating concerns.
+Program.cs configures the host builder with session, services, and
+middleware pipeline. appsettings.json stores configuration with
+environment-specific overrides in appsettings.Development.json and
+appsettings.Production.json.
+
+wwwroot folder holds static assets including CSS stylesheets, JavaScript
+files, and library dependencies. Uploads subdirectory within wwwroot
+stores claim documents with unique filenames. Bootstrap and jQuery
+are served from local files rather than CDNs for offline compatibility.
+
+Documentation folder contains API reference generated from XML comments,
+user guide with screenshots, administrator handbook for configuration,
+and deployment guide with step-by-step instructions.
+
+---
+
+End of Document
 
 ---
