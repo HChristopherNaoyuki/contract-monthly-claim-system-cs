@@ -664,6 +664,6 @@ and deployment guide with step-by-step instructions.
 
 ---
 
-End of Document
+END OF DOCUMENT
 
 ---
